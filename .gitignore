@@ -1,0 +1,5 @@
+# Jetbrains Products
+.idea/
+
+# Mac User
+.DS_Store
