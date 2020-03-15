@@ -26,21 +26,26 @@ func main() {
 	verifier = provider.Verifier(&oidc.Config{ClientID: clientID})
 
 	http.HandleFunc("/api/login", handleLogin)
-	log.Fatalln(http.ListenAndServe(":8080", nil))
+	log.Fatalln(http.ListenAndServe(":8081", nil))
 }
 
 func handleLogin(w http.ResponseWriter, r *http.Request) {
 	rawIdToken := r.Header.Get("Authorization")
 
-	if trimmedToken := strings.TrimSpace(rawIdToken); trimmedToken == "" || trimmedToken == "Bearer" {
+	// removed the Bearer Prefix, leading and tailing space characters
+	trimmedToken := strings.TrimPrefix(rawIdToken, "Bearer")
+	trimmedToken = strings.TrimSpace(trimmedToken)
+
+	if trimmedToken == "" {
 		http.Error(w, "Missing token.", http.StatusUnauthorized)
 		return
 	}
 
-	_, err := verifier.Verify(r.Context(), rawIdToken)
+	_, err := verifier.Verify(r.Context(), trimmedToken)
 	if err != nil {
 		http.Error(w, "Invalid token.", http.StatusUnauthorized)
 	} else {
 		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("Valid token."))
 	}
 }
