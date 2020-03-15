@@ -29,10 +29,12 @@ func main() {
 	log.Fatalln(http.ListenAndServe(":8081", nil))
 }
 
+// handleLogin retrieves the ID-Token from the Request and verifies it by
+// sending it to the OpenID Connect Server.
 func handleLogin(w http.ResponseWriter, r *http.Request) {
 	rawIdToken := r.Header.Get("Authorization")
 
-	// removed the Bearer Prefix, leading and tailing space characters
+	// removes the Bearer Prefix, leading and tailing space characters
 	trimmedToken := strings.TrimPrefix(rawIdToken, "Bearer")
 	trimmedToken = strings.TrimSpace(trimmedToken)
 
