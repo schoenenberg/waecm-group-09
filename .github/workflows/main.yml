@@ -29,8 +29,8 @@ jobs:
     - name: Push to Github Packages Docker
       run: |
         cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u schoenenberg --password-stdin
-        docker tag waecm-group-09_frontend:latest docker.pkg.github.com/schoenenberg/waecm-group-09/frontend:${{ GITHUB_SHA }}
-        docker tag waecm-group-09_backend:latest docker.pkg.github.com/schoenenberg/waecm-group-09/backend:${{ GITHUB_SHA }}
-        docker push docker.pkg.github.com/schoenenberg/waecm-group-09/frontend:${{ GITHUB_SHA }}
-        docker push docker.pkg.github.com/schoenenberg/waecm-group-09/backend:${{ GITHUB_SHA }}
+        docker tag waecm-group-09_frontend:latest docker.pkg.github.com/schoenenberg/waecm-group-09/frontend:$GITHUB_SHA
+        docker tag waecm-group-09_backend:latest docker.pkg.github.com/schoenenberg/waecm-group-09/backend:$GITHUB_SHA
+        docker push docker.pkg.github.com/schoenenberg/waecm-group-09/frontend:$GITHUB_SHA
+        docker push docker.pkg.github.com/schoenenberg/waecm-group-09/backend:$GITHUB_SHA
 
