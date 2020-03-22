@@ -1,20 +1,19 @@
-import {Parent, Query, ResolveField, Resolver} from "@nestjs/graphql"
-import {HelloEntity} from "./entities/hello.entity"
+import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { HelloModel } from './models/hello.model';
 
-@Resolver(() => HelloEntity)
+@Resolver(() => HelloModel)
 export class HelloworldResolver {
+  @Query(() => HelloModel)
+  hello(): HelloModel {
+    return {
+      hello: 'Hello World',
+    };
+  }
 
-    @Query(() => HelloEntity)
-    hello(): HelloEntity {
-        return {
-            hello: 'Hello World',
-        }
-    }
-
-    // just for trying out stuff
-    @ResolveField('foo', () => String)
-    getFoo(@Parent() parent: HelloEntity): string {
-        console.log('i was called')
-        return 'Parent.hello: ' + parent.hello
-    }
+  // just for trying out stuff
+  @ResolveField('foo', () => String)
+  getFoo(@Parent() parent: HelloModel): string {
+    console.log('i was called');
+    return 'Parent.hello: ' + parent.hello;
+  }
 }
