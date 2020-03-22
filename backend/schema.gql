@@ -2,11 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type HelloEntity {
+type HelloModel {
   hello: String!
   foo: String!
 }
 
 type Query {
-  hello: HelloEntity!
+  hello: HelloModel!
+  currentUser: UserType!
+}
+
+type UserType {
+  username: String!
+  picture: String
+  name: String
+  nickname: String
+  family_name: String
+  given_name: String
 }
