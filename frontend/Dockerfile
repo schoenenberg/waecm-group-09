@@ -1,17 +1,15 @@
-# base image
-FROM node:12.2.0-alpine
+# Using node image as build-stage
+FROM node:12.2.0-alpine AS build-stage
 
 # set working directory
 WORKDIR /usr/src/waecm
 
-# install and cache app dependencies
+# Copy sources and build app
 COPY . /usr/src/waecm/
-RUN npm install
-
-#expose port
-EXPOSE 3000/tcp
-
-# start app
-CMD ["npm", "start"]
+RUN npm install \
+ && npm run build
 
 
+FROM nginx:1.17.9
+
+COPY --from=build-stage /usr/src/waecm/build/ /usr/share/nginx/html/
