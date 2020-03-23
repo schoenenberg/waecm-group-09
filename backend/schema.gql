@@ -9,10 +9,10 @@ type HelloModel {
 
 type Query {
   hello: HelloModel!
-  currentUser: UserType!
+  currentUser: UserModel!
 }
 
-type UserType {
+type UserModel {
   username: String!
   picture: String
   name: String
