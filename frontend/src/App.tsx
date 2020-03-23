@@ -1,26 +1,244 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import { uuid } from 'uuidv4';
+import { useEffect } from 'react';
+import Image from './background_image.jpg';
+import {Alert, AlertTitle} from "@material-ui/lab";
+
+
+import ApolloClient from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import {ApolloProvider, useQuery} from '@apollo/react-hooks';
+import {gql} from "apollo-boost";
+
+
+const useStyles = makeStyles(theme => ({
+  login: {
+    marginTop: theme.spacing(25),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  profile_details: {
+    marginTop: theme.spacing(10),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  access_denied: {
+    marginTop: theme.spacing(15),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%',
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  large: {
+    width: theme.spacing(40),
+    height: theme.spacing(40),
+  },
+
+  container:{
+    width: '100vw',
+    height: '100vh',
+    backgroundImage: `url(${Image})`,
+    backgroundSize: 'cover',
+    headerMode: 'screen'
+  },
+
+  fonts:{
+    margin: 0,
+    color: 'white'
+  }
+}));
+
+
 
 function App() {
+  const [token_id, setTokenId] = useState("aba");
+  const classes = useStyles();
+  const [hidden, setHidden] = useState(false);
+  const [accessDenied, setAccessDenied] = useState(false);
+  const [client, setClient] = useState(new ApolloClient({
+    link: new HttpLink({
+      uri: 'http://localhost:8080/graphql',
+      headers: {
+        Authorization: `Bearer ` + token_id
+      }
+    }),
+    cache: new InMemoryCache(),
+  }))
+
+  /*
+  const createApolloClient = (token: String) => {
+    return new ApolloClient({
+      link: new HttpLink({
+        uri: 'http://localhost:8080/graphql',
+        headers: {
+          Authorization: `Bearer ` + token
+        }
+      }),
+      cache: new InMemoryCache(),
+    });
+  };*/
+
+  const GET_USERINFO = gql`
+   {
+    currentUser {
+      username
+      picture
+    }
+  }
+`;
+
+  const UserInformation= () => {
+    const { loading, error, data } = useQuery(GET_USERINFO);
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    if (error) {
+      console.error(error);
+      return <div>Error!</div>;
+    }
+    return <div><Avatar alt="Remy Sharp" src={data.currentUser.picture} className = {classes.large}/><h2 className={classes.fonts}>data.currentUser.username</h2></div>;
+  };
+
+
+  const useReactPath = () => {
+    const [path, setPath] = React.useState(window.location.href);
+    const listenToPopstate = () => {
+      const winPath = window.location.href;
+      setPath(winPath);
+    };
+
+    useEffect(() => {
+      window.addEventListener("popstate", listenToPopstate);
+      return () => {
+        window.removeEventListener("popstate", listenToPopstate);
+      };
+    }, []);
+    return path;
+  };
+
+  const href = useReactPath();
+
+  useEffect(() => {
+
+    if(href.includes("id_token")){
+      setHidden(true);
+      setTokenId(href.split("token=")[1]);
+      setClient(new ApolloClient({
+        link: new HttpLink({
+          uri: 'http://localhost:8080/graphql',
+          headers: {
+            Authorization: `Bearer ` + token_id
+          }
+        }),
+        cache: new InMemoryCache(),
+      }));
+      setTimeout(function(){ alert("Hello"); }, 3000);
+      console.log(token_id);
+    }
+    if(href.includes("access_denied")){
+      setAccessDenied(true);
+    }
+  }, [href, token_id, hidden, accessDenied, client]);
+
+
+  function auth_url() {
+    return "https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/auth" +
+        "?client_id=waecm"
+        +"&response_type=id_token"
+        +"&prompt=consent"
+        +"&nonce="+uuid()
+        +"&scope=openid%20profile"
+        +"&redirect_uri=http://localhost:3000";
+  }
+  function login() {
+    window.location.replace(auth_url());
+  }
+
+  function logout() {
+    window.location.replace("https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/logout?post_logout_redirect_uri=http://localhost:3000");
+    setHidden(false);
+  }
+
+  function redirectStartPage() {
+    window.location.replace("http://localhost:3000");
+
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <ApolloProvider client={client}>
+      <Container component="main" className = {classes.container}>
+        <header>
+          <h1 className={classes.fonts}>WAECM Project: Max, Sigrid, Alicia, Elli</h1>
+        </header>
+        <Container maxWidth="xs">
+          <CssBaseline />
+          {accessDenied &&
+          <div className={classes.access_denied}>
+            <Alert severity="error">
+              <AlertTitle> Error </AlertTitle>
+              Unfortunately the access was denied!
+            </Alert>
+            <Button fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={redirectStartPage}>
+              Redirect to start page
+            </Button>
+          </div>}
+
+          {hidden && !accessDenied &&
+          <div className = {classes.profile_details}>
+            <UserInformation/>
+            <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={logout}>
+              Logout
+            </Button>
+          </div>
+          }
+          {!hidden && !accessDenied &&
+          <div className={classes.login}>
+
+            <form className={classes.form} noValidate>
+
+              <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  onClick={login}
+              >
+                Login
+              </Button>
+            </form>
+          </div>}
+        </Container>
+      </Container>
+      </ApolloProvider>
+
   );
 }
-
 export default App;
