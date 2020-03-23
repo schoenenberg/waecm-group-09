@@ -1,15 +1,15 @@
 import { Query, Resolver } from '@nestjs/graphql';
-import { UserType } from './models/userType';
+import { UserModel } from './models/user.model';
 import { GqlAuthGuard } from '../auth/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from "./user.decorator";
 import { User } from "../../types/user";
 
-@Resolver(() => UserType)
+@Resolver(() => UserModel)
 export class UserResolver {
-  @Query(() => UserType)
+  @Query(() => UserModel)
   @UseGuards(GqlAuthGuard)
-  currentUser(@CurrentUser() user: User): UserType {
+  currentUser(@CurrentUser() user: User): UserModel {
     return {
       username: user.preferred_username,
       picture: user.picture,
