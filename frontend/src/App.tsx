@@ -41,9 +41,6 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
-  form: {
-    width: '100%',
-  },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
@@ -62,7 +59,8 @@ const useStyles = makeStyles(theme => ({
 
   fonts:{
     margin: 0,
-    color: 'white'
+    color: 'white',
+    align: 'center'
   }
 }));
 
@@ -82,20 +80,7 @@ function App() {
       }
     }),
     cache: new InMemoryCache(),
-  }))
-
-  /*
-  const createApolloClient = (token: String) => {
-    return new ApolloClient({
-      link: new HttpLink({
-        uri: 'http://localhost:8080/graphql',
-        headers: {
-          Authorization: `Bearer ` + token
-        }
-      }),
-      cache: new InMemoryCache(),
-    });
-  };*/
+  }));
 
   const GET_USERINFO = gql`
    {
@@ -116,7 +101,8 @@ function App() {
       console.error(error);
       return <div>Error!</div>;
     }
-    return <div><Avatar alt="Remy Sharp" src={data.currentUser.picture} className = {classes.large}/><h2 className={classes.fonts}>data.currentUser.username</h2></div>;
+    const result = data;
+    return <div><Avatar alt="Remy Sharp" src={result.currentUser.picture} className = {classes.large}/><h2 className={classes.fonts}>{result.currentUser.username}</h2></div>;
   };
 
 
@@ -226,10 +212,7 @@ function App() {
           }
           {!hidden && !accessDenied &&
           <div className={classes.login}>
-
-            <form className={classes.form} noValidate>
-
-              <Button
+             <Button
                   fullWidth
                   variant="contained"
                   color="primary"
@@ -238,7 +221,6 @@ function App() {
               >
                 Login
               </Button>
-            </form>
           </div>}
         </Container>
       </Container>
