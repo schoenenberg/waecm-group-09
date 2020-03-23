@@ -73,6 +73,7 @@ function App() {
   const classes = useStyles();
   const [hidden, setHidden] = useState(false);
   const [accessDenied, setAccessDenied] = useState(false);
+  const [oldToken, setOldTOken] = useState("aba");
   const [client, setClient] = useState(new ApolloClient({
     link: new HttpLink({
       uri: 'http://localhost:8080/graphql',
@@ -140,27 +141,30 @@ function App() {
   useEffect(() => {
 
     if(href.includes("id_token")){
-      setHidden(true);
-      setTokenId(href.split("token=")[1]);
-      setClient(new ApolloClient({
-        link: new HttpLink({
-          uri: 'http://localhost:8080/graphql',
-          headers: {
-            Authorization: `Bearer ` + token_id
-          }
-        }),
-        cache: new InMemoryCache(),
-      }));
-      setTimeout(function(){ alert("Hello"); }, 3000);
-      console.log(token_id);
+      setOldTOken(token_id);
+      if(!oldToken.includes(href.split("token=")[1])) {
+        setHidden(true);
+        setTokenId(href.split("token=")[1]);
+
+        setClient(new ApolloClient({
+          link: new HttpLink({
+            uri: 'http://localhost:8080/graphql',
+            headers: {
+              Authorization: `Bearer ` + token_id
+            }
+          }),
+          cache: new InMemoryCache(),
+        }));
+        console.log(token_id);
+      }
     }
     if(href.includes("access_denied")){
       setAccessDenied(true);
     }
-  }, [href, token_id, hidden, accessDenied, client]);
+  }, [href, token_id, hidden, accessDenied, client, oldToken]);
 
 
-  function auth_url() {
+  function auth_url () : string {
     return "https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/auth" +
         "?client_id=waecm"
         +"&response_type=id_token"
@@ -169,6 +173,7 @@ function App() {
         +"&scope=openid%20profile"
         +"&redirect_uri=http://localhost:3000";
   }
+
   function login() {
     window.location.replace(auth_url());
   }
