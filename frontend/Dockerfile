@@ -13,3 +13,4 @@ RUN npm install \
 FROM nginx:1.17.9
 
 COPY --from=build-stage /usr/src/waecm/build/ /usr/share/nginx/html/
+COPY nginx-custom.conf /etc/nginx/conf.d/default.conf
