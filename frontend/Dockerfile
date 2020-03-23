@@ -1,24 +1,16 @@
-# base image
-FROM node:12.2.0-alpine
+# Using node image as build-stage
+FROM node:12.2.0-alpine AS build-stage
 
 # set working directory
 WORKDIR /usr/src/waecm
 
-# add node modules to $PATH
-ENV PATH /usr/src/waecm/node_modules/.bin:$PATH
-
-# install and cache app dependencies
-COPY package.json /usr/src/waecm/package.json
-RUN npm install --silent
-RUN npm install react-scripts@3.0.1 -g --silent
-
-#expose port
-EXPOSE 3000/tcp
-
-#copy everything to workdirectory
-COPY . /usr/src/waecm
-
-# start app
-CMD ["npm", "start"]
+# Copy sources and build app
+COPY . /usr/src/waecm/
+RUN npm install \
+ && npm run build
 
 
+FROM nginx:1.17.9
+
+COPY --from=build-stage /usr/src/waecm/build/ /usr/share/nginx/html/
+COPY nginx-custom.conf /etc/nginx/conf.d/default.conf
