@@ -3,7 +3,7 @@
 - Develop: ![develop](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=develop)
 
 ## Gruppenteilnehmer
-Maximilian Schönenberg, Sigrid Huemer, Alicia Schwabenbauer 11925878, Elena Nuiding 11925876 ---!!! alle Matrikelnummern ergänzen
+Maximilian Schönenberg, Sigrid Huemer 51824175, Alicia Schwabenbauer 11925878, Elena Nuiding 11925876 ---!!! alle Matrikelnummern ergänzen
 
 ## Technologieauswahl
 
