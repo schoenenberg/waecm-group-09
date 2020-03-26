@@ -18,7 +18,7 @@ export const PrimaryButton: FC<PrimaryButtonProps> = ({
   return (
     <Button
       fullWidth
-      variant="contained"
+      variant="outlined"
       color="primary"
       className={classes.button}
       onClick={onClickHandler}

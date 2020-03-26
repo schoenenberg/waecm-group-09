@@ -39,12 +39,15 @@ export const useStyles = makeStyles(theme => ({
     headerMode: "screen"
   },
   fonts: {
-    margin: 0,
-    color: "white"
+    ...theme.typography.h4, 
+    paddingTop: theme.spacing(10), 
+    textAlign: "center", 
+    color: "#19334d"
   },
   username: {
+    ...theme.typography.h6,
     margin: 0,
-    color: "white",
+    color: "#2d5986",
     textAlign: "center"
   }
 }));
