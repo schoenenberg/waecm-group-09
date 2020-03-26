@@ -48,7 +48,7 @@ export const useStyles = makeStyles(theme => ({
   username: {
     ...theme.typography.h6,
     margin: 0,
-    color: "#2d5986",
+    color: "white",
     textAlign: "center"
   }
 }));
