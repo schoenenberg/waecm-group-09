@@ -15,8 +15,9 @@ const useStyles = makeStyles(theme => ({
   username: {
     ...theme.typography.h6,
     margin: 0,
-    color: "white",
-    textAlign: "center"
+    color: "#c6d9ec",
+    textAlign: "center",
+    marginBottom: theme.spacing(3)
   }
 }));
 

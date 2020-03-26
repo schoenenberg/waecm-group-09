@@ -18,7 +18,7 @@ type LoginProps = {
 
 const useStyles = makeStyles(theme => ({
   login: {
-    marginTop: theme.spacing(25),
+    marginTop: theme.spacing(15),
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
