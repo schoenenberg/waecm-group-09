@@ -40,7 +40,8 @@ export const useStyles = makeStyles(theme => ({
   },
   fonts: {
     ...theme.typography.h4, 
-    paddingTop: theme.spacing(10), 
+    paddingTop: theme.spacing(10),
+    margin: 0,
     textAlign: "center", 
     color: "#19334d"
   },
