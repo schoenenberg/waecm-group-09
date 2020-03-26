@@ -26,22 +26,24 @@ export const Login: FC<LoginProps> = ({
   const classes = useStyles();
   const { error, loading } = useQuery(GET_CURRENT_USER);
 
+  console.log("error", error);
+
   const materialClass =
-    accessDenied || error
+    accessDenied || (error && isProfileDetailPage)
       ? classes.access_denied
       : isProfileDetailPage
       ? classes.profile_details
       : classes.login;
 
   const onClick =
-    accessDenied || error
+    accessDenied || (error && isProfileDetailPage)
       ? onRedirectStartpage
       : isProfileDetailPage
       ? onLogout
       : onLogin;
 
   const buttonText =
-    accessDenied || error
+    accessDenied || (error && isProfileDetailPage)
       ? "Redirect to Startpage"
       : isProfileDetailPage
       ? "Logout"
