@@ -1,6 +1,13 @@
 body, html {
   height: 100%;
   margin: 0;
+  background: url("./background_image.jpg");
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+  background-repeat-x: no-repeat;
+  background-repeat-y: no-repeat;
+  background-attachment: fixed;
 }
 
 .App {

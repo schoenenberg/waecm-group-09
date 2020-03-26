@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/core/styles";
-import Image from "./background_image.jpg";
 
 export const useStyles = makeStyles(theme => ({
   login: {
@@ -34,13 +33,11 @@ export const useStyles = makeStyles(theme => ({
   container: {
     width: "100vw",
     height: "100vh",
-    backgroundImage: `url(${Image})`,
-    backgroundSize: "cover",
     headerMode: "screen"
   },
   fonts: {
     ...theme.typography.h4, 
-    paddingTop: theme.spacing(10),
+    paddingTop: theme.spacing(5),
     margin: 0,
     textAlign: "center", 
     color: "#19334d"
