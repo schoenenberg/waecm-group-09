@@ -3,7 +3,7 @@
 - Develop: ![develop](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=develop)
 
 ## Gruppenteilnehmer
-Maximilian Schönenberg, Sigrid Huemer 51824175, Alicia Schwabenbauer 11925878, Elena Nuiding 11925876 ---!!! alle Matrikelnummern ergänzen
+Maximilian Schönenberg, Sigrid Huemer 51824175, Alicia Schwabenbauer 11925878, Elena Nuiding 11925876
 
 ## Technologieauswahl
 
@@ -15,7 +15,7 @@ Bei der Frontend Entwicklung wird React mit TypeScript verwendet. React ist vor 
 
 ### Kommunikation
 - Kommunikation: GraphQL (Tokenverifikation) ?
-Für die Kommunikation wurde GraphQL verwendet, da es sowohl flexibler als auch effizienter als REST ist. Zudem löst es das Problem, dass oft entweder zu viele oder zu wenige Daten abgerufen werden und ist somit ein aufsteigendes API-Konzept.
+Für die Kommunikation wurde GraphQL verwendet, da es sowohl flexibler als auch effizienter als REST ist. Im Gegensatz zu REST reicht bei einer GraphQL-API eine einzige Anfrage an den Server aus, um alle relevanten Daten zu erhalten. Dadurch löst GraphQL das Problem, dass oft entweder zu viele oder zu wenige Daten abgerufen werden und ist somit ein aufsteigendes API-Konzept.
 
 Die Datenbank wird erst im zweiten Beispiel ausgewählt werden (vermutlich MongoDB/ Postgres ->kommt darauf an, welche Art von Daten gespeichert werden sollen).
 
