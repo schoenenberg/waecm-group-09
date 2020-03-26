@@ -28,10 +28,10 @@ export const useStyles = makeStyles(theme => ({
     background: "linear-gradient(45deg, #b3cce6 30%, #c6d9ec 90%)",
     borderRadius: 3,
     border: 0,
-    color: "white",
+    color: "#132639",
     height: 48,
     padding: "0 30px",
-    boxShadow: "0 3px 5px 2px rgba(19, 38, 57, .3)",
+    boxShadow: "0 5px 7px 4px rgba(19, 38, 57, .5)",
   },
   large: {
     width: theme.spacing(40),
@@ -50,14 +50,14 @@ export const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(5),
     margin: 0,
     textAlign: "center", 
-    color: "#19334d"
+    color: "#132639"
   },
   names: {
     ...theme.typography.h5, 
     paddingTop: theme.spacing(1),
     margin: 0,
     textAlign: "center", 
-    color: "#19334d"
+    color: "#132639"
   },
   username: {
     ...theme.typography.h6,
