@@ -1,12 +1,28 @@
 import { useQuery } from "@apollo/react-hooks";
 import Avatar from "@material-ui/core/Avatar";
 import React from "react";
-import { useStyles } from "../materialStyles";
 import { Alert } from "./Alert";
 import { CurrentUserData, GET_CURRENT_USER } from "../gql/currentUserQuery";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+    width: theme.spacing(40),
+    height: theme.spacing(40)
+  },
+  username: {
+    ...theme.typography.h6,
+    margin: 0,
+    color: "#c6d9ec",
+    textAlign: "center",
+    marginBottom: theme.spacing(3)
+  }
+}));
 
 export const UserInformation = () => {
-  const classes = useStyles();
+  const styles = useStyles();
 
   const { loading, error, data } = useQuery<CurrentUserData>(GET_CURRENT_USER);
 
@@ -23,9 +39,9 @@ export const UserInformation = () => {
               <Avatar
                 alt="Remy Sharp"
                 src={data.currentUser.picture}
-                className={classes.large}
+                className={styles.avatar}
               />
-              <h2 className={classes.username}>{data.currentUser.username}</h2>
+              <h2 className={styles.username}>{data.currentUser.username}</h2>
             </>
           )}
         </div>
