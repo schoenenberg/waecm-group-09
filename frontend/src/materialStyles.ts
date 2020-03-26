@@ -1,28 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles(theme => ({
-  login: {
-    marginTop: theme.spacing(15),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  profile_details: {
-    marginTop: theme.spacing(10),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  access_denied: {
-    marginTop: theme.spacing(15),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
   button: {
     margin: theme.spacing(3, 0, 2),
     background: "linear-gradient(45deg, #b3cce6 30%, #c6d9ec 90%)",
