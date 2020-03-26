@@ -47,7 +47,7 @@ export const useStyles = makeStyles(theme => ({
   },
   fonts: {
     ...theme.typography.h4, 
-    paddingTop: theme.spacing(15),
+    paddingTop: theme.spacing(5),
     margin: 0,
     textAlign: "center", 
     color: "#19334d"
@@ -63,6 +63,11 @@ export const useStyles = makeStyles(theme => ({
     ...theme.typography.h6,
     margin: 0,
     color: "#c6d9ec",
-    textAlign: "center"
+    textAlign: "center",
+    marginBottom: theme.spacing(3)
+  },
+  alert: {
+    marginBottom: theme.spacing(3)
   }
+
 }));
