@@ -1,10 +1,19 @@
 import { gql } from "apollo-boost";
 
-export const currentUserQuery = gql`
-    {
-      currentUser {
-        username
-        picture
-      }
+export type CurrentUser = {
+  username: string;
+  picture: string;
+};
+
+export type CurrentUserData = {
+  currentUser: CurrentUser;
+};
+
+export const GET_CURRENT_USER = gql`
+  {
+    currentUser {
+      username
+      picture
     }
-  `;
+  }
+`;
