@@ -1,4 +1,4 @@
-FROM node:10-alpine AS builder
+FROM node:10-alpine
 
 EXPOSE 8080/tcp
 
