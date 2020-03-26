@@ -8,19 +8,18 @@ Maximilian Schönenberg 11931241, Sigrid Huemer 51824175, Alicia Schwabenbauer 1
 ## Technologieauswahl
 
 ### Frontend
-Bei der Frontend Entwicklung wird React mit TypeScript verwendet. React ist vor allem schnell und gut skalierbar. Zudem weist React einen großen Marktanteil auf und ist aus diesem Grund eine Technologie, mit welcher sich Entwickler beschäftigen sollten. TypeScript wiederum hat eine starke Typisierung und verringert somit die Anzahl der Laufzeitfehler. Für das Styling wird Material UI, ein React UI Framework, welches sich an [Material Design](https://material.io) orientiert, verwendet. Es bietet eine breite Auswahl an vordefinierten Styles und Komponenten, sowie eine gute Dokumentation.
+Bei der Frontend Entwicklung wird **React mit TypeScript** verwendet. React ist vor allem schnell und gut skalierbar. Zudem weist React einen großen Marktanteil auf und ist aus diesem Grund eine Technologie, mit welcher sich Entwickler beschäftigen sollten. TypeScript wiederum hat eine starke Typisierung und verringert somit die Anzahl der Laufzeitfehler. Für das Styling wird Material UI, ein React UI Framework, welches sich an [Material Design](https://material.io) orientiert, verwendet. Es bietet eine breite Auswahl an vordefinierten Styles und Komponenten, sowie eine gute Dokumentation.
 
 ### Backend
-- Backend: Node.js
+Im Backend verwenden wir das Framework **Nest.js**, da dieses design patterns wie MVC und Decorators in Node.js bringt.  Nest.js hat eine gute Unterstützung für GraphQL APIs und bietet dafür einige interne Libraries. Ein großer Vorteil ist, dass bei der Verwendung von **TypeScript** der "code first approach" in Nest.js genutzt werden kann, um stark typisierte GraphQL schemas zu generieren.
 
 ### Kommunikation
-- Kommunikation: GraphQL (Tokenverifikation) ?
-Für die Kommunikation wurde GraphQL verwendet, da es sowohl flexibler als auch effizienter als REST ist. Im Gegensatz zu REST reicht bei einer GraphQL-API eine einzige Anfrage an den Server aus, um alle relevanten Daten zu erhalten. Dadurch löst GraphQL das Problem, dass oft entweder zu viele oder zu wenige Daten abgerufen werden und ist somit ein aufsteigendes API-Konzept.
+Für die Kommunikation wurde **GraphQL** verwendet, da es sowohl flexibler als auch effizienter als REST ist. Im Gegensatz zu REST reicht bei einer GraphQL-API eine einzige Anfrage an den Server aus, um alle relevanten Daten zu erhalten. Dadurch löst GraphQL das Problem, dass oft entweder zu viele oder zu wenige Daten abgerufen werden und ist somit ein aufsteigendes API-Konzept.
 
 Die Datenbank wird erst im zweiten Beispiel ausgewählt werden (vermutlich MongoDB/ Postgres ->kommt darauf an, welche Art von Daten gespeichert werden sollen).
 
 ## Linter Aufruf
-Beschreibung ergänzen------!!!!
+Der Linter wird im Frontend und im Backend über `npm run lint` aufgerufen.
 
 ## Containerisierung
 Die Applikation kann mittles `docker-compose -f docker-compose-a1.yaml up` gestartet werden. Das Frontend ist auf [localhost:3000](http://localhost:3000) erreichbar.
