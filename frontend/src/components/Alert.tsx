@@ -1,4 +1,3 @@
-
 import React, { FC } from "react";
 import { Alert as MaterialAlert, AlertTitle } from "@material-ui/lab";
 import {useStyles} from "../materialStyles";

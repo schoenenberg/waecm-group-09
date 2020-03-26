@@ -49,12 +49,12 @@ export const useStyles = makeStyles(theme => ({
     ...theme.typography.h4, 
     paddingTop: theme.spacing(5),
     margin: 0,
-    textAlign: "center", 
-    color: "#132639"
+    color: "#132639",
+    textAlign: "center" 
   },
   names: {
     ...theme.typography.h5, 
-    paddingTop: theme.spacing(1),
+    paddingTop: theme.spacing(2),
     margin: 0,
     textAlign: "center", 
     color: "#132639"
