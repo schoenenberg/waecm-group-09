@@ -8,6 +8,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { useStyles } from "./materialStyles";
+import Divider from '@material-ui/core/Divider';
 import { Login } from "./components/Login";
 
 const useReactPath = () => {
@@ -102,8 +103,12 @@ const App = () => {
       <Container component="main" className={classes.container}>
         <header>
           <h1 className={classes.fonts}>
-            WAECM Project: Max, Sigrid, Alicia, Elli
+            WAECM Project 
           </h1>
+          <h1 className={classes.names}>
+            Max, Sigrid, Alicia, Elli
+          </h1>
+          <Divider variant="middle" />
         </header>
         <Login
           accessDenied={accessDenied}
