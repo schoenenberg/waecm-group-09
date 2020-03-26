@@ -4,11 +4,13 @@ import { useStyles } from "../materialStyles";
 
 type PrimaryButtonProps = {
   onClickHandler: MouseEventHandler;
+  disabled?: boolean
   children: string;
 };
 
 export const PrimaryButton: FC<PrimaryButtonProps> = ({
   onClickHandler,
+  disabled = false,
   children
 }) => {
   const classes = useStyles();
@@ -20,6 +22,7 @@ export const PrimaryButton: FC<PrimaryButtonProps> = ({
       color="primary"
       className={classes.button}
       onClick={onClickHandler}
+      disabled={disabled}
     >
       {children}
     </Button>

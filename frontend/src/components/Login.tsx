@@ -5,6 +5,8 @@ import { PrimaryButton } from "./PrimaryButton";
 import React, { MouseEventHandler, FC } from "react";
 import { useStyles } from "../materialStyles";
 import { UserInformation } from "./UserInformation";
+import { useQuery } from "@apollo/react-hooks";
+import { GET_CURRENT_USER } from "../gql/currentUserQuery";
 
 type LoginProps = {
   accessDenied: boolean;
@@ -22,24 +24,28 @@ export const Login: FC<LoginProps> = ({
   isProfileDetailPage
 }) => {
   const classes = useStyles();
+  const { error, loading } = useQuery(GET_CURRENT_USER);
 
-  const materialClass = accessDenied
-    ? classes.access_denied
-    : isProfileDetailPage
-    ? classes.profile_details
-    : classes.login;
+  const materialClass =
+    accessDenied || error
+      ? classes.access_denied
+      : isProfileDetailPage
+      ? classes.profile_details
+      : classes.login;
 
-  const onClick = accessDenied
-    ? onRedirectStartpage
-    : isProfileDetailPage
-    ? onLogout
-    : onLogin;
+  const onClick =
+    accessDenied || error
+      ? onRedirectStartpage
+      : isProfileDetailPage
+      ? onLogout
+      : onLogin;
 
-  const buttonText = accessDenied
-    ? "Redirect to Startpage"
-    : isProfileDetailPage
-    ? "Logout"
-    : "Login";
+  const buttonText =
+    accessDenied || error
+      ? "Redirect to Startpage"
+      : isProfileDetailPage
+      ? "Logout"
+      : "Login";
 
   return (
     <Container maxWidth="xs">
@@ -49,7 +55,12 @@ export const Login: FC<LoginProps> = ({
           <Alert title={"Error"}>Unfortunately the access was denied!</Alert>
         )}
         {isProfileDetailPage && !accessDenied && <UserInformation />}
-        <PrimaryButton onClickHandler={onClick}>{buttonText}</PrimaryButton>
+        <PrimaryButton
+          onClickHandler={onClick}
+          disabled={isProfileDetailPage && loading}
+        >
+          {buttonText}
+        </PrimaryButton>
       </div>
     </Container>
   );
