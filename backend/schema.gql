@@ -4,6 +4,14 @@
 
 type Query {
   currentUser: UserModel!
+  subreddit: RedditModel!
+}
+
+type RedditModel {
+  link: String!
+  description: String
+  icon: String
+  answerCount: Float
 }
 
 type UserModel {
