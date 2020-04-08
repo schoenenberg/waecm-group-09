@@ -1,0 +1,124 @@
+import React, { useState, useCallback } from "react";
+import "./App.css";
+import Container from "@material-ui/core/Container";
+import { uuid } from "uuidv4";
+import { useEffect } from "react";
+import ApolloClient from "apollo-client";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { HttpLink } from "apollo-link-http";
+import { ApolloProvider } from "@apollo/react-hooks";
+import { useStyles } from "./materialStyles";
+import Divider from '@material-ui/core/Divider';
+import { Login } from "./components/Login";
+
+const useReactPath = () => {
+  const [windowHref, setWindowHref] = useState(window.location.href);
+  const listenToPopstate = () => {
+    const currentWindowHref = window.location.href;
+    setWindowHref(currentWindowHref);
+  };
+  useEffect(() => {
+    window.addEventListener("popstate", listenToPopstate);
+    return () => {
+      window.removeEventListener("popstate", listenToPopstate);
+    };
+  }, []);
+  return windowHref;
+};
+
+const App = () => {
+  const classes = useStyles();
+  const [token_id, setTokenId] = useState("");
+  const [oldToken, setOldToken] = useState("");
+  const [isProfileDetailPage, setIsProfileDetailPage] = useState(false);
+  const [accessDenied, setAccessDenied] = useState(false);
+  const [client, setClient] = useState(
+    new ApolloClient({
+      link: new HttpLink({
+        uri: "http://localhost:8080/graphql",
+        headers: {
+          Authorization: `Bearer ` + token_id
+        }
+      }),
+      cache: new InMemoryCache()
+    })
+  );
+
+  const href = useReactPath();
+
+  useEffect(() => {
+    if (href.includes("id_token")) {
+      setOldToken(token_id);
+      if (!oldToken.includes(href.split("token=")[1])) {
+        setIsProfileDetailPage(true);
+        setTokenId(href.split("token=")[1]);
+        setClient(
+          new ApolloClient({
+            link: new HttpLink({
+              uri: "http://localhost:8080/graphql",
+              headers: {
+                Authorization: `Bearer ` + token_id
+              }
+            }),
+            cache: new InMemoryCache()
+          })
+        );
+      }
+    }
+    if (href.includes("access_denied")) {
+      setAccessDenied(true);
+    }
+  }, [href, token_id, isProfileDetailPage, accessDenied, client, oldToken]);
+
+  const auth_url = (): string => {
+    return (
+      "https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/auth" +
+      "?client_id=waecm" +
+      "&response_type=id_token" +
+      "&prompt=consent" +
+      "&nonce=" +
+      uuid() +
+      "&scope=openid%20profile" +
+      "&redirect_uri=http://localhost:3000"
+    );
+  };
+
+  const login = useCallback(() => {
+    window.location.replace(auth_url());
+  }, []);
+
+  const logout = useCallback(() => {
+    window.location.replace(
+      "https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/logout?post_logout_redirect_uri=http://localhost:3000"
+    );
+    setIsProfileDetailPage(false);
+  }, []);
+
+  const redirectStartPage = useCallback(() => {
+    window.location.replace("http://localhost:3000");
+  }, []);
+
+  return (
+    <ApolloProvider client={client}>
+      <Container component="main" className={classes.container}>
+        <header>
+          <h1 className={classes.fonts}>
+            WAECM Project 
+          </h1>
+          <h1 className={classes.names}>
+            Max, Sigrid, Alicia, Elli
+          </h1>
+          <Divider variant="middle" />
+        </header>
+        <Login
+          accessDenied={accessDenied}
+          onLogin={login}
+          onLogout={logout}
+          onRedirectStartpage={redirectStartPage}
+          isProfileDetailPage={isProfileDetailPage}
+        />
+      </Container>
+    </ApolloProvider>
+  );
+}
+export default App;

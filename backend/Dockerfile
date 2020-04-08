@@ -1,13 +1,11 @@
-FROM golang:1.14 AS builder
+FROM node:10-alpine
 
-WORKDIR /go/src/waecm
-COPY . /go/src/waecm/
+EXPOSE 8080/tcp
 
-RUN CGO_ENABLED=0 go build -v ./cmd/backend
+WORKDIR /opt/waecm
+COPY . /opt/waecm/
 
-# -----------------------------
+RUN npm install \
+ && npm run build
 
-FROM alpine:latest
-
-COPY --from=builder --chown=root:root /go/src/waecm/backend /opt/bin/waecm-backend
-CMD /opt/bin/waecm-backend
+CMD npm run start:prod
