@@ -1,4 +1,4 @@
-import React, {FC, MouseEventHandler} from 'react';
+import React, {FC, MouseEventHandler, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import Settings from "./Settings";
 import Dashboard from "./Dashboard";
 import {PrimaryButton} from "./PrimaryButton";
+import {AlertDialog} from "./AlertDialog";
 
 type NavigationProps = {
     onLogout: MouseEventHandler;
@@ -60,15 +61,22 @@ function a11yProps(index: number) {
 export const MenuAppBar: FC<NavigationProps> =  ({onLogout}) => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
-    const onClick = onLogout;
+    const [open, setOpen] = useState(false); // refers to alert dialog
 
     const handleChange = (_event: any, newValue: React.SetStateAction<number>) => {
         setValue(newValue);
     };
 
+    const handleAlertDialogOpen = () => {
+        setOpen(true);
+    };
+
+    const handleAlertDialogClose = () => {
+        setOpen(false);
+    };
+
     return (
         <div className={classes.root}>
-
             <AppBar position="fixed">
                 <Toolbar>
                    <Typography variant="h6" className={classes.title}>
@@ -76,7 +84,7 @@ export const MenuAppBar: FC<NavigationProps> =  ({onLogout}) => {
                     </Typography>
                     <IconButton color="inherit">
                         <PrimaryButton
-                            onClickHandler={onClick}
+                            onClickHandler={handleAlertDialogOpen}
                         >
                             Logout
                         </PrimaryButton>
@@ -89,6 +97,12 @@ export const MenuAppBar: FC<NavigationProps> =  ({onLogout}) => {
             </AppBar>
             <TabPanel value={value} index={0}>
                   <Settings/>
+                  <AlertDialog
+                      handleAlertDialogOpen= {handleAlertDialogOpen}
+                      handleAlertDialogClose= {handleAlertDialogClose}
+                      open={open}
+                      onLogout={onLogout}
+                      />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <Dashboard/>
