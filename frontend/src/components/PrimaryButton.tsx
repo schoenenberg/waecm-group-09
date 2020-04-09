@@ -32,7 +32,6 @@ export const PrimaryButton: FC<PrimaryButtonProps> = ({
     <Button
       fullWidth
       variant="contained"
-      // color="primary"
       className={styles.button}
       onClick={onClickHandler}
       disabled={disabled}
