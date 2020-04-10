@@ -120,13 +120,16 @@ const App = () => {
           </div>
           }
         </header>
-        <Login
-          accessDenied={accessDenied}
-          onLogin={login}
-          onLogout={logout}
-          onRedirectStartpage={redirectStartPage}
-          isProfileDetailPage={isProfileDetailPage}
-        />
+          {!isLoggedIn &&
+
+          <Login
+              accessDenied={accessDenied}
+              onLogin={login}
+              onLogout={logout}
+              onRedirectStartpage={redirectStartPage}
+              isProfileDetailPage={isProfileDetailPage}
+          />
+          }
       </Container>
     </ApolloProvider>
   );

@@ -1,27 +1,42 @@
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
-import React, {FC, MouseEventHandler} from "react";
+import React, {FC, MouseEventHandler, useState} from "react";
 import {PrimaryButton} from "./PrimaryButton";
 
 type NavigationProps = {
-    onLogout: MouseEventHandler;
-    handleAlertDialogOpen: MouseEventHandler;
-    handleAlertDialogClose: MouseEventHandler;
-    open: boolean;
+    onAcceptDialog: MouseEventHandler;
+    title: string;
+    text: string;
+    buttonOpenText: string;
 };
 
-export const AlertDialog: FC<NavigationProps> =  ({onLogout, handleAlertDialogClose, open}) =>  {
+export const AlertDialog: FC<NavigationProps> =  ({onAcceptDialog, title, text, buttonOpenText}) =>  {
+    const [alertDialogOpen, setAlertDialogOpen] = useState(false); // refers to alert dialog
+
+    const handleAlertDialogOpen = () => {
+        setAlertDialogOpen(true);
+    };
+
+    const handleAlertDialogClose = () => {
+        setAlertDialogOpen(false);
+    };
+
     return (
         <div>
+            <PrimaryButton
+                onClickHandler={handleAlertDialogOpen}
+            >
+                {buttonOpenText}
+            </PrimaryButton>
             <Dialog
-                open={open}
+                open={alertDialogOpen}
                 onClose={handleAlertDialogClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Logout?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Do you really want to log out?
+                        {text}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -31,7 +46,7 @@ export const AlertDialog: FC<NavigationProps> =  ({onLogout, handleAlertDialogCl
                         No
                     </PrimaryButton>
                     <PrimaryButton
-                        onClickHandler={onLogout}
+                        onClickHandler={onAcceptDialog}
                     >
                         Yes
                     </PrimaryButton>

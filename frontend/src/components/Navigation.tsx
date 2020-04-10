@@ -1,4 +1,4 @@
-import React, {FC, MouseEventHandler, useState} from 'react';
+import React, {FC, MouseEventHandler} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,7 +9,6 @@ import {Box, Tab, Tabs} from "@material-ui/core";
 import PropTypes from 'prop-types';
 import Settings from "./Settings";
 import Dashboard from "./Dashboard";
-import {PrimaryButton} from "./PrimaryButton";
 import {AlertDialog} from "./AlertDialog";
 
 type NavigationProps = {
@@ -59,20 +58,12 @@ function a11yProps(index: number) {
 }
 
 export const MenuAppBar: FC<NavigationProps> =  ({onLogout}) => {
-    const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-    const [open, setOpen] = useState(false); // refers to alert dialog
+    const classes = useStyles(); // defines styles for the class
+    const [value, setValue] = React.useState(0); // value of the tab (either settings or dashboard
+
 
     const handleChange = (_event: any, newValue: React.SetStateAction<number>) => {
         setValue(newValue);
-    };
-
-    const handleAlertDialogOpen = () => {
-        setOpen(true);
-    };
-
-    const handleAlertDialogClose = () => {
-        setOpen(false);
     };
 
     return (
@@ -83,11 +74,12 @@ export const MenuAppBar: FC<NavigationProps> =  ({onLogout}) => {
                         <UserInformation />
                     </Typography>
                     <IconButton color="inherit">
-                        <PrimaryButton
-                            onClickHandler={handleAlertDialogOpen}
-                        >
-                            Logout
-                        </PrimaryButton>
+                        <AlertDialog
+                            buttonOpenText={"Logout"}
+                            onAcceptDialog={onLogout}
+                            title={"Logout?"}
+                            text={"Do you really want to log out?"}
+                        />
                     </IconButton>
                 </Toolbar>
                 <Tabs value={value} onChange={handleChange}>
@@ -97,12 +89,7 @@ export const MenuAppBar: FC<NavigationProps> =  ({onLogout}) => {
             </AppBar>
             <TabPanel value={value} index={0}>
                   <Settings/>
-                  <AlertDialog
-                      handleAlertDialogOpen= {handleAlertDialogOpen}
-                      handleAlertDialogClose= {handleAlertDialogClose}
-                      open={open}
-                      onLogout={onLogout}
-                      />
+
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <Dashboard/>
