@@ -2,34 +2,26 @@ import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} fr
 import React, {FC, MouseEventHandler, useState} from "react";
 import {PrimaryButton} from "./PrimaryButton";
 
-type NavigationProps = {
+type AlertDialogProps = {
     onAcceptDialog: MouseEventHandler;
     title: string;
     text: string;
     buttonOpenText: string;
 };
 
-export const AlertDialog: FC<NavigationProps> =  ({onAcceptDialog, title, text, buttonOpenText}) =>  {
+export const AlertDialog: FC<AlertDialogProps> =  ({onAcceptDialog, title, text, buttonOpenText}) =>  {
     const [alertDialogOpen, setAlertDialogOpen] = useState(false); // refers to alert dialog
-
-    const handleAlertDialogOpen = () => {
-        setAlertDialogOpen(true);
-    };
-
-    const handleAlertDialogClose = () => {
-        setAlertDialogOpen(false);
-    };
 
     return (
         <div>
             <PrimaryButton
-                onClickHandler={handleAlertDialogOpen}
+                onClickHandler={() =>setAlertDialogOpen(true)}
             >
                 {buttonOpenText}
             </PrimaryButton>
             <Dialog
                 open={alertDialogOpen}
-                onClose={handleAlertDialogClose}
+                onClose={() =>setAlertDialogOpen(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -41,7 +33,7 @@ export const AlertDialog: FC<NavigationProps> =  ({onAcceptDialog, title, text, 
                 </DialogContent>
                 <DialogActions>
                     <PrimaryButton
-                        onClickHandler={handleAlertDialogClose}
+                        onClickHandler={() =>setAlertDialogOpen(false)}
                     >
                         No
                     </PrimaryButton>

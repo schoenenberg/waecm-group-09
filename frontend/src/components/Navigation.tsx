@@ -1,4 +1,4 @@
-import React, {FC, MouseEventHandler} from 'react';
+import React, {FC, MouseEventHandler, ReactNode} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -6,12 +6,11 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import {UserInformation} from "./UserInformation";
 import {Box, Tab, Tabs} from "@material-ui/core";
-import PropTypes from 'prop-types';
 import Settings from "./Settings";
 import Dashboard from "./Dashboard";
 import {AlertDialog} from "./AlertDialog";
 
-type NavigationProps = {
+type MenuAppBarProps = {
     onLogout: MouseEventHandler;
 };
 
@@ -27,8 +26,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function TabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
-    const { children, value, index, ...other } = props;
+const TabPanel: FC<TabPanelProps> = ({ children, value, index, ...other }) => {
 
     return (
         <Typography
@@ -44,11 +42,11 @@ function TabPanel(props: { [x: string]: any; children: any; value: any; index: a
     );
 }
 
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
+type TabPanelProps = {
+    children?: ReactNode,
+    value: number,
+    index: number
+}
 
 function a11yProps(index: number) {
     return {
@@ -57,7 +55,7 @@ function a11yProps(index: number) {
     };
 }
 
-export const MenuAppBar: FC<NavigationProps> =  ({onLogout}) => {
+export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
     const classes = useStyles(); // defines styles for the class
     const [value, setValue] = React.useState(0); // value of the tab (either settings or dashboard
 
@@ -89,7 +87,6 @@ export const MenuAppBar: FC<NavigationProps> =  ({onLogout}) => {
             </AppBar>
             <TabPanel value={value} index={0}>
                   <Settings/>
-
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <Dashboard/>
