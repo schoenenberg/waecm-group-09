@@ -8,8 +8,10 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { useStyles } from "./materialStyles";
-import Divider from '@material-ui/core/Divider';
 import { Login } from "./components/Login";
+
+import Divider from "@material-ui/core/Divider";
+import {MenuAppBar} from "./components/Navigation";
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -28,6 +30,7 @@ const useReactPath = () => {
 
 const App = () => {
   const classes = useStyles();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token_id, setTokenId] = useState("");
   const [oldToken, setOldToken] = useState("");
   const [isProfileDetailPage, setIsProfileDetailPage] = useState(false);
@@ -50,6 +53,7 @@ const App = () => {
     if (href.includes("id_token")) {
       setOldToken(token_id);
       if (!oldToken.includes(href.split("token=")[1])) {
+          setIsLoggedIn(true)
         setIsProfileDetailPage(true);
         setTokenId(href.split("token=")[1]);
         setClient(
@@ -68,7 +72,7 @@ const App = () => {
     if (href.includes("access_denied")) {
       setAccessDenied(true);
     }
-  }, [href, token_id, isProfileDetailPage, accessDenied, client, oldToken]);
+  }, [href, token_id, isProfileDetailPage, accessDenied, client, oldToken, isLoggedIn]);
 
   const auth_url = (): string => {
     return (
@@ -92,6 +96,7 @@ const App = () => {
       "https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/logout?post_logout_redirect_uri=http://localhost:3000"
     );
     setIsProfileDetailPage(false);
+    setIsLoggedIn(false);
   }, []);
 
   const redirectStartPage = useCallback(() => {
@@ -102,21 +107,29 @@ const App = () => {
     <ApolloProvider client={client}>
       <Container component="main" className={classes.container}>
         <header>
-          <h1 className={classes.fonts}>
-            WAECM Project 
-          </h1>
-          <h1 className={classes.names}>
-            Max, Sigrid, Alicia, Elli
-          </h1>
-          <Divider variant="middle" />
+          {isLoggedIn && <MenuAppBar onLogout={logout}/>}
+          {!isLoggedIn &&
+          <div>
+            <h1 className={classes.fonts}>
+              WAECM Project
+            </h1>
+            < h1 className={classes.names}>
+              Max, Sigrid, Alicia, Elli
+            </h1>
+            <Divider variant="middle"/>
+          </div>
+          }
         </header>
-        <Login
-          accessDenied={accessDenied}
-          onLogin={login}
-          onLogout={logout}
-          onRedirectStartpage={redirectStartPage}
-          isProfileDetailPage={isProfileDetailPage}
-        />
+          {!isLoggedIn &&
+
+          <Login
+              accessDenied={accessDenied}
+              onLogin={login}
+              onLogout={logout}
+              onRedirectStartpage={redirectStartPage}
+              isProfileDetailPage={isProfileDetailPage}
+          />
+          }
       </Container>
     </ApolloProvider>
   );

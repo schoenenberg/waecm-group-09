@@ -3,7 +3,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { Alert } from "./Alert";
 import { PrimaryButton } from "./PrimaryButton";
 import React, { MouseEventHandler, FC } from "react";
-import { UserInformation } from "./UserInformation";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_CURRENT_USER } from "../gql/currentUserQuery";
 import { makeStyles } from "@material-ui/core/styles";
@@ -77,7 +76,6 @@ export const Login: FC<LoginProps> = ({
         {accessDenied && (
           <Alert title={"Error"}>Unfortunately the access was denied!</Alert>
         )}
-        {isProfileDetailPage && !accessDenied && <UserInformation />}
         <PrimaryButton
           onClickHandler={onClick}
           disabled={isProfileDetailPage && loading}
