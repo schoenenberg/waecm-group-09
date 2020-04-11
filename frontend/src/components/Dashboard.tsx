@@ -5,7 +5,7 @@ import {DashboardElement} from "./DashboardElement";
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
-        marginTop: theme.spacing(30),
+        marginTop: theme.spacing(25),
     },
 
 }));
@@ -28,12 +28,23 @@ export const Dashboard = () => {
         icon: "blabla",
         number_answers: 1000
     });
+    mocks.push({
+        name: "/r/Angular2",
+        description: "Angular 2+",
+        icon: "blabla",
+        number_answers: 10
+    });
+    mocks.push({
+        name: "/r/Angular2",
+        description: "Angular 2+",
+        icon: "blabla",
+        number_answers: 5
+    });
     const data ={mocks
     }
 
     return (
         <div className={classes.root}>
-            <p>This is the dashboard</p>
             {data.mocks.map((elem) => (
                 <DashboardElement
                     name={elem.name}
