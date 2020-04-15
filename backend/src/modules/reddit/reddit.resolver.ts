@@ -34,6 +34,13 @@ export class RedditResolver {
   }
 
   @Mutation(() => SubredditModel)
+  async getSubreddit(
+    @Args('_id') id: string,
+  ){
+    return await this.redditService.readOne(id);
+  }
+
+  @Mutation(() => SubredditModel)
   async updateSubreddit(
     @Args('_id') id: string,
     @Args('input') subredditInput: UpdateSubredditInput,

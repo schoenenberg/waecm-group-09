@@ -3,6 +3,7 @@
 # ------------------------------------------------------
 
 type Mutation {
+  getSubreddit(_id: String!): SubredditModel!
   updateSubreddit(input: UpdateSubredditInput!, _id: String!): SubredditModel!
   createNewSubreddit(input: NewSubredditInput!): SubredditModel!
   deleteSubreddit(_id: String!): SubredditModel!

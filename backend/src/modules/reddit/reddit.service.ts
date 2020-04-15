@@ -37,8 +37,13 @@ export class RedditService {
     return await createdSubreddit.save();
   }
 
-  async remove(id: string): Promise<Subreddit | null> {
-    return this.subredditModel.findOne({ _id: id });
+  async readOne(id: string): Promise<Subreddit> {
+    const foundSubreddit = await this.subredditModel.findOne({ _id: id });
+
+    if (!foundSubreddit)
+      throw new Error('ERROR: Could not be updated - ID not found');
+
+    return foundSubreddit;
   }
 
   async update(
