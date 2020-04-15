@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class SubredditInfo {
+export class SubredditModel {
   @Field()
   _id!: string;
 

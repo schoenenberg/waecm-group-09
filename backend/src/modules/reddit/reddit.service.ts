@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { NewSubredditInput } from './dto/new-subreddit.input';
 import { UpdateSubredditInput } from './dto/update-subreddit.input';
-import { SubredditInfo } from './reddit.model';
+import { SubredditModel } from './subreddit.model';
 import { Subreddit } from './interfaces/subreddit.interface';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class RedditService {
 
   async createSubreddit(
     newSubredditDTO: NewSubredditInput,
-  ): Promise<SubredditInfo> {
+  ): Promise<SubredditModel> {
     // TODO: get data from reddit (description, icon)
     // TODO: get current answer count from database
 

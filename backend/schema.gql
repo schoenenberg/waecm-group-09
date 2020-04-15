@@ -3,9 +3,9 @@
 # ------------------------------------------------------
 
 type Mutation {
-  updateSubreddit(input: UpdateSubredditInput!, _id: String!): SubredditInfo!
-  createNewSubreddit(input: NewSubredditInput!): SubredditInfo!
-  deleteSubreddit(_id: String!): SubredditInfo!
+  updateSubreddit(input: UpdateSubredditInput!, _id: String!): SubredditModel!
+  createNewSubreddit(input: NewSubredditInput!): SubredditModel!
+  deleteSubreddit(_id: String!): SubredditModel!
 }
 
 input NewSubredditInput {
@@ -17,11 +17,11 @@ input NewSubredditInput {
 
 type Query {
   currentUser: UserModel!
-  subreddit: SubredditInfo!
-  allSubreddits: [SubredditInfo!]!
+  subreddit: SubredditModel!
+  allSubreddits: [SubredditModel!]!
 }
 
-type SubredditInfo {
+type SubredditModel {
   _id: String!
   name: String!
   keywords: [String!]!

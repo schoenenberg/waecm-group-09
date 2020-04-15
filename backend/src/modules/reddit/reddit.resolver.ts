@@ -1,20 +1,20 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/auth.guard';
-import { SubredditInfo } from './reddit.model';
+import { SubredditModel } from './subreddit.model';
 import { RedditService } from './reddit.service';
 import { NewSubredditInput } from './dto/new-subreddit.input';
 import { UpdateSubredditInput } from './dto/update-subreddit.input';
 
-@Resolver(() => SubredditInfo)
+@Resolver(() => SubredditModel)
 export class RedditResolver {
   constructor(private readonly redditService: RedditService) {}
 
 
   // THIS IS JUST FOR TESTING ---- delete later --------------------------------
-  @Query(() => SubredditInfo)
+  @Query(() => SubredditModel)
   @UseGuards(GqlAuthGuard)
-  subreddit(): SubredditInfo {
+  subreddit(): SubredditModel {
     return {
       _id: 'gfdsdfgsdfg',
       name: '/r/reactjs-testData',
@@ -28,12 +28,12 @@ export class RedditResolver {
   }
   // ---------------------------------------------------------------------------
 
-  @Query(() => [SubredditInfo])
+  @Query(() => [SubredditModel])
   async allSubreddits() {
     return this.redditService.findAll();
   }
 
-  @Mutation(() => SubredditInfo)
+  @Mutation(() => SubredditModel)
   async updateSubreddit(
     @Args('_id') id: string,
     @Args('input') subredditInput: UpdateSubredditInput,
@@ -41,7 +41,7 @@ export class RedditResolver {
     return await this.redditService.update(id, subredditInput);
   }
 
-  @Mutation(() => SubredditInfo)
+  @Mutation(() => SubredditModel)
   async createNewSubreddit(
     @Args('input')
     subredditInput: NewSubredditInput,
@@ -49,7 +49,7 @@ export class RedditResolver {
     return await this.redditService.createSubreddit(subredditInput);
   }
 
-  @Mutation(() => SubredditInfo)
+  @Mutation(() => SubredditModel)
   async deleteSubreddit(
     @Args('_id')
     id: string,
