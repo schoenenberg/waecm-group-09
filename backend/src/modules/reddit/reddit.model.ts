@@ -1,9 +1,21 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class RedditModel {
+export class SubredditInfo {
   @Field()
-  link!: string;
+  _id!: string;
+
+  @Field()
+  name!: string;
+
+  @Field(() => [String])
+  keywords!: string[];
+
+  @Field()
+  answer!: string;
+
+  @Field()
+  active!: boolean;
 
   @Field({ nullable: true })
   description?: string;

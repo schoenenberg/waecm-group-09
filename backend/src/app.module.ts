@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { MongooseModule } from '@nestjs/mongoose';
 import { Request } from 'express';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -16,6 +17,7 @@ import { RedditModule } from './modules/reddit/reddit.module';
       autoSchemaFile: 'schema.gql',
       context: ({ req }: { req: Request }) => ({ req }),
     }),
+    MongooseModule.forRoot('mongodb://localhost/nest')
   ],
 })
 export class AppModule {}
