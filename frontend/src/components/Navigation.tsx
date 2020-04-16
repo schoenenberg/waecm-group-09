@@ -7,12 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import {UserInformation} from "./UserInformation";
 import {Box, Tab, Tabs} from "@material-ui/core";
 import Settings from "./Settings";
-import Dashboard from "./Dashboard";
 import {AlertDialog} from "./AlertDialog";
-
-type MenuAppBarProps = {
-    onLogout: MouseEventHandler;
-};
+import {Dashboard} from "./Dashboard";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -54,6 +50,10 @@ function a11yProps(index: number) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
+
+type MenuAppBarProps = {
+    onLogout: MouseEventHandler;
+};
 
 export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
     const classes = useStyles(); // defines styles for the class
