@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
             "& > *": {
                 position: 'absolute',
                 background: "#4287f5",
-                bottom: theme.spacing(5),
-                right: theme.spacing(5),
+                bottom: theme.spacing(3),
+                right: theme.spacing(3),
             },
         },
         extendedIcon: {

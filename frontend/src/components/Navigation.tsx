@@ -1,4 +1,5 @@
 import React, {FC, MouseEventHandler, ReactNode,/* useCallback,*/ useState} from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -6,9 +7,11 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import {UserInformation} from "./UserInformation";
 import {Box, Tab, Tabs} from "@material-ui/core";
+
 import { Settings } from "./Settings";
 import Dashboard from "./Dashboard";
 import {AlertDialog} from "./AlertDialog";
+import {PrimaryButton} from "./PrimaryButton";
 
 type MenuAppBarProps = {
     onLogout: MouseEventHandler;
@@ -59,6 +62,7 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
     const classes = useStyles(); // defines styles for the class
     const [value, setValue] = React.useState(0); // value of the tab (either settings or dashboard
     const [showSettingsComponent, setSettingsComponent] = useState(true);
+    const [alertDialogOpen, setAlertDialogOpen] = useState(false); 
 
     const handleChange = (_event: any, newValue: React.SetStateAction<number>) => {
         setValue(newValue);
@@ -81,12 +85,15 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
                         <UserInformation />
                     </Typography>
                     <IconButton color="inherit">
-                        <AlertDialog
-                            buttonOpenText={"Logout"}
-                            onAcceptDialog={onLogout}
-                            title={"Logout?"}
-                            text={"Do you really want to log out?"}
-                        />
+                        <PrimaryButton
+                                onClickHandler={() =>setAlertDialogOpen(true)}>
+                                Logout
+                        </PrimaryButton>
+                        {alertDialogOpen && <AlertDialog
+                                onAcceptDialog={onLogout}
+                                title={"Logout?"}
+                                text={"Do you really want to log out?"}
+                            />}
                     </IconButton>
                 </Toolbar>
                 <Tabs value={value} onChange={handleChange}>

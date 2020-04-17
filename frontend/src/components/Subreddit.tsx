@@ -1,4 +1,4 @@
-import React, {FC, MouseEventHandler} from "react";
+import React, {FC, MouseEventHandler, useState} from "react";
 
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
@@ -8,6 +8,8 @@ import Box from '@material-ui/core/Box';
 
 import Fab from "@material-ui/core/Fab";
 import DeleteIcon from "@material-ui/icons/Delete";
+
+import {AlertDialog} from "./AlertDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,6 +39,7 @@ export const Subreddit: FC<DeleteSubredditPrompts> = ({
     date, 
 }) => {
     const classes = useStyles();
+    const [alertDialogOpen,setAlertDialogOpen] = useState(false); 
 
 return (
     <div className={classes.root}>
@@ -54,9 +57,14 @@ return (
             </Typography>
           </Grid>
           <Grid item>
-            <Fab color="primary" aria-label="add" onClick={onDeleteReddit}>
+            <Fab color="primary" aria-label="add" onClick={() => setAlertDialogOpen(true)}>
               <DeleteIcon />
             </Fab>
+            {alertDialogOpen && <AlertDialog
+                            onAcceptDialog={onDeleteReddit}
+                            title={"Delte?"}
+                            text={"Do you really want to delete this reddit?"}
+            />}
           </Grid>
         </Grid>
       </Paper>
