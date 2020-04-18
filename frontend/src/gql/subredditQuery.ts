@@ -1,7 +1,8 @@
 import { gql } from "apollo-boost";
 
 export type Subreddit = {
-    link: string;
+    _id: string;
+    name: string;
     description: string;
     icon: string;
     answerCount: string;
@@ -11,13 +12,14 @@ export type SubredditData = {
     subreddit: Subreddit;
 };
 
-export const GET_SUBREDDIT = gql`
+export const GET_SUBREDDITS = gql`
   {
-    subreddit {
-      link
-      description
-      icon
-      answerCount
+     allSubreddits {
+    _id
+    name
+    description
+    icon
+    answerCount
     }
   }
 `;

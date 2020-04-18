@@ -2,7 +2,10 @@ import React, {FC} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from "@material-ui/core/Box";
 import ChatIcon from '@material-ui/icons/Chat';
-import {Grid} from "@material-ui/core";
+import {Grid, Link} from "@material-ui/core";
+import {useQuery} from "@apollo/react-hooks";
+import {CurrentUserData, GET_CURRENT_USER} from "../gql/currentUserQuery";
+import {GET_SUBREDDITS, SubredditData} from "../gql/subredditQuery";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,10 +29,12 @@ type DashboardElemProps = {
 export const DashboardElement: FC<DashboardElemProps> =  ({name, description, icon, number_answers}) =>{
     const classes = useStyles();
     const color = "#80d8ff";
+    const { loading, error, data } = useQuery<SubredditData>(GET_SUBREDDITS);
 
     return (
 
             <div className={classes.root}>
+                {loading}{error}{data.subreddit}
                 <Box
                     display="flex"
                     alignItems="center"
@@ -42,8 +47,16 @@ export const DashboardElement: FC<DashboardElemProps> =  ({name, description, ic
                         {icon}
                     </Box>
                     <Box p={1} bgcolor={color} width={1/2}>
-                        <h4>{name}</h4>
-                        <p>{description}</p>
+                            <Link
+                                component="button"
+                                variant="body1"
+                                onClick={() => {
+                                    window.open("http://www.google.de", '_blank');
+                                }}
+                            >
+                                {name}
+                            </Link>
+                        {description}
                     </Box>
                     <Box p={1} bgcolor={color} width={1/4}>
                         <Grid container spacing={3} className={classes.paper}>
