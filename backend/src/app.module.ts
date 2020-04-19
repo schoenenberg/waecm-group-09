@@ -17,7 +17,14 @@ import { RedditModule } from './modules/reddit/reddit.module';
       autoSchemaFile: 'schema.gql',
       context: ({ req }: { req: Request }) => ({ req }),
     }),
-    MongooseModule.forRoot('mongodb://localhost/nest')
+    MongooseModule.forRoot('mongodb://localhost:27017/', {
+      user: 'waecm',
+      pass: 'waecm20',
+      db: 'test',
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }),
   ],
 })
-export class AppModule {}
+export class AppModule {
+}
