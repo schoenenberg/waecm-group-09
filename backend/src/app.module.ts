@@ -17,7 +17,7 @@ import { RedditModule } from './modules/reddit/reddit.module';
       autoSchemaFile: 'schema.gql',
       context: ({ req }: { req: Request }) => ({ req }),
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/', {
+    MongooseModule.forRoot('mongodb://db:27017/', {
       user: 'waecm',
       pass: 'waecm20',
       db: 'test',
