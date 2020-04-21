@@ -14,7 +14,7 @@ import { RedditModule } from './modules/reddit/reddit.module';
     GraphQLModule.forRoot({
       debug: false,
       playground: true,
-      autoSchemaFile: 'schema.gql',
+      autoSchemaFile: 'schema.graphql',
       context: ({ req }: { req: Request }) => ({ req }),
     }),
     MongooseModule.forRoot('mongodb://db:27017/', {
