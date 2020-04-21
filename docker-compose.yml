@@ -5,9 +5,18 @@ services:
     build:
       context: ./backend
     ports:
-    - target: 8080
-      published: 8080
-      protocol: tcp
+      - target: 8080
+        published: 8080
+        protocol: tcp
+    networks:
+      - db_net
+    environment:
+      - REDDIT_USERNAME=unset
+      - REDDIT_PASSWORD=unset
+      - REDDIT_CLIENT_ID=unset
+      - REDDIT_CLIENT_SECRET=unset
+    depends_on:
+      - db
 
   frontend:
     build:
@@ -16,4 +25,17 @@ services:
       - target: 3000
         published: 3000
         protocol: tcp
+    depends_on:
+      - backend
+
+  db:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=waecm
+      - MONGO_INITDB_ROOT_PASSWORD=waecm20
+    networks:
+      - db_net
+
+networks:
+  db_net:
 
