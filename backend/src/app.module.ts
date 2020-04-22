@@ -5,6 +5,7 @@ import { Request } from 'express';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { RedditModule } from './modules/reddit/reddit.module';
+import { RedditConnectorModule } from './reddit-connector/reddit-connector.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RedditModule } from './modules/reddit/reddit.module';
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }),
+    RedditConnectorModule,
   ],
 })
 export class AppModule {

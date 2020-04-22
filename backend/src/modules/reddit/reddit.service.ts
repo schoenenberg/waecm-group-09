@@ -5,23 +5,14 @@ import { NewSubredditInput } from './dto/new-subreddit.input';
 import { UpdateSubredditInput } from './dto/update-subreddit.input';
 import { SubredditModel } from './subreddit.model';
 import { Subreddit } from './interfaces/subreddit.interface';
-import Snoowrap = require('snoowrap');
+import { RedditConnector } from '../../reddit-connector/reddit-connector.service';
 
 @Injectable()
 export class RedditService {
-  private redditClient: Snoowrap;
-
   constructor(
     @InjectModel('Subreddit') private subredditModel: Model<Subreddit>,
-  ) {
-    this.redditClient = new Snoowrap({
-      userAgent: 'bot from /u/' + process.env.REDDIT_USERNAME,
-      username: process.env.REDDIT_USERNAME,
-      password: process.env.REDDIT_PASSWORD,
-      clientId: process.env.REDDIT_CLIENT_ID,
-      clientSecret: process.env.REDDIT_CLIENT_SECRET,
-    });
-  }
+    private redditClient: RedditConnector
+  ) {}
 
   async findAll(): Promise<Subreddit[]> {
     return await this.subredditModel.find().exec();
@@ -33,7 +24,7 @@ export class RedditService {
     // TODO: get data from reddit (description, icon)
     // TODO: get current answer count from database
 
-    const subreddit = this.redditClient.getSubreddit(newSubredditDTO.name);
+    const subreddit = this.redditClient.subredditDetails(newSubredditDTO.name);
 
     const additionalData = {
       description: subreddit.description,
