@@ -3,9 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from "@material-ui/core/Box";
 import ChatIcon from '@material-ui/icons/Chat';
 import {Grid, Link} from "@material-ui/core";
-import {useQuery} from "@apollo/react-hooks";
-import {CurrentUserData, GET_CURRENT_USER} from "../gql/currentUserQuery";
-import {GET_SUBREDDITS, SubredditData} from "../gql/subredditQuery";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,12 +26,10 @@ type DashboardElemProps = {
 export const DashboardElement: FC<DashboardElemProps> =  ({name, description, icon, number_answers}) =>{
     const classes = useStyles();
     const color = "#80d8ff";
-    const { loading, error, data } = useQuery<SubredditData>(GET_SUBREDDITS);
 
     return (
 
             <div className={classes.root}>
-                {loading}{error}{data.subreddit}
                 <Box
                     display="flex"
                     alignItems="center"

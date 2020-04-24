@@ -10,13 +10,11 @@ import {Box, Tab, Tabs} from "@material-ui/core";
 
 
 import { Settings } from "./Settings";
-import Dashboard from "./Dashboard";
 import {AlertDialog} from "./AlertDialog";
 import {PrimaryButton} from "./PrimaryButton";
+import {Dashboard} from "./Dashboard";
 
-type MenuAppBarProps = {
-    onLogout: MouseEventHandler;
-};
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -67,7 +65,7 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
     const classes = useStyles(); // defines styles for the class
     const [value, setValue] = React.useState(0); // value of the tab (either settings or dashboard
     const [showSettingsComponent, setSettingsComponent] = useState(true);
-    const [alertDialogOpen, setAlertDialogOpen] = useState(false); 
+    const [alertDialogOpen, setAlertDialogOpen] = useState(false);
 
     const handleChange = (_event: any, newValue: React.SetStateAction<number>) => {
         setValue(newValue);

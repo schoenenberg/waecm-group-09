@@ -1,11 +1,14 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {DashboardElement} from "./DashboardElement";
+import {useQuery} from "@apollo/react-hooks";
+import {GET_ALL_SUBREDDITS, AllSubredditsData} from "../gql/subredditQuery";
+import {Alert} from "./Alert";
 
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
-        marginTop: theme.spacing(25),
+        marginTop: theme.spacing(50),
     },
 
 }));
@@ -13,46 +16,23 @@ const useStyles = makeStyles(theme => ({
 export const Dashboard = () => {
     const classes = useStyles();
 
-    //mockdata
+    const { loading, error, data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
 
-    const mocks = [];
-    mocks.push({
-        name: "/r/react.js",
-        description: "The front page of react",
-        icon: "blabla",
-        number_answers: 1000
-    });
-    mocks.push({
-        name: "/r/Angular2",
-        description: "Angular 2+",
-        icon: "blabla",
-        number_answers: 1000
-    });
-    mocks.push({
-        name: "/r/Angular2",
-        description: "Angular 2+",
-        icon: "blabla",
-        number_answers: 10
-    });
-    mocks.push({
-        name: "/r/Angular2",
-        description: "Angular 2+",
-        icon: "blabla",
-        number_answers: 5
-    });
-    const data ={mocks
-    }
 
     return (
+
         <div className={classes.root}>
-            {data.mocks.map((elem) => (
-                <DashboardElement
-                    name={elem.name}
-                    description={elem.description}
-                    icon={elem.icon}
-                    number_answers={elem.number_answers}
-                />
-            ))}/>
+            {loading ? (
+                <div>Loading...</div>
+            ) : error ? (
+                <Alert title={"Error"}>Unauthorized</Alert>
+            ) :  data && (<div>{data.allSubreddits.map((elem) => (<DashboardElement
+                name={elem.name}
+                description={elem.description}
+                icon={elem.icon}
+                number_answers={elem.answer}
+            />))}</div>)}
+            />
         </div>
     );
 }
