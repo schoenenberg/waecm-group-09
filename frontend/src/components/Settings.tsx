@@ -4,8 +4,13 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
+import { useQuery, useMutation } from "@apollo/react-hooks";
+
 import { AddComponent } from "./AddComponent";
 import { Subreddit } from "./Subreddit"; 
+
+import { GET_ALL_SUBREDDITS, AllSubredditsData } from '../gql/allSubredditsQuery';
+import { ADD_SUBREDDIT } from '../gql/addSubredditMutation'; 
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -38,6 +43,9 @@ export const Settings: FC<SettingsPrompts> = ({
     const [showAddComponent, setAddComponent] = useState(false);
     const [showRedditList, setShowRedditList] = useState(true); 
 
+    const { loading, error, data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
+    const [addSubreddit] = useMutation(ADD_SUBREDDIT);
+
     const [showField, setShowField] = React.useState({
     showReddit1: false, 
     showReddit2: false, 
@@ -57,7 +65,28 @@ export const Settings: FC<SettingsPrompts> = ({
     setShowRedditList(true);
     }, []);
 
-   const handleAddRedditClick = () => {       
+   const handleAddRedditClick = () => { 
+        console.log("data1", data); 
+        
+       const NewSubredditInput = { 
+        //"input": {
+            "name": "sdf4", 
+            "answer": "sfdsf",
+            "active": true,
+            "keywords": ["blah"]
+       //}
+        }; 
+       console.log("dazwischen"); 
+       addSubreddit({ variables: { input: NewSubredditInput }}); 
+            
+       if (loading){
+           console.log ("loading");
+       } else if (error){
+           console.log("error"); 
+       } else {
+           console.log("date", data);
+       }
+            
        if (ls.length == 3){
         setAddComponent(false);
       } else {
