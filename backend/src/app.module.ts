@@ -4,8 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Request } from 'express';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { RedditModule } from './modules/reddit/reddit.module';
-import { RedditConnectorModule } from './reddit-connector/reddit-connector.module';
+import { RedditModule } from './modules/reddit-data/reddit.module';
+import { RedditConnectorModule } from './modules/reddit-connector/reddit-connector.module';
 
 @Module({
   imports: [
