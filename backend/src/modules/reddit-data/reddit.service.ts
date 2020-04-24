@@ -5,7 +5,7 @@ import { NewSubredditInput } from './dto/new-subreddit.input';
 import { UpdateSubredditInput } from './dto/update-subreddit.input';
 import { SubredditModel } from './subreddit.model';
 import { Subreddit } from './interfaces/subreddit.interface';
-import { RedditConnector } from '../../reddit-connector/reddit-connector.service';
+import { RedditConnector } from '../reddit-connector/reddit-connector.service';
 
 @Injectable()
 export class RedditService {

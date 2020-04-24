@@ -4,7 +4,7 @@ import { AuthModule } from '../auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SubredditSchema } from '../../schemas/subreddit.schema';
 import { RedditService } from "./reddit.service";
-import { RedditConnectorModule } from '../../reddit-connector/reddit-connector.module';
+import { RedditConnectorModule } from '../reddit-connector/reddit-connector.module';
 
 @Module({
   providers: [RedditResolver, RedditService],
