@@ -5,8 +5,8 @@ export type AllSubreddits = {
     name: string;
     description: string;
     icon: string;
-    answerCount: string;
-    answer: number;
+    answerCount: number;
+    answer: string;
     active: boolean;
     keywords: string[];
 };

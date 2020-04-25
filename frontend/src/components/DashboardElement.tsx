@@ -21,9 +21,10 @@ type DashboardElemProps = {
     description: string;
     icon: string;
     number_answers: number;
+    url: string;
 };
 
-export const DashboardElement: FC<DashboardElemProps> =  ({name, description, icon, number_answers}) =>{
+export const DashboardElement: FC<DashboardElemProps> =  ({name, description, icon, number_answers, url}) =>{
     const classes = useStyles();
     const color = "#80d8ff";
 
@@ -39,14 +40,14 @@ export const DashboardElement: FC<DashboardElemProps> =  ({name, description, ic
                     width={3/4}
                 >
                     <Box p={1} bgcolor={color} width={1/4}>
-                        {icon}
+                        <img src={icon} width="70%" height="70%"/>
                     </Box>
                     <Box p={1} bgcolor={color} width={1/2}>
                             <Link
                                 component="button"
                                 variant="body1"
                                 onClick={() => {
-                                    window.open("http://www.google.de", '_blank');
+                                    window.open(url, '_blank');
                                 }}
                             >
                                 {name}

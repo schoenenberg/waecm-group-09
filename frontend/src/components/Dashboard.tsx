@@ -8,7 +8,7 @@ import {Alert} from "./Alert";
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
-        marginTop: theme.spacing(50),
+        marginTop: theme.spacing(25),
     },
 
 }));
@@ -17,7 +17,6 @@ export const Dashboard = () => {
     const classes = useStyles();
 
     const { loading, error, data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
-
 
     return (
 
@@ -30,9 +29,9 @@ export const Dashboard = () => {
                 name={elem.name}
                 description={elem.description}
                 icon={elem.icon}
-                number_answers={elem.answer}
+                number_answers={elem.answerCount}
+                url={elem.answer}
             />))}</div>)}
-            />
         </div>
     );
 }
