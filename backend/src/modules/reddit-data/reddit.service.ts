@@ -11,7 +11,7 @@ import { RedditConnector } from '../reddit-connector/reddit-connector.service';
 export class RedditService {
   constructor(
     @InjectModel('Subreddit') private subredditModel: Model<Subreddit>,
-    private redditClient: RedditConnector
+    private redditClient: RedditConnector,
   ) {}
 
   async findAll(): Promise<Subreddit[]> {
@@ -21,24 +21,25 @@ export class RedditService {
   async createSubreddit(
     newSubredditDTO: NewSubredditInput,
   ): Promise<SubredditModel> {
-    // TODO: get data from reddit (description, icon)
     // TODO: get current answer count from database
 
-    const subreddit = this.redditClient.subredditDetails(newSubredditDTO.name);
+    return this.redditClient
+      .subredditDetails(newSubredditDTO.name)
+      .then(subreddit => {
+        const additionalData = {
+          description: subreddit.title,
+          icon: subreddit.icon_img,
+          answerCount: 6, // TODO: No functionality found for that in reddit api, only active user count
+        };
 
-    const additionalData = {
-      description: subreddit.description,
-      icon: subreddit.icon_img,
-      answerCount: 6, // TODO: No functionality found for that in reddit api, only active user count
-    };
+        const combinedSubredditData = {
+          ...newSubredditDTO,
+          ...additionalData,
+        };
+        const createdSubreddit = new this.subredditModel(combinedSubredditData);
 
-    const combinedSubredditData = {
-      ...newSubredditDTO,
-      ...additionalData,
-    };
-    const createdSubreddit = new this.subredditModel(combinedSubredditData);
-
-    return await createdSubreddit.save();
+        return createdSubreddit.save();
+      });
   }
 
   async readOne(id: string): Promise<Subreddit> {
