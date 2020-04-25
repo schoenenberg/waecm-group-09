@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import Snoowrap = require('snoowrap');
-import { Subreddit } from 'snoowrap';
+import * as Snoowrap from 'snoowrap';
+import { Subreddit, Listing, Comment } from 'snoowrap';
 
 @Injectable()
 export class RedditConnector {
@@ -19,5 +19,14 @@ export class RedditConnector {
   // Returns all details about the specified Subreddit
   public subredditDetails(subredditName: string): Promise<Subreddit> {
     return this.redditClient.getSubreddit(subredditName).fetch();
+  }
+
+  public subredditComments(
+    subredditName: string,
+    limit: number,
+  ): Promise<Listing<Comment>> {
+    return this.redditClient
+      .getSubreddit(subredditName)
+      .getNewComments({ limit: limit });
   }
 }

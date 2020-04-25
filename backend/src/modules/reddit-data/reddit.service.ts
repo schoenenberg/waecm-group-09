@@ -55,6 +55,7 @@ export class RedditService {
     id: string,
     subreddit: UpdateSubredditInput,
   ): Promise<Subreddit> {
+    // TODO: when name is changed, also fetch new icon and description from reddit
     const updatedSubreddit = await this.subredditModel.findByIdAndUpdate(
       id,
       subreddit,
@@ -76,5 +77,12 @@ export class RedditService {
       throw new Error('ERROR: Could not be updated - ID not found');
 
     return subredditToDelete;
+  }
+
+  async getAllActive(): Promise<Subreddit[]> {
+    return await this.subredditModel
+      .find({ active: true })
+      .limit(5)
+      .exec();
   }
 }

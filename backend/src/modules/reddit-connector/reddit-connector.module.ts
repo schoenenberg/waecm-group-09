@@ -3,6 +3,6 @@ import { RedditConnector } from './reddit-connector.service';
 
 @Module({
   providers: [RedditConnector],
-  exports: [RedditConnector]
+  exports: [RedditConnector],
 })
 export class RedditConnectorModule {}

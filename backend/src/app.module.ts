@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { RedditModule } from './modules/reddit-data/reddit.module';
 import { RedditConnectorModule } from './modules/reddit-connector/reddit-connector.module';
+import { RedditBotModule } from "./modules/reddit-bot/reddit-bot.module";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { RedditConnectorModule } from './modules/reddit-connector/reddit-connect
       useUnifiedTopology: true,
     }),
     RedditConnectorModule,
+    RedditBotModule
   ],
 })
 export class AppModule {
