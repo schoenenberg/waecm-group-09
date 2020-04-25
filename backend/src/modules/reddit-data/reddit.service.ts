@@ -82,7 +82,6 @@ export class RedditService {
   async getAllActive(): Promise<Subreddit[]> {
     return await this.subredditModel
       .find({ active: true })
-      .limit(5)
       .exec();
   }
 }
