@@ -16,8 +16,8 @@ export class RedditConnector {
     });
   }
 
-  /// Returns all details about the specified Subreddit
-  public subredditDetails(subredditName: string): Subreddit {
-    return this.redditClient.getSubreddit(subredditName);
+  // Returns all details about the specified Subreddit
+  public subredditDetails(subredditName: string): Promise<Subreddit> {
+    return this.redditClient.getSubreddit(subredditName).fetch();
   }
 }
