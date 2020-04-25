@@ -7,11 +7,12 @@ import { RedditService } from "./reddit.service";
 import { RedditConnectorModule } from '../reddit-connector/reddit-connector.module';
 
 @Module({
-  providers: [RedditResolver, RedditService],
   imports: [
     AuthModule,
     MongooseModule.forFeature([{ name: 'Subreddit', schema: SubredditSchema }]),
     RedditConnectorModule
   ],
+  providers: [RedditResolver, RedditService],
+  exports: [RedditService]
 })
 export class RedditModule {}
