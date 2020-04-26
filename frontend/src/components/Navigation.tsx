@@ -108,7 +108,8 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
                 <Dashboard/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                  <Settings/>
+                  {showSettingsComponent &&  
+                <Settings /*onShowSettings={showSettings}*//>}
             </TabPanel>
         </div>
     );
