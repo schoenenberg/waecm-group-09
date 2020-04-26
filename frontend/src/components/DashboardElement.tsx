@@ -14,6 +14,12 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
         backgroundColor: "#80d8ff"
     },
+    name: {
+        padding: theme.spacing(0),
+        textAlign: 'left',
+        color: theme.palette.text.secondary,
+        backgroundColor: "#80d8ff"
+    },
 }));
 
 type DashboardElemProps = {
@@ -43,16 +49,23 @@ export const DashboardElement: FC<DashboardElemProps> =  ({name, description, ic
                         <img src={icon} width="70%" height="70%"/>
                     </Box>
                     <Box p={1} bgcolor={color} width={1/2}>
-                            <Link
-                                component="button"
-                                variant="body1"
-                                onClick={() => {
-                                    window.open(url, '_blank');
-                                }}
-                            >
-                                {name}
-                            </Link>
-                        {description}
+                        <Grid container spacing={3} className={classes.name}>
+                            <Grid item xs={12} >
+                                <Link
+                                    component="button"
+                                    variant="body1"
+                                    onClick={() => {
+                                        window.open(url, '_blank');
+                                    }}
+                                >r/{name}
+                                </Link>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={3} className={classes.name}>
+                            <Grid item xs={12}>
+                                {description}
+                            </Grid>
+                        </Grid>
                     </Box>
                     <Box p={1} bgcolor={color} width={1/4}>
                         <Grid container spacing={3} className={classes.paper}>
