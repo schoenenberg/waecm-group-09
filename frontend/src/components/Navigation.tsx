@@ -74,7 +74,11 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
         }
     };
 
-    
+    const onCloseAlertDialog = () => {
+        setAlertDialogOpen(false);
+    };
+
+
 
     /*const showSettings = useCallback(() => {
         setSettingsComponent(false); 
@@ -92,11 +96,13 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
                                 onClickHandler={() =>setAlertDialogOpen(true)}>
                                 Logout
                         </PrimaryButton>
-                        {alertDialogOpen && <AlertDialog
+                        {alertDialogOpen && (<AlertDialog
+                                alertDialogOpen ={alertDialogOpen}
+                                onCloseAlertDialog={onCloseAlertDialog}
                                 onAcceptDialog={onLogout}
                                 title={"Logout?"}
                                 text={"Do you really want to log out?"}
-                            />}
+                            />)}
                     </IconButton>
                 </Toolbar>
                 <Tabs value={value} onChange={handleChange}>

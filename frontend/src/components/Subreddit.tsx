@@ -61,6 +61,8 @@ return (
               <DeleteIcon />
             </Fab>
             {alertDialogOpen && <AlertDialog
+                            alertDialogOpen={alertDialogOpen}
+                            onCloseAlertDialog={() => setAlertDialogOpen(false)}
                             onAcceptDialog={onDeleteReddit}
                             title={"Delete?"}
                             text={"Do you really want to delete this reddit?"}

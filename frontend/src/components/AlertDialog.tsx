@@ -1,21 +1,21 @@
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
-import React, {FC, MouseEventHandler, useState} from "react";
+import React, {FC, MouseEventHandler} from "react";
 import {PrimaryButton} from "./PrimaryButton";
 
 type AlertDialogProps = {
+    alertDialogOpen: boolean;
+    onCloseAlertDialog: MouseEventHandler;
     onAcceptDialog: MouseEventHandler; 
     title: string;
     text: string;
 };
 
-export const AlertDialog: FC<AlertDialogProps> =  ({onAcceptDialog, title, text}) =>  {
-    const [alertDialogOpen, setAlertDialogOpen] = useState(true); // refers to alert dialog
-
+export const AlertDialog: FC<AlertDialogProps> =  ({onCloseAlertDialog, alertDialogOpen, onAcceptDialog, title, text}) =>  {
     return (
         <div>
             <Dialog
                 open={alertDialogOpen}
-                onClose={() =>setAlertDialogOpen(false)}
+                onClose={onCloseAlertDialog}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -27,7 +27,7 @@ export const AlertDialog: FC<AlertDialogProps> =  ({onAcceptDialog, title, text}
                 </DialogContent>
                 <DialogActions>
                     <PrimaryButton
-                        onClickHandler={() =>setAlertDialogOpen(false)}
+                        onClickHandler={onCloseAlertDialog}
                     >
                         No
                     </PrimaryButton>
