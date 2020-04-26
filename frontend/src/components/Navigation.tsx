@@ -100,16 +100,16 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
                     </IconButton>
                 </Toolbar>
                 <Tabs value={value} onChange={handleChange}>
-                    <Tab label="Settings" {...a11yProps(0)}/>
-                    <Tab label="Dashboard" {...a11yProps(1)}/>
+                    <Tab label="Dashboard" {...a11yProps(0)}/>
+                    <Tab label="Settings" {...a11yProps(1)}/>
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                {showSettingsComponent &&  
-                <Settings /*onShowSettings={showSettings}*//>}
+                <Dashboard/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Dashboard/>
+                  {showSettingsComponent &&  
+                <Settings /*onShowSettings={showSettings}*//>}
             </TabPanel>
         </div>
     );
