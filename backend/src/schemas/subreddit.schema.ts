@@ -7,5 +7,5 @@ export const SubredditSchema = new Schema({
   active: Boolean,
   description: String,
   icon: String,
-  answerCount: Number,
+  answeredCommentIDs: [String]
 });
