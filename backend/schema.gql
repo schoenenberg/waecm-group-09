@@ -2,16 +2,42 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Query {
-  currentUser: UserModel!
-  subreddit: RedditModel!
+type Mutation {
+  getSubreddit(_id: String!): SubredditModel!
+  updateSubreddit(input: UpdateSubredditInput!, _id: String!): SubredditModel!
+  createNewSubreddit(input: NewSubredditInput!): SubredditModel!
+  deleteSubreddit(_id: String!): SubredditModel!
 }
 
-type RedditModel {
-  link: String!
+input NewSubredditInput {
+  name: String!
+  answer: String!
+  keywords: [String!]!
+  active: Boolean!
+}
+
+type Query {
+  currentUser: UserModel!
+  subreddit: SubredditModel!
+  allSubreddits: [SubredditModel!]!
+}
+
+type SubredditModel {
+  _id: String!
+  name: String!
+  keywords: [String!]!
+  answer: String!
+  active: Boolean!
   description: String
   icon: String
   answerCount: Float
+}
+
+input UpdateSubredditInput {
+  name: String
+  answer: String
+  keywords: [String!]
+  active: Boolean
 }
 
 type UserModel {
