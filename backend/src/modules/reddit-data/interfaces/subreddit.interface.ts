@@ -1,11 +1,11 @@
 import { Document } from 'mongoose';
 
-export interface Subreddit extends Document {
+export interface SubredditMongo extends Document {
   readonly name: string;
   readonly keywords: string[];
   readonly answer: string;
   readonly active: boolean;
   description: string;
   icon: string;
-  answerCount: number;
+  answeredCommentIDs: string[];
 }
