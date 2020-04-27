@@ -5,11 +5,13 @@ import { NewSubredditInput } from './dto/new-subreddit.input';
 import { UpdateSubredditInput } from './dto/update-subreddit.input';
 import { SubredditModel } from './subreddit.model';
 import { Subreddit } from './interfaces/subreddit.interface';
+import { RedditConnector } from '../reddit-connector/reddit-connector.service';
 
 @Injectable()
 export class RedditService {
   constructor(
     @InjectModel('Subreddit') private subredditModel: Model<Subreddit>,
+    private redditClient: RedditConnector,
   ) {}
 
   async findAll(): Promise<Subreddit[]> {
@@ -19,22 +21,25 @@ export class RedditService {
   async createSubreddit(
     newSubredditDTO: NewSubredditInput,
   ): Promise<SubredditModel> {
-    // TODO: get data from reddit (description, icon)
     // TODO: get current answer count from database
 
-    const sampleAdditionalData = {
-      description: 'sample test description',
-      icon: 'https://api.adorable.io/avatars/285/abott@adorable.png',
-      answerCount: 6,
-    };
+    return this.redditClient
+      .subredditDetails(newSubredditDTO.name)
+      .then(subreddit => {
+        const additionalData = {
+          description: subreddit.title,
+          icon: subreddit.icon_img,
+          answerCount: 6, // TODO: No functionality found for that in reddit api, only active user count
+        };
 
-    const combinedSubredditData = {
-      ...newSubredditDTO,
-      ...sampleAdditionalData,
-    };
-    const createdSubreddit = new this.subredditModel(combinedSubredditData);
+        const combinedSubredditData = {
+          ...newSubredditDTO,
+          ...additionalData,
+        };
+        const createdSubreddit = new this.subredditModel(combinedSubredditData);
 
-    return await createdSubreddit.save();
+        return createdSubreddit.save();
+      });
   }
 
   async readOne(id: string): Promise<Subreddit> {
@@ -50,6 +55,7 @@ export class RedditService {
     id: string,
     subreddit: UpdateSubredditInput,
   ): Promise<Subreddit> {
+    // TODO: when name is changed, also fetch new icon and description from reddit
     const updatedSubreddit = await this.subredditModel.findByIdAndUpdate(
       id,
       subreddit,
@@ -71,5 +77,11 @@ export class RedditService {
       throw new Error('ERROR: Could not be updated - ID not found');
 
     return subredditToDelete;
+  }
+
+  async getAllActive(): Promise<Subreddit[]> {
+    return await this.subredditModel
+      .find({ active: true })
+      .exec();
   }
 }
