@@ -19,7 +19,7 @@ export class RedditResolver {
       name: '/r/reactjs-testData',
       description: 'sample description',
       icon: 'https://api.adorable.io/avatars/285/abott@adorable.png',
-      answerCount: 6,
+      answeredCommentIDs: ['1', '2', '3'],
       active: false,
       answer: 'test Answer',
       keywords: ['first', 'hello', 'last'],
@@ -60,7 +60,7 @@ export class RedditResolver {
   @Mutation(() => SubredditModel)
   async createNewSubreddit(
     @Args('input')
-    subredditInput: NewSubredditInput,
+      subredditInput: NewSubredditInput,
   ) {
     return await this.redditService.createSubreddit(subredditInput);
   }
@@ -68,7 +68,7 @@ export class RedditResolver {
   @Mutation(() => SubredditModel)
   async deleteSubreddit(
     @Args('_id')
-    id: string,
+      id: string,
   ) {
     return await this.redditService.delete(id);
   }

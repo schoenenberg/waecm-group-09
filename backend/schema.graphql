@@ -30,7 +30,7 @@ type SubredditModel {
   active: Boolean!
   description: String
   icon: String
-  answerCount: Float
+  answeredCommentIDs: [String!]!
 }
 
 input UpdateSubredditInput {
