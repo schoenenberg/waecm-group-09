@@ -57,10 +57,28 @@ export class RedditService {
     id: string,
     subreddit: UpdateSubredditInput,
   ): Promise<SubredditMongo> {
-    // TODO: when name is changed, also fetch new icon and description from reddit
+    let icon: string;
+    let description: string;
+
+    if (subreddit.name != null) {
+      await this.redditClient.subredditDetails(subreddit.name!)
+        .then((val) => {
+          icon = val.icon_img;
+          description = val.description;
+        });
+    }
+
+    const combinedData = {
+      ...subreddit,
+      ...{
+        icon: subreddit.name != null ? icon! : null,
+        description: (subreddit.name != null) ? description! : null,
+      },
+    };
+
     const updatedSubreddit = await this.subredditModel.findByIdAndUpdate(
       id,
-      subreddit,
+      combinedData,
       {
         new: true,
       },
