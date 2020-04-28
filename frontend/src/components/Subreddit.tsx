@@ -100,6 +100,7 @@ return (
                                 title={"Delte?"}
                                 text={"Do you really want to delete this reddit?"}
                             />)}
+
           </Grid>
         </Grid>
       </Paper>

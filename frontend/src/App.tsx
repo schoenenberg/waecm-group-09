@@ -9,7 +9,6 @@ import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { useStyles } from "./materialStyles";
 import { Login } from "./components/Login";
-
 import Divider from "@material-ui/core/Divider";
 import {MenuAppBar} from "./components/Navigation";
 
@@ -30,7 +29,16 @@ const useReactPath = () => {
 
 const App = () => {
   const classes = useStyles();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // check if user is already logged in
+  const getIsLoggedIn = () => {
+    if(window.sessionStorage.getItem("currentToken")== null){
+      return false;
+    }
+    return true;
+  }
+  const initialValue = getIsLoggedIn();
+  const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
   const [token_id, setTokenId] = useState("");
   const [oldToken, setOldToken] = useState("");
   const [isProfileDetailPage, setIsProfileDetailPage] = useState(false);
@@ -40,7 +48,7 @@ const App = () => {
       link: new HttpLink({
         uri: "http://localhost:8080/graphql",
         headers: {
-          Authorization: `Bearer ` + token_id
+          Authorization: `Bearer ` + window.sessionStorage.getItem("currentToken")
         }
       }),
       cache: new InMemoryCache()
@@ -50,18 +58,23 @@ const App = () => {
   const href = useReactPath();
 
   useEffect(() => {
+    if(window.sessionStorage.getItem("currentToken")!=null){
+      setIsLoggedIn(true)
+    }
     if (href.includes("id_token")) {
       setOldToken(token_id);
       if (!oldToken.includes(href.split("token=")[1])) {
-          setIsLoggedIn(true)
+
         setIsProfileDetailPage(true);
         setTokenId(href.split("token=")[1]);
+        window.sessionStorage.setItem("currentToken", href.split("token=")[1]);
+
         setClient(
           new ApolloClient({
             link: new HttpLink({
               uri: "http://localhost:8080/graphql",
               headers: {
-                Authorization: `Bearer ` + token_id
+                Authorization: `Bearer ` + window.sessionStorage.getItem("currentToken")
               }
             }),
             cache: new InMemoryCache()
@@ -96,6 +109,7 @@ const App = () => {
       "https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/logout?post_logout_redirect_uri=http://localhost:3000"
     );
     setIsProfileDetailPage(false);
+    window.sessionStorage.removeItem("currentToken");
     setIsLoggedIn(false);
   }, []);
 

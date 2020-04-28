@@ -1,6 +1,7 @@
 import React, { useState, useCallback }  from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
+
 import Link from '@material-ui/core/Link';
 
 import {DashboardElement} from "./DashboardElement";
@@ -9,6 +10,7 @@ import {Alert} from "./Alert";
 
 import {GET_ALL_SUBREDDITS, AllSubredditsData} from "../gql/allSubredditsQuery";
 import {useQuery} from "@apollo/react-hooks";
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,7 +22,6 @@ const useStyles = makeStyles(theme => ({
 
 export const Dashboard = () => {
     const classes = useStyles();
-
 
     const { loading, error, data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
     const [ noReddits ] = useState(getData()); 
@@ -40,7 +41,6 @@ export const Dashboard = () => {
         }, []);
     
 
-
     return (
 
         <div className={classes.root}>
@@ -55,6 +55,7 @@ export const Dashboard = () => {
                 number_answers={elem.answerCount}
                 url={elem.answer}
             />))}</div>)}
+
         {noReddits && <Link href="#" onClick={() => 
                         setAddComponent(true)} 
                         color="inherit">
@@ -68,6 +69,7 @@ export const Dashboard = () => {
                             editActive= {true}
                             editMode= {false}
                             id={""}/>}
+
         </div>
     );
 }
