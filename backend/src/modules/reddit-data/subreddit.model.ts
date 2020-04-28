@@ -23,7 +23,7 @@ export class SubredditModel {
   @Field({ nullable: true })
   icon?: string;
 
-  @Field( () => [String])
+  @Field(() => [String])
   answeredCommentIDs?: string[];
 
   @Field(() => Date)
