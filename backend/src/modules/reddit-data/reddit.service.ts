@@ -64,7 +64,7 @@ export class RedditService {
             ...subreddit,
             ...{
               icon: val.icon_img,
-              description: val.description,
+              description: val.title,
             },
           };
         })
