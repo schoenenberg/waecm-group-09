@@ -47,7 +47,7 @@ export class RedditBotService {
         );
 
         // reply to filtered comments (unanswered and with keywords)
-        this.replyCommentsAndSaveID(commentsWithKeywords, subredditDB);
+        await this.replyCommentsAndSaveID(commentsWithKeywords, subredditDB);
       }),
     );
   }
