@@ -13,8 +13,7 @@ export class RedditService {
   constructor(
     @InjectModel('Subreddit') private subredditModel: Model<SubredditMongo>,
     private redditClient: RedditConnector,
-  ) {
-  }
+  ) {}
 
   async findAll(): Promise<SubredditMongo[]> {
     return await this.subredditModel.find().exec();
@@ -58,28 +57,22 @@ export class RedditService {
     id: string,
     subreddit: UpdateSubredditInput,
   ): Promise<SubredditMongo> {
-    let icon = '';
-    let description = '';
-
-    if (subreddit.name) {
-      await this.redditClient.subredditDetails(subreddit.name)
-        .then((val) => {
-          icon = val.icon_img;
-          description = val.description;
-        });
-    }
-
-    const combinedData = {
-      ...subreddit,
-      ...{
-        icon: (subreddit.name != null) ? icon : null,
-        description: (subreddit.name != null) ? description : null,
-      },
-    };
+    // also fetch and change icon and description if name has changed
+    const data = subreddit.name
+      ? await this.redditClient.subredditDetails(subreddit.name).then(val => {
+          return {
+            ...subreddit,
+            ...{
+              icon: val.icon_img,
+              description: val.description,
+            },
+          };
+        })
+      : subreddit;
 
     const updatedSubreddit = await this.subredditModel.findByIdAndUpdate(
       id,
-      combinedData,
+      data,
       {
         new: true,
       },
