@@ -15,4 +15,7 @@ export class UpdateSubredditInput {
 
   @Field({ nullable: true })
   active?: boolean;
+
+  @Field()
+  username!: string;
 }

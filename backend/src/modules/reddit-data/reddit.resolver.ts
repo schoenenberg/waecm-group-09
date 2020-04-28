@@ -23,7 +23,8 @@ export class RedditResolver {
       active: false,
       answer: 'test Answer',
       keywords: ['first', 'hello', 'last'],
-      createdOn: new Date(Date.now()),
+      createdOn: new Date(),
+      username: "myusername"
     };
   }
 

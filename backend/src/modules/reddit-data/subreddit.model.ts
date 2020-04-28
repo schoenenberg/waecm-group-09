@@ -28,4 +28,7 @@ export class SubredditModel {
 
   @Field(() => Date)
   createdOn!: Date;
+
+  @Field()
+  username!: string;
 }

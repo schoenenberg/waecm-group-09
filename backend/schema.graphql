@@ -20,6 +20,7 @@ input NewSubredditInput {
   keywords: [String!]!
   active: Boolean!
   createdOn: DateTime!
+  username: String!
 }
 
 type Query {
@@ -38,6 +39,7 @@ type SubredditModel {
   icon: String
   answeredCommentIDs: [String!]!
   createdOn: DateTime!
+  username: String!
 }
 
 input UpdateSubredditInput {
@@ -45,6 +47,7 @@ input UpdateSubredditInput {
   answer: String
   keywords: [String!]
   active: Boolean
+  username: String!
 }
 
 type UserModel {
