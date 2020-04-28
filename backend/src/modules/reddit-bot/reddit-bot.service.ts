@@ -7,13 +7,18 @@ import { Comment } from 'snoowrap';
 @Injectable()
 export class RedditBotService {
   // bot runs every few seconds and retrieves some comments
-  private readonly SECONDS_UNTIL_UPDATE: number = 40;
-  private readonly COMMENT_LIMIT: number = 5;
+  private readonly SECONDS_UNTIL_UPDATE: number;
+  private readonly COMMENT_LIMIT: number;
 
   constructor(
     private redditClient: RedditConnector,
     private readonly redditService: RedditService,
   ) {
+    this.COMMENT_LIMIT = (process.env.REDDIT_BOT_COMMENT_LIMIT)
+      ? parseInt(process.env.REDDIT_BOT_COMMENT_LIMIT) : 5;
+    this.SECONDS_UNTIL_UPDATE = (process.env.REDDIT_BOT_INTERVAL)
+      ? parseInt(process.env.REDDIT_BOT_INTERVAL) : 40;
+
     setInterval(() => this.startBot(), this.SECONDS_UNTIL_UPDATE * 1000);
   }
 
@@ -85,7 +90,11 @@ export class RedditBotService {
     subredditDB: SubredditMongo,
   ) {
     const answer = subredditDB.answer;
-    commentsToAnswer.forEach(comment => comment.reply(answer));
+    commentsToAnswer.forEach(comment => comment.reply(answer)
+      .then((c) => {
+        console.log('BOT: ' + c.id);
+      }),
+    );
 
     const id = subredditDB.id;
     const alreadyAnsweredIDs = subredditDB.answeredCommentIDs;

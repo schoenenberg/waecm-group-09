@@ -8,7 +8,8 @@ import { UpdateSubredditInput } from './dto/update-subreddit.input';
 
 @Resolver(() => SubredditModel)
 export class RedditResolver {
-  constructor(private readonly redditService: RedditService) {}
+  constructor(private readonly redditService: RedditService) {
+  }
 
   // THIS IS JUST FOR TESTING ---- delete later --------------------------------
   @Query(() => SubredditModel)
@@ -25,6 +26,7 @@ export class RedditResolver {
       keywords: ['first', 'hello', 'last'],
     };
   }
+
   // ---------------------------------------------------------------------------
 
   @Query(() => [SubredditModel])

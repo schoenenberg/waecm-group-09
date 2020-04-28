@@ -13,7 +13,8 @@ export class RedditService {
   constructor(
     @InjectModel('Subreddit') private subredditModel: Model<SubredditMongo>,
     private redditClient: RedditConnector,
-  ) {}
+  ) {
+  }
 
   async findAll(): Promise<SubredditMongo[]> {
     return await this.subredditModel.find().exec();
@@ -57,11 +58,11 @@ export class RedditService {
     id: string,
     subreddit: UpdateSubredditInput,
   ): Promise<SubredditMongo> {
-    let icon: string;
-    let description: string;
+    let icon = '';
+    let description = '';
 
-    if (subreddit.name != null) {
-      await this.redditClient.subredditDetails(subreddit.name!)
+    if (subreddit.name) {
+      await this.redditClient.subredditDetails(subreddit.name)
         .then((val) => {
           icon = val.icon_img;
           description = val.description;
@@ -71,8 +72,8 @@ export class RedditService {
     const combinedData = {
       ...subreddit,
       ...{
-        icon: subreddit.name != null ? icon! : null,
-        description: (subreddit.name != null) ? description! : null,
+        icon: (subreddit.name != null) ? icon : null,
+        description: (subreddit.name != null) ? description : null,
       },
     };
 
