@@ -1,27 +1,29 @@
 import React, { FC, /*MouseEventHandler,*/ useCallback, useState } from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
-import { useQuery, useMutation } from "@apollo/react-hooks";
-
 import { AddComponent } from "./AddComponent";
 import { Subreddit } from "./Subreddit"; 
+import { Alert } from "./Alert"
+import { GET_ALL_SUBREDDITS, AllSubredditsData } from "../gql/allSubredditsQuery";
 
-import { GET_ALL_SUBREDDITS, AllSubredditsData } from '../gql/allSubredditsQuery';
-import { ADD_SUBREDDIT } from '../gql/addSubredditMutation'; 
+import { useQuery } from "@apollo/react-hooks";
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
         root: {
             flexGrow: 1,
             marginTop: theme.spacing(20),
+            display: 'block',
+            height: '100%',
+            background: '#fffff'
         },
         addButton: {
             "& > *": {
                 position: 'absolute',
-                background: "#4287f5",
+                background: "primary",
                 bottom: theme.spacing(3),
                 right: theme.spacing(3),
             },
@@ -43,97 +45,35 @@ export const Settings: FC<SettingsPrompts> = ({
     const [showAddComponent, setAddComponent] = useState(false);
     const [showRedditList, setShowRedditList] = useState(true); 
 
-    const { loading, error, data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
-    const [addSubreddit] = useMutation(ADD_SUBREDDIT);
+    const {loading, error, data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS, {
+        //variables: { breed },
+        pollInterval: 500,
+      });
 
-    const [showField, setShowField] = React.useState({
-    showReddit1: false, 
-    showReddit2: false, 
-    showReddit3: false, 
-    })
+    
+    const allReddits: any[] = getData(); 
 
-    const ls: any[] =  JSON.parse(localStorage.getItem("Reddit") || "[]");
-
-    const deleteReddit = useCallback(() => {
-    ls.splice(0, 1); 
-    localStorage.setItem("Reddit", JSON.stringify(ls));
-    setShowField({ ...showField, ["showReddit1"]: false});
-    }, []);
+    function getData(): any[] {
+        if(data === undefined) {
+          return []; 
+        } else {
+          return data.allSubreddits;
+        }
+    }
 
     const redirectSettings = useCallback(() => {
     setAddComponent(false); 
     setShowRedditList(true);
     }, []);
 
-   const handleAddRedditClick = () => { 
-        console.log("data1", data); 
-        
-       const NewSubredditInput = { 
-        //"input": {
-            "name": "sdf4", 
-            "answer": "sfdsf",
-            "active": true,
-            "keywords": ["blah"]
-       //}
-        }; 
-       console.log("dazwischen"); 
-       addSubreddit({ variables: { input: NewSubredditInput }}); 
-            
-       if (loading){
-           console.log ("loading");
-       } else if (error){
-           console.log("error"); 
-       } else {
-           console.log("date", data);
-       }
-            
-       if (ls.length == 3){
+   const handleAddRedditClick = () => {     
+       if (allReddits.length == 3){
         setAddComponent(false);
       } else {
         setAddComponent(true); 
         setShowRedditList(false); 
       }
    } 
-
-
-    const subredditElementList = ls.map(
-    index => {
-        switch (ls.length) {
-        case 1:
-            return <Subreddit onDeleteReddit={deleteReddit}
-            reddit ={index.reddit}
-            date = {index.date}/>;
-        case 2:
-            return (
-            <div>
-                <Subreddit onDeleteReddit={deleteReddit}
-                reddit ={ls[0].reddit}
-                date = {ls[0].date}/>
-                <Subreddit onDeleteReddit={deleteReddit}
-                reddit ={ls[1].reddit}
-                date = {ls[1].date}/>
-            </div>);
-        case 3:
-            return (
-            <div>
-            <Subreddit onDeleteReddit={deleteReddit}
-            reddit ={ls[0].reddit}
-            date = {ls[0].date}/>
-            <Subreddit onDeleteReddit={deleteReddit}
-            reddit ={ls[1].reddit}
-            date = {ls[1].date}/>
-            <Subreddit onDeleteReddit={deleteReddit}
-            reddit ={ls[2].reddit}
-            date = {ls[2].date}/>
-            </div>); 
-        default:
-            return (
-            <div></div>
-            );
-        }
-    }
-    )[0];
-
 
     return (
     <div className={classes.root}>
@@ -143,8 +83,27 @@ export const Settings: FC<SettingsPrompts> = ({
         </Fab>
         </div>
         
-        {showRedditList && <div>{subredditElementList}</div>}
-        {showAddComponent && <AddComponent onRedirectSettings={redirectSettings}/>}
+        {loading ? (
+                <div>Loading...</div>
+            ) : error ? (
+                <Alert title={"Error"}>Unauthorized</Alert>
+            ) :  data && showRedditList && (<div>{data.allSubreddits.map((elem) => (<Subreddit 
+                 //onDeleteReddit={deleteReddit}
+                 reddit ={elem.name}
+                 date = {"test"}
+                 id = {elem._id}
+                 keywords = {elem.keywords}
+                 answer = {elem.answer}
+                 active = {elem.active}
+                 />))}</div>)}
+        {showAddComponent && <AddComponent 
+                    onRedirectSettings={redirectSettings}
+                    editName= {""}
+                    editKeywords= {[]}
+                    editAnswer= {""}
+                    editActive= {true}
+                    editMode= {false}
+                    id={""}/>}
     </div>
     );
 }

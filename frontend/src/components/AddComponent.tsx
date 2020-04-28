@@ -7,11 +7,22 @@ import Switch from "@material-ui/core/Switch";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Button } from "@material-ui/core";
-
 import Alert from "@material-ui/lab/Alert";
+
+import { ADD_SUBREDDIT } from '../gql/addSubredditMutation'; 
+import { UPDATE_SUBREDDIT } from '../gql/updateSubredditMutation'; 
+import { GET_ALL_SUBREDDITS, AllSubredditsData } from "../gql/allSubredditsQuery";
+
+import { useMutation, useQuery } from "@apollo/react-hooks";
 
 type AddComponentPrompts = {
     onRedirectSettings: MouseEventHandler;
+    editName: String;
+    editKeywords: String[];
+    editAnswer: String;
+    editActive: boolean;
+    editMode: boolean; 
+    id: String; 
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,12 +68,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const AddComponent: FC<AddComponentPrompts> = ({
     onRedirectSettings,
+    editName,
+    editKeywords,
+    editAnswer,
+    editActive,
+    editMode,
+    id, 
 }) => {
 
   const classes = useStyles();
 
   const [Inputstate, setInputState] = React.useState({
-    active: true,
+    active: editActive,
     redditState: "",
     keywordState: "",
     answerState: ""
@@ -79,53 +96,70 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     setInputState({ ...Inputstate, [event.target.id]: event.target.value})
   };
 
-  const ls: any[] =  JSON.parse(localStorage.getItem("Reddit") || "[]");
+  const handleOnSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputState({ ...Inputstate, [event.target.id]: event.target.checked });
+  };
+
+
+  const [addSubreddit] = useMutation(ADD_SUBREDDIT);
+  const [updateSubreddit] = useMutation(UPDATE_SUBREDDIT); 
+  const { data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
+
+  const allReddits: any[] = getData(); 
+
+  function getData(): any[] {
+    if(data === undefined) {
+      return []; 
+    } else {
+      return data.allSubreddits;
+    }
+  }
+
+  const handleSave = () => {
+      //Check for empty fiels
+      if(Inputstate.redditState === "" || Inputstate.keywordState === "" || Inputstate.answerState === ""){
+          setAlertState({ ...AlertState, ["emtyFieldState"]: true});
+      //Check for enough storage space
+      } else if (allReddits.length === 3 ) {
+          setAlertState({ ...AlertState, ["redditAmountState"]: true});
+      //Check for duplicates
+      } else if ((allReddits.length > 1) && checkForDuplicates() === false) {
+          setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
+      } else {
+          if(editMode){
+            const UpdateSubredditInput = { 
+              "name": Inputstate.redditState.toString(), 
+              "active": Inputstate.active
+            };
+
+            updateSubreddit({variables: {_id: id, input: UpdateSubredditInput}}); 
+          } else {
+          //const date = new Date();
+          //const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString(); 
+
+          //GQL
+          const NewSubredditInput = { 
+            "name": Inputstate.redditState.toString(), 
+            "answer": Inputstate.answerState.toString(),
+            "active": Inputstate.active,
+            "keywords": Inputstate.keywordState.split(" ")
+          }; 
+        
+          addSubreddit({ variables: { input: NewSubredditInput }});
+
+          setAlertState({ ...AlertState, ["storageState"]: true});
+        }
+      }
+  };
 
   function checkForDuplicates (): boolean{
-    for(let i = 0; i < ls.length; i++){
-        if (ls.length > 0 && ls[i].reddit === Inputstate.redditState.toString()){
+    for(let i = 0; i < allReddits.length; i++){
+        if (allReddits.length > 0 && allReddits[i].name === Inputstate.redditState.toString()){
             return false;
         }         
     }
     return true; 
   }
-
-    const handleSave = () => {
-
-        //TODO: Change to Graph QL
-        //Check for empty fiels
-        if(Inputstate.redditState === "" || Inputstate.keywordState === "" || Inputstate.answerState === ""){
-            setAlertState({ ...AlertState, ["emtyFieldState"]: true});
-        //Check for enough storage space
-        } else if (ls.length === 3 ) {
-            setAlertState({ ...AlertState, ["redditAmountState"]: true});
-        //Check for duplicates
-        } else if ((ls.length > 1) && checkForDuplicates() === false) {
-            setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
-        } else {
-
-            const date = new Date();
-            const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString();
-
-            //check if storage already contains reddit 
-            const newReddit = JSON.parse('{ "ID":' + '"' + ls.length + '"' 
-            + ', "reddit":'+ '"' + Inputstate.redditState.toString() + '"' 
-            + ', "answer":'+ '"' + Inputstate.answerState.toString() + '"'
-            + ', "keyword":'+ '"' + Inputstate.keywordState.toString() + '"'
-            + ', "active":'+ '"' + Inputstate.active.toString() + '"'
-            + ', "date":'+ '"' + dateOfAdding + '"'
-            + '}');
-
-            ls.push(newReddit);
-            if (ls.length > 0){
-              localStorage.removeItem("Reddit"); 
-            }
-            
-            localStorage.setItem("Reddit", JSON.stringify(ls)); 
-
-            setAlertState({ ...AlertState, ["storageState"]: true});
-        }
-    };
  
 
   return (
@@ -135,14 +169,31 @@ export const AddComponent: FC<AddComponentPrompts> = ({
         <TextField  required id="redditState" 
                     label="Subreddit" 
                     onChange={handleOnChange}
+                    defaultValue={editName}
         />
-        <TextField required id="keywordState" label="Keywords"  onChange={handleOnChange}/>
-        <TextField required id="answerState" label="Answer"  onChange={handleOnChange}/>
+        <TextField required     
+                  id="keywordState" 
+                  label="Keywords"  
+                  defaultValue={editKeywords} 
+                  onChange={handleOnChange}
+                  // InputProps={{
+                  //   readOnly: {editMode},
+                  // }}
+                  />
+        <TextField required 
+                    id="answerState" 
+                    label="Answer"  
+                    defaultValue={editAnswer} 
+                    onChange={handleOnChange}
+                    // InputProps={{
+                    //   readOnly: {editMode},
+                    // }}
+                    />
         </form>
 
         <FormGroup className={classes.switch}>
         <FormControlLabel
-            control={<Switch checked={Inputstate.active} onChange={handleOnChange} color="primary" id="active" inputProps={{ "aria-label": "secondary checkbox" }} />}
+            control={<Switch checked={Inputstate.active} onChange={handleOnSwitchChange} color="primary" id="active" inputProps={{ "aria-label": "secondary checkbox" }} />}
             label="Active"
         />
         </FormGroup>

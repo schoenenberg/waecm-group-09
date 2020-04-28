@@ -1,18 +1,18 @@
 import gql from 'graphql-tag';
 
 export type AllSubreddits = {
-    _id: string; 
+    _id: string;
     name: string;
     description: string;
     icon: string;
-    answerCount: string;
-    answer: number;
+    answerCount: number;
+    answer: string;
     active: boolean;
     keywords: string[];
 };
 
 export type AllSubredditsData = {
-    allSubreddits: AllSubreddits;
+    allSubreddits: [AllSubreddits];
 };
 
 export const GET_ALL_SUBREDDITS = gql`

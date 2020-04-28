@@ -105,7 +105,7 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <Container component="main" className={classes.container}>
+      <Container component="main" className={isLoggedIn ? 'containerProfile' : 'container'}>
         <header>
           {isLoggedIn && <MenuAppBar onLogout={logout}/>}
           {!isLoggedIn &&

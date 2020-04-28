@@ -8,14 +8,13 @@ import IconButton from '@material-ui/core/IconButton';
 import {UserInformation} from "./UserInformation";
 import {Box, Tab, Tabs} from "@material-ui/core";
 
+
 import { Settings } from "./Settings";
-import Dashboard from "./Dashboard";
 import {AlertDialog} from "./AlertDialog";
 import {PrimaryButton} from "./PrimaryButton";
+import {Dashboard} from "./Dashboard";
 
-type MenuAppBarProps = {
-    onLogout: MouseEventHandler;
-};
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -58,11 +57,15 @@ function a11yProps(index: number) {
     };
 }
 
+type MenuAppBarProps = {
+    onLogout: MouseEventHandler;
+};
+
 export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
     const classes = useStyles(); // defines styles for the class
     const [value, setValue] = React.useState(0); // value of the tab (either settings or dashboard
     const [showSettingsComponent, setSettingsComponent] = useState(true);
-    const [alertDialogOpen, setAlertDialogOpen] = useState(false); 
+    const [alertDialogOpen, setAlertDialogOpen] = useState(false);
 
     const handleChange = (_event: any, newValue: React.SetStateAction<number>) => {
         setValue(newValue);
@@ -71,7 +74,11 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
         }
     };
 
-    
+    const onCloseAlertDialog = () => {
+        setAlertDialogOpen(false);
+    };
+
+
 
     /*const showSettings = useCallback(() => {
         setSettingsComponent(false); 
@@ -89,24 +96,26 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
                                 onClickHandler={() =>setAlertDialogOpen(true)}>
                                 Logout
                         </PrimaryButton>
-                        {alertDialogOpen && <AlertDialog
+                        {alertDialogOpen && (<AlertDialog
+                                alertDialogOpen ={alertDialogOpen}
+                                onCloseAlertDialog={onCloseAlertDialog}
                                 onAcceptDialog={onLogout}
                                 title={"Logout?"}
                                 text={"Do you really want to log out?"}
-                            />}
+                            />)}
                     </IconButton>
                 </Toolbar>
                 <Tabs value={value} onChange={handleChange}>
-                    <Tab label="Settings" {...a11yProps(0)}/>
-                    <Tab label="Dashboard" {...a11yProps(1)}/>
+                    <Tab label="Dashboard" {...a11yProps(0)}/>
+                    <Tab label="Settings" {...a11yProps(1)}/>
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                {showSettingsComponent &&  
-                <Settings /*onShowSettings={showSettings}*//>}
+                <Dashboard/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Dashboard/>
+                  {showSettingsComponent &&  
+                <Settings /*onShowSettings={showSettings}*//>}
             </TabPanel>
         </div>
     );
