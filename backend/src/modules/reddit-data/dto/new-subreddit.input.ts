@@ -15,4 +15,7 @@ export class NewSubredditInput {
 
   @Field()
   active!: boolean;
+
+  @Field()
+  createdOn!: Date;
 }

@@ -25,4 +25,7 @@ export class SubredditModel {
 
   @Field( () => [String])
   answeredCommentIDs?: string[];
+
+  @Field(() => Date)
+  createdOn!: Date;
 }
