@@ -1,4 +1,4 @@
-import React, { FC, /*MouseEventHandler,*/ useCallback, useState } from 'react';
+import React, {FC, useCallback} from 'react';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
         addButton: {
             "& > *": {
                 position: 'absolute',
-                background: "#336699",
+                background: "primary",
                 bottom: theme.spacing(3),
                 right: theme.spacing(3),
             },
@@ -35,23 +35,25 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
  type SettingsPrompts = {
-    // onShowSettings: MouseEventHandler; 
+     showAddComponent: boolean,
+     showRedditList: boolean,
+     setAddComponent: (newValue: boolean) => void,
+     setShowRedditList: (newValue: boolean) => void,
  }; 
 
 export const Settings: FC<SettingsPrompts> = ({
-    //onShowSettings,
+   showAddComponent, showRedditList, setAddComponent, setShowRedditList
 }) => {
     const classes = useStyles();
-    const [showAddComponent, setAddComponent] = useState(false);
-    const [showRedditList, setShowRedditList] = useState(true); 
+
 
     const {loading, error, data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS, {
+        //variables: { breed },
         pollInterval: 500,
       });
 
     
     const allReddits: any[] = getData(); 
-    const date: any = new Date(Date.now());
 
     function getData(): any[] {
         if(data === undefined) {
@@ -77,14 +79,6 @@ export const Settings: FC<SettingsPrompts> = ({
 
     return (
     <div className={classes.root}>
-        {showAddComponent && <AddComponent 
-                    onRedirectSettings={redirectSettings}
-                    editName= {""}
-                    editKeywords= {[]}
-                    editAnswer= {""}
-                    editActive= {true}
-                    editMode= {false}
-                    id={""}/>}
         <div className={classes.addButton} onClick={handleAddRedditClick}>
         <Fab color="primary" aria-label="add">
             <AddIcon />
@@ -96,13 +90,22 @@ export const Settings: FC<SettingsPrompts> = ({
             ) : error ? (
                 <Alert title={"Error"}>Unauthorized</Alert>
             ) :  data && showRedditList && (<div>{data.allSubreddits.map((elem) => (<Subreddit 
+                 //onDeleteReddit={deleteReddit}
                  reddit ={elem.name}
-                 date = {date}
+                 date = {"test"}
                  id = {elem._id}
                  keywords = {elem.keywords}
                  answer = {elem.answer}
                  active = {elem.active}
                  />))}</div>)}
+        {showAddComponent && <AddComponent 
+                    onRedirectSettings={redirectSettings}
+                    editName= {""}
+                    editKeywords= {[]}
+                    editAnswer= {""}
+                    editActive= {true}
+                    editMode= {false}
+                    id={""}/>}
     </div>
     );
 }

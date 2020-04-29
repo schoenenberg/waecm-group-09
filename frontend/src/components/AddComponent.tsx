@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
       width: "90%",
       height: "100%",
-      //flexWrap: "wrap",
-      flexGrow: 1,
+      flexWrap: "wrap",
+      //flexGrow: 1,
       overflow: 'hidden',
       padding: theme.spacing(0, 2),
       "& > *": {
@@ -104,10 +104,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   const [addSubreddit, { loading: addLoading, error: addError },] = useMutation(ADD_SUBREDDIT);
   const [updateSubreddit, { loading: updateLoading, error: updateError },] = useMutation(UPDATE_SUBREDDIT); 
-   const { data, refetch } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS
-  //   pollInterval: 100,
-  // }
-  );
+   const { data, refetch } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
 
   const allReddits: any[] = getData(); 
 
