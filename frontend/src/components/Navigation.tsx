@@ -67,10 +67,15 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
     const [showSettingsComponent, setSettingsComponent] = useState(true);
     const [alertDialogOpen, setAlertDialogOpen] = useState(false);
 
+    const [showAddComponent, setAddComponent] = useState(false);
+    const [showRedditList, setShowRedditList] = useState(true);
+
     const handleChange = (_event: any, newValue: React.SetStateAction<number>) => {
         setValue(newValue);
+        handleSetAddComponent(false);
+        handleShowRedditList(true);
         if (newValue === 0){
-            setSettingsComponent(true); 
+            setSettingsComponent(true);
         }
     };
 
@@ -78,7 +83,13 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
         setAlertDialogOpen(false);
     };
 
+    const handleSetAddComponent = (newValue: boolean) => {
+        setAddComponent(newValue)
+    };
 
+    const handleShowRedditList = (newValue: boolean) => {
+        setShowRedditList(newValue)
+    };
 
     /*const showSettings = useCallback(() => {
         setSettingsComponent(false); 
@@ -114,8 +125,8 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
                 <Dashboard/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                  {showSettingsComponent &&  
-                <Settings /*onShowSettings={showSettings}*//>}
+                  {showSettingsComponent &&
+                <Settings showAddComponent = {showAddComponent}  setAddComponent={handleSetAddComponent} setShowRedditList ={handleShowRedditList} showRedditList={showRedditList} /*onShowSettings={showSettings}*//>}
             </TabPanel>
         </div>
     );
