@@ -1,4 +1,4 @@
-import React, { FC, /*MouseEventHandler,*/ useCallback, useState } from 'react';
+import React, {FC, useCallback} from 'react';
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
@@ -35,15 +35,17 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
  type SettingsPrompts = {
-    // onShowSettings: MouseEventHandler; 
+     showAddComponent: boolean,
+     showRedditList: boolean,
+     setAddComponent: (newValue: boolean) => void,
+     setShowRedditList: (newValue: boolean) => void,
  }; 
 
 export const Settings: FC<SettingsPrompts> = ({
-    //onShowSettings,
+   showAddComponent, showRedditList, setAddComponent, setShowRedditList
 }) => {
     const classes = useStyles();
-    const [showAddComponent, setAddComponent] = useState(false);
-    const [showRedditList, setShowRedditList] = useState(true); 
+
 
     const {loading, error, data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS, {
         //variables: { breed },
