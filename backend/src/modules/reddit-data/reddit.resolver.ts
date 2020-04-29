@@ -10,7 +10,6 @@ import { UpdateSubredditInput } from './dto/update-subreddit.input';
 export class RedditResolver {
   constructor(private readonly redditService: RedditService) {}
 
-
   // THIS IS JUST FOR TESTING ---- delete later --------------------------------
   @Query(() => SubredditModel)
   @UseGuards(GqlAuthGuard)
@@ -20,12 +19,14 @@ export class RedditResolver {
       name: '/r/reactjs-testData',
       description: 'sample description',
       icon: 'https://api.adorable.io/avatars/285/abott@adorable.png',
-      answerCount: 6,
+      answeredCommentIDs: ['1', '2', '3'],
       active: false,
       answer: 'test Answer',
       keywords: ['first', 'hello', 'last'],
+      createdOn: new Date(Date.now()),
     };
   }
+
   // ---------------------------------------------------------------------------
 
   @Query(() => [SubredditModel])
@@ -34,9 +35,7 @@ export class RedditResolver {
   }
 
   @Mutation(() => SubredditModel)
-  async getSubreddit(
-    @Args('_id') id: string,
-  ){
+  async getSubreddit(@Args('_id') id: string) {
     return await this.redditService.readOne(id);
   }
 
@@ -49,18 +48,12 @@ export class RedditResolver {
   }
 
   @Mutation(() => SubredditModel)
-  async createNewSubreddit(
-    @Args('input')
-    subredditInput: NewSubredditInput,
-  ) {
+  async createNewSubreddit(@Args('input') subredditInput: NewSubredditInput) {
     return await this.redditService.createSubreddit(subredditInput);
   }
 
   @Mutation(() => SubredditModel)
-  async deleteSubreddit(
-    @Args('_id')
-    id: string,
-  ) {
+  async deleteSubreddit(@Args('_id') id: string) {
     return await this.redditService.delete(id);
   }
 }

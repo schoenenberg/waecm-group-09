@@ -25,6 +25,7 @@ import { RedditBotModule } from "./modules/reddit-bot/reddit-bot.module";
       db: 'test',
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
     }),
     RedditConnectorModule,
     RedditBotModule

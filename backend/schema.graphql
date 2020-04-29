@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Mutation {
   getSubreddit(_id: String!): SubredditModel!
   updateSubreddit(input: UpdateSubredditInput!, _id: String!): SubredditModel!
@@ -14,6 +19,7 @@ input NewSubredditInput {
   answer: String!
   keywords: [String!]!
   active: Boolean!
+  createdOn: DateTime!
 }
 
 type Query {
@@ -30,7 +36,8 @@ type SubredditModel {
   active: Boolean!
   description: String
   icon: String
-  answerCount: Float
+  answeredCommentIDs: [String!]!
+  createdOn: DateTime!
 }
 
 input UpdateSubredditInput {
