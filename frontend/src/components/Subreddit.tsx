@@ -79,7 +79,7 @@ return (
             <Typography component="div">
                 <Box fontSize="h6.fontSize"m={1}>
                 <Link href="#" onClick={() => setAddComponent(true)} color="inherit">
-                  r/{reddit}
+                  {reddit}
                 </Link>
                 </Box>
                 <Box m={1}>
@@ -88,7 +88,7 @@ return (
             </Typography>
           </Grid>
           <Grid item>
-            <Fab color="default" aria-label="add" onClick={() => setAlertDialogOpen(true)}>
+            <Fab color="primary" aria-label="add" onClick={() => setAlertDialogOpen(true)}>
               <DeleteIcon />
             </Fab>
             {alertDialogOpen && (<AlertDialog

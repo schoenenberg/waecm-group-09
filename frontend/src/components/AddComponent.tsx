@@ -128,13 +128,16 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   const editModeSaveCheck = () => {
     //Check if requried fields are not empty
-    if (Inputstate.redditState === ""){
-      setAlertState({ ...AlertState, ["emtyFieldState"]: true});
-    } else if (!checkForDuplicates()){
+    if (Inputstate.redditState != ""){
+      //setAlertState({ ...AlertState, ["emtyFieldState"]: true});
+      editName = "bla"; 
+    } 
+    if (!checkForDuplicates()){
       setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
     } else {
+      console.log("edit");
       const UpdateSubredditInput = { 
-        "name": Inputstate.redditState.toString(), 
+        "name": editName, 
         "active": Inputstate.active
       };
       updateSubreddit({variables: {_id: id, input: UpdateSubredditInput}}); 
@@ -162,17 +165,17 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     } else if ((allReddits.length > 1) && checkForDuplicates() === false) {
         setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
     } else {
-        console.log(typeof new Date(Date.now()));
-
+        console.log("normal");
         //const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString(); 
 
         //GQL
         const NewSubredditInput = { 
           "name": Inputstate.redditState.toString(), 
-          "answer": Inputstate.answerState.toString(),
           "active": Inputstate.active,
+          "answer": Inputstate.answerState.toString(),
           "keywords": Inputstate.keywordState.split(" ")
         }; 
+        console.log(NewSubredditInput); 
       
         addSubreddit({ variables: { input: NewSubredditInput }});
 

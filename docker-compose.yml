@@ -11,10 +11,10 @@ services:
     networks:
       - db_net
     environment:
-      - REDDIT_USERNAME=unset
-      - REDDIT_PASSWORD=unset
-      - REDDIT_CLIENT_ID=unset
-      - REDDIT_CLIENT_SECRET=unset
+      - REDDIT_USERNAME=waecm20-group09
+      - REDDIT_PASSWORD=QcNRyav34TJ9NFG
+      - REDDIT_CLIENT_ID=Gz05UbDPDZ42_w
+      - REDDIT_CLIENT_SECRET=jFVeSq7b8Ixf5N5Ckyjx5z0JWPM
     depends_on:
       - db
 

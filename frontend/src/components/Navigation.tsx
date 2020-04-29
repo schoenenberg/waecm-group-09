@@ -94,10 +94,6 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
         setShowRedditList(newValue)
     };
 
-    /*const showSettings = useCallback(() => {
-        setSettingsComponent(false); 
-    }, []);*/
-
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar} >
@@ -119,7 +115,7 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
                             />)}
                     </IconButton>
                 </Toolbar>
-                <Tabs value={value} onChange={handleChange}>
+                <Tabs indicatorColor="primary" value={value} onChange={handleChange}>
                     <Tab label="Dashboard" {...a11yProps(0)}/>
                     <Tab label="Settings" {...a11yProps(1)}/>
                 </Tabs>
@@ -129,7 +125,7 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
             </TabPanel>
             <TabPanel value={value} index={1}>
                   {showSettingsComponent &&
-                <Settings showAddComponent = {showAddComponent}  setAddComponent={handleSetAddComponent} setShowRedditList ={handleShowRedditList} showRedditList={showRedditList} /*onShowSettings={showSettings}*//>}
+                <Settings showAddComponent = {showAddComponent}  setAddComponent={handleSetAddComponent} setShowRedditList ={handleShowRedditList} showRedditList={showRedditList}/>}
             </TabPanel>
         </div>
     );
