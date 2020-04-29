@@ -89,7 +89,8 @@ export const AddComponent: FC<AddComponentPrompts> = ({
       emtyFieldState: false,
       storageState: false,
       redditAmountState: false,
-      redditDuplicateState: false, 
+      redditDuplicateState: false,
+      gqlErrorState: false, 
     })
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,9 +102,12 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   };
 
 
-  const [addSubreddit] = useMutation(ADD_SUBREDDIT);
-  const [updateSubreddit] = useMutation(UPDATE_SUBREDDIT); 
-  const { data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
+  const [addSubreddit, { loading: addLoading, error: addError },] = useMutation(ADD_SUBREDDIT);
+  const [updateSubreddit, { loading: updateLoading, error: updateError },] = useMutation(UPDATE_SUBREDDIT); 
+   const { data, refetch } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS
+  //   pollInterval: 100,
+  // }
+  );
 
   const allReddits: any[] = getData(); 
 
@@ -115,49 +119,88 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     }
   }
 
-  const handleSave = () => {
-      //Check for empty fiels
-      if(Inputstate.redditState === "" || Inputstate.keywordState === "" || Inputstate.answerState === ""){
-          setAlertState({ ...AlertState, ["emtyFieldState"]: true});
-      //Check for enough storage space
-      } else if (allReddits.length === 3 ) {
-          setAlertState({ ...AlertState, ["redditAmountState"]: true});
-      //Check for duplicates
-      } else if ((allReddits.length > 1) && checkForDuplicates() === false) {
-          setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
+  const handleSave = () => { 
+      if (editMode){
+        editModeSaveCheck();     
       } else {
-          if(editMode){
-            const UpdateSubredditInput = { 
-              "name": Inputstate.redditState.toString(), 
-              "active": Inputstate.active
-            };
-
-            updateSubreddit({variables: {_id: id, input: UpdateSubredditInput}}); 
-          } else {
-          //const date = new Date();
-          //const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString(); 
-
-          //GQL
-          const NewSubredditInput = { 
-            "name": Inputstate.redditState.toString(), 
-            "answer": Inputstate.answerState.toString(),
-            "active": Inputstate.active,
-            "keywords": Inputstate.keywordState.split(" ")
-          }; 
-        
-          addSubreddit({ variables: { input: NewSubredditInput }});
-
-          setAlertState({ ...AlertState, ["storageState"]: true});
-        }
+        normalModeSaveCheck();
+        //console.log(allReddits.length); 
+        //console.log(allReddits);
       }
   };
 
+  const editModeSaveCheck = () => {
+    //Check if requried fields are not empty
+    if (Inputstate.redditState === ""){
+      setAlertState({ ...AlertState, ["emtyFieldState"]: true});
+    } else if (!checkForDuplicates()){
+      setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
+    } else {
+      const UpdateSubredditInput = { 
+        "name": Inputstate.redditState.toString(), 
+        "active": Inputstate.active
+      };
+      updateSubreddit({variables: {_id: id, input: UpdateSubredditInput}}); 
+
+      //Check if GQL error occurred
+      if(updateError){
+        setAlertState({ ...AlertState, ["gqlErrorState"]: true});
+      } else if (updateLoading){
+        console.log("loading");
+      } else {
+        setAlertState({ ...AlertState, ["storageState"]: true});
+        refetch();
+      }      
+    }
+  }; 
+
+  const normalModeSaveCheck = () => {
+    //Check if fields are not empty
+    if(Inputstate.redditState === "" || Inputstate.keywordState === "" || Inputstate.answerState === ""){
+      setAlertState({ ...AlertState, ["emtyFieldState"]: true});
+    //Check for enough storage space
+    } else if (allReddits.length === 3 ) {
+        setAlertState({ ...AlertState, ["redditAmountState"]: true});
+    //Check for duplicates
+    } else if ((allReddits.length > 1) && checkForDuplicates() === false) {
+        setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
+    } else {
+        console.log(typeof new Date(Date.now()));
+
+        //const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString(); 
+
+        //GQL
+        const NewSubredditInput = { 
+          "name": Inputstate.redditState.toString(), 
+          "answer": Inputstate.answerState.toString(),
+          "active": Inputstate.active,
+          "keywords": Inputstate.keywordState.split(" ")
+        }; 
+      
+        addSubreddit({ variables: { input: NewSubredditInput }});
+
+        //Check if GQL error occurred
+        if(addError){ 
+          setAlertState({ ...AlertState, ["gqlErrorState"]: true});
+        } else if (addLoading){
+          console.log("loading");
+        } else {
+          setAlertState({ ...AlertState, ["storageState"]: true});
+          refetch();
+        }        
+      }
+  }
+
   function checkForDuplicates (): boolean{
-    for(let i = 0; i < allReddits.length; i++){
+    if (allReddits.length === 1 && allReddits[0].name === Inputstate.redditState.toString()){
+        return false; 
+    } else {
+      for(let i = 0; i < allReddits.length; i++){
         if (allReddits.length > 0 && allReddits[i].name === Inputstate.redditState.toString()){
             return false;
         }         
-    }
+      }
+    }  
     return true; 
   }
  
@@ -176,18 +219,13 @@ export const AddComponent: FC<AddComponentPrompts> = ({
                   label="Keywords"  
                   defaultValue={editKeywords} 
                   onChange={handleOnChange}
-                  // InputProps={{
-                  //   readOnly: {editMode},
-                  // }}
-                  />
+                  disabled={editMode}/>
         <TextField required 
                     id="answerState" 
                     label="Answer"  
                     defaultValue={editAnswer} 
                     onChange={handleOnChange}
-                    // InputProps={{
-                    //   readOnly: {editMode},
-                    // }}
+                    disabled={editMode}
                     />
         </form>
 
@@ -200,6 +238,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
         {AlertState.emtyFieldState && <Alert severity="error">Fill all Fields!</Alert>}
         {AlertState.redditDuplicateState && <Alert severity="error">Subreddit already exists!</Alert>}
         {AlertState.redditAmountState && <Alert severity="error">To many Items in Storage, delete First!</Alert>}
+        {AlertState.gqlErrorState && <Alert severity="error">GQL Error occured!</Alert>}
         {AlertState.storageState && <Alert severity="success">Subreddit successfully stored!</Alert>}
 
         <Button className={classes.button1} variant="contained" onClick={onRedirectSettings}>Cancel</Button>

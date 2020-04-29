@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
     title: {
         flexGrow: 1,
     },
+    appBar: {
+        background: "#336699"
+    }
 }));
 
 const TabPanel: FC<TabPanelProps> = ({ children, value, index, ...other }) => {
@@ -97,7 +100,7 @@ export const MenuAppBar: FC<MenuAppBarProps> =  ({onLogout}) => {
 
     return (
         <div className={classes.root}>
-            <AppBar position="fixed" >
+            <AppBar position="fixed" className={classes.appBar} >
                 <Toolbar >
                    <Typography variant="h6" className={classes.title}>
                         <UserInformation />

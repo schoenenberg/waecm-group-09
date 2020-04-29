@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 400,
       margin: `${theme.spacing(1)}px auto`,
       padding: theme.spacing(2),
-      //background: '#b3cce6',
       color: '#b3cce6'  
     },
   }),
@@ -58,8 +57,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
     const [alertDialogOpen, setAlertDialogOpen] = useState(false);
     const [showAddComponent, setAddComponent] = useState(false);
 
-    const [deleteSubreddit] = useMutation(DELETE_SUBREDDIT);
-    
+    const [deleteSubreddit] = useMutation(DELETE_SUBREDDIT);   
 
     const onCloseAlertDialog = () => {
       setAlertDialogOpen(false);
@@ -85,12 +83,12 @@ return (
                 </Link>
                 </Box>
                 <Box m={1}>
-                    Added: {date}
+                    Added: {date.toLocaleString()}
                 </Box>
             </Typography>
           </Grid>
           <Grid item>
-            <Fab color="primary" aria-label="add" onClick={() => setAlertDialogOpen(true)}>
+            <Fab color="default" aria-label="add" onClick={() => setAlertDialogOpen(true)}>
               <DeleteIcon />
             </Fab>
             {alertDialogOpen && (<AlertDialog
@@ -100,7 +98,6 @@ return (
                                 title={"Delte?"}
                                 text={"Do you really want to delete this reddit?"}
                             />)}
-
           </Grid>
         </Grid>
       </Paper>
