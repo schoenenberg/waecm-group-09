@@ -14,6 +14,7 @@ import { UPDATE_SUBREDDIT } from '../gql/updateSubredditMutation';
 import { GET_ALL_SUBREDDITS, AllSubredditsData } from "../gql/allSubredditsQuery";
 
 import { useMutation, useQuery } from "@apollo/react-hooks";
+//import { onError } from 'apollo-link-error';
 
 type AddComponentPrompts = {
     onRedirectSettings: MouseEventHandler;
@@ -95,6 +96,12 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputState({ ...Inputstate, [event.target.id]: event.target.value})
+
+    setAlertState({ ...AlertState, ["emtyFieldState"]: false});
+    setAlertState({ ...AlertState, ["storageState"]: false});
+    setAlertState({ ...AlertState, ["redditAmountState"]: false});
+    setAlertState({ ...AlertState, ["redditDuplicateState"]: false});
+    setAlertState({ ...AlertState, ["gqlErrorState"]: false});
   };
 
   const handleOnSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,9 +109,15 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   };
 
 
-  const [addSubreddit, { loading: addLoading, error: addError },] = useMutation(ADD_SUBREDDIT);
-  const [updateSubreddit, { loading: updateLoading, error: updateError },] = useMutation(UPDATE_SUBREDDIT); 
-   const { data, refetch } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
+  const [addSubreddit, error] = useMutation(ADD_SUBREDDIT)
+  const [updateSubreddit] = useMutation(UPDATE_SUBREDDIT); 
+
+  
+  const { data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS
+  //   , {
+  //   pollInterval: 100,
+  // }
+  );
 
   const allReddits: any[] = getData(); 
 
@@ -116,10 +129,12 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     }
   }
 
+
   const handleSave = () => { 
       if (editMode){
         editModeSaveCheck();     
       } else {
+        console.log("bevor" + allReddits.length);
         normalModeSaveCheck();
         //console.log(allReddits.length); 
         //console.log(allReddits);
@@ -127,10 +142,11 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   };
 
   const editModeSaveCheck = () => {
+    
     //Check if requried fields are not empty
     if (Inputstate.redditState != ""){
       //setAlertState({ ...AlertState, ["emtyFieldState"]: true});
-      editName = "bla"; 
+      editName = Inputstate.redditState; 
     } 
     if (!checkForDuplicates()){
       setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
@@ -143,14 +159,18 @@ export const AddComponent: FC<AddComponentPrompts> = ({
       updateSubreddit({variables: {_id: id, input: UpdateSubredditInput}}); 
 
       //Check if GQL error occurred
-      if(updateError){
-        setAlertState({ ...AlertState, ["gqlErrorState"]: true});
-      } else if (updateLoading){
-        console.log("loading");
-      } else {
-        setAlertState({ ...AlertState, ["storageState"]: true});
-        refetch();
-      }      
+      // setTimeout(() => {
+      //   if(updateError){
+      //     console.log("error")
+      //     console.log(updateError)
+      //     //console.log(error.called)
+      //     setAlertState({ ...AlertState, ["gqlErrorState"]: true});
+      //   } else {
+      //     setAlertState({ ...AlertState, ["storageState"]: true});
+      //   } 
+      // }, 2000); 
+
+      //handleErrors();
     }
   }; 
 
@@ -162,10 +182,9 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     } else if (allReddits.length === 3 ) {
         setAlertState({ ...AlertState, ["redditAmountState"]: true});
     //Check for duplicates
-    } else if ((allReddits.length > 1) && checkForDuplicates() === false) {
+    } else if ((allReddits.length > 0) && checkForDuplicates() === false) {
         setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
     } else {
-        console.log("normal");
         //const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString(); 
 
         //GQL
@@ -180,19 +199,17 @@ export const AddComponent: FC<AddComponentPrompts> = ({
         addSubreddit({ variables: { input: NewSubredditInput }});
 
         //Check if GQL error occurred
-        if(addError){ 
-          setAlertState({ ...AlertState, ["gqlErrorState"]: true});
-        } else if (addLoading){
-          console.log("loading");
-        } else {
-          setAlertState({ ...AlertState, ["storageState"]: true});
-          refetch();
-        }        
+        handleErrors(); 
+        //refetch();
+
+        console.log("After" + allReddits.length); 
+        // console.log("After" +allReddits);
+        
       }
   }
 
   function checkForDuplicates (): boolean{
-    if (allReddits.length === 1 && allReddits[0].name === Inputstate.redditState.toString()){
+    if (allReddits.length === 0 && allReddits[0].name === Inputstate.redditState.toString()){
         return false; 
     } else {
       for(let i = 0; i < allReddits.length; i++){
@@ -202,6 +219,21 @@ export const AddComponent: FC<AddComponentPrompts> = ({
       }
     }  
     return true; 
+  }
+
+  const handleErrors =  () => {
+    setTimeout(() => {
+      if(error.called === false){
+        console.log("error")
+        console.log(error)
+        console.log(error.called)
+        console.log(addSubreddit);
+        setAlertState({ ...AlertState, ["gqlErrorState"]: true});
+      } else {
+        setAlertState({ ...AlertState, ["storageState"]: true});
+        console.log(addSubreddit);
+      } 
+    }, 2000);
   }
  
 
@@ -238,11 +270,12 @@ export const AddComponent: FC<AddComponentPrompts> = ({
         {AlertState.emtyFieldState && <Alert severity="error">Fill all Fields!</Alert>}
         {AlertState.redditDuplicateState && <Alert severity="error">Subreddit already exists!</Alert>}
         {AlertState.redditAmountState && <Alert severity="error">To many Items in Storage, delete First!</Alert>}
-        {AlertState.gqlErrorState && <Alert severity="error">GQL Error occured!</Alert>}
+        {AlertState.gqlErrorState && <Alert severity="error">The subreddit does not exist!</Alert>}
         {AlertState.storageState && <Alert severity="success">Subreddit successfully stored!</Alert>}
 
         <Button className={classes.button1} variant="contained" onClick={onRedirectSettings}>Cancel</Button>
         <Button className={classes.button2} variant="contained" onClick={handleSave}>Save</Button>
+        
       </Paper>
     </div>
   );

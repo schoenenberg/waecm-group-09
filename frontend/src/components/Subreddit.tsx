@@ -73,13 +73,13 @@ export const Subreddit: FC<SubredditPrompts> = ({
 return (
     <div className={classes.root}>
 
-      <Paper className={active ? classes.paper : classes.paperInactive} elevation={3} id={id}>
+      {!showAddComponent && <Paper className={active ? classes.paper : classes.paperInactive} elevation={3} id={id}>
         <Grid container wrap="nowrap" spacing={2}>
           <Grid item xs zeroMinWidth>
             <Typography component="div">
                 <Box fontSize="h6.fontSize"m={1}>
                 <Link href="#" onClick={() => setAddComponent(true)} color="inherit">
-                  {reddit}
+                  r/{reddit}
                 </Link>
                 </Box>
                 <Box m={1}>
@@ -100,7 +100,7 @@ return (
                             />)}
           </Grid>
         </Grid>
-      </Paper>
+      </Paper>}
       {showAddComponent && <AddComponent 
                     onRedirectSettings={() => setAddComponent(false)}
                     editName= {reddit}

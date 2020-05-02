@@ -58,14 +58,14 @@ export const Dashboard = () => {
                 <div>Loading...</div>
             ) : error ? (
                 <Alert title={"Error"}>Unauthorized</Alert>
-            ) :  data && (<div>{data.allSubreddits.map((elem) => (<DashboardElement
+            ) :  data && !showAddComponent && (<div>{data.allSubreddits.map((elem) => (<DashboardElement
                 name={elem.name}
                 description={elem.description}
                 icon={elem.icon}
                 number_answers={elem.answerCount}
                 url={elem.answer}
             />))}</div>)}
-        {noReddits && <Link href="#" onClick={() => 
+        {noReddits && !showAddComponent && <Link href="#" onClick={() => 
                         setAddComponent(true)} 
                         color="inherit">
                                 Add Subreddits now!
