@@ -5,23 +5,23 @@ export const useStyles = makeStyles(theme => ({
     maxWidth: "100vw",
     width: "100vw",
     height: "100vh",
-    margin: 0, 
-    marginRight: 0, 
-    marginLeft: 0, 
+    margin: 0,
+    marginRight: 0,
+    marginLeft: 0,
     headerMode: "screen"
   },
   fonts: {
-    ...theme.typography.h4, 
+    ...theme.typography.h4,
     paddingTop: theme.spacing(5),
     margin: 0,
     color: "#132639",
-    textAlign: "center" 
+    textAlign: "center"
   },
   names: {
-    ...theme.typography.h5, 
+    ...theme.typography.h5,
     paddingTop: theme.spacing(2),
     margin: 0,
-    textAlign: "center", 
+    textAlign: "center",
     color: "#132639"
   }
 }));
