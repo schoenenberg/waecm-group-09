@@ -196,7 +196,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
         }; 
         console.log(NewSubredditInput); 
       
-        addSubreddit({ variables: { input: NewSubredditInput }});
+        addSubreddit({ variables: { input: NewSubredditInput }}).catch(err => {setAlertState({ ...AlertState, ["gqlErrorState"]: true}); console.error("does not exist error "+err); });
 
         //Check if GQL error occurred
         handleErrors(); 
@@ -223,12 +223,12 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   const handleErrors =  () => {
     setTimeout(() => {
-      if(error.called === false){
+      if(AlertState.gqlErrorState){
         console.log("error")
         console.log(error)
         console.log(error.called)
         console.log(addSubreddit);
-        setAlertState({ ...AlertState, ["gqlErrorState"]: true});
+        //setAlertState({ ...AlertState, ["gqlErrorState"]: true});
       } else {
         setAlertState({ ...AlertState, ["storageState"]: true});
         console.log(addSubreddit);

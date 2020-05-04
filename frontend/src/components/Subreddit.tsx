@@ -95,7 +95,7 @@ return (
                                 alertDialogOpen ={alertDialogOpen}
                                 onCloseAlertDialog={onCloseAlertDialog}
                                 onAcceptDialog={deleteReddit}
-                                title={"Delte?"}
+                                title={"Delete?"}
                                 text={"Do you really want to delete this reddit?"}
                             />)}
           </Grid>
