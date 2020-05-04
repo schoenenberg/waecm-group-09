@@ -1,30 +1,20 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export type RedditId = {
-  _id: string; 
+  _id: string;
 };
 
-export type UpdateSubredditInput = {    
-    name: string, 
-    active: boolean,
+export type UpdateSubredditInput = {
+  name?: string;
+  active?: boolean;
+  answer?: string;
+  keywords?: string[];
 };
-
 
 export const UPDATE_SUBREDDIT = gql`
-mutation UpdateSubreddit($_id: String!, $input: UpdateSubredditInput!){
-    updateSubreddit( 
-      _id: $_id
-      input: $input
-      ) 
-    { 
-    name
+  mutation UpdateSubreddit($_id: String!, $input: UpdateSubredditInput!) {
+    updateSubreddit(_id: $_id, input: $input) {
+      name
     }
-}
+  }
 `;
-
-
-
-
-
-
-

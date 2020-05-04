@@ -1,31 +1,31 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export type AllSubreddits = {
-    _id: string;
-    name: string;
-    description: string;
-    icon: string;
-    answerCount: number;
-    answer: string;
-    active: boolean;
-    keywords: string[];
+  _id: string;
+  name: string;
+  description: string;
+  icon: string;
+  answeredCommentIDs: string[];
+  answer: string;
+  active: boolean;
+  keywords: string[];
 };
 
 export type AllSubredditsData = {
-    allSubreddits: [AllSubreddits];
+  allSubreddits: [AllSubreddits];
 };
 
 export const GET_ALL_SUBREDDITS = gql`
-    {
-        allSubreddits {
-            _id
-            name
-            description
-            icon
-            answerCount
-            answer
-            active
-            keywords
-        }
+  {
+    allSubreddits {
+      _id
+      name
+      description
+      icon
+      answeredCommentIDs
+      answer
+      active
+      keywords
     }
+  }
 `;

@@ -10,7 +10,7 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { useStyles } from "./materialStyles";
 import { Login } from "./components/Login";
 import Divider from "@material-ui/core/Divider";
-import {MenuAppBar} from "./components/Navigation";
+import { MenuAppBar } from "./components/Navigation";
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -32,11 +32,11 @@ const App = () => {
 
   // check if user is already logged in
   const getIsLoggedIn = () => {
-    if(window.sessionStorage.getItem("currentToken")== null){
+    if (window.sessionStorage.getItem("currentToken") == null) {
       return false;
     }
     return true;
-  }
+  };
   const initialValue = getIsLoggedIn();
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
   const [token_id, setTokenId] = useState("");
@@ -48,7 +48,8 @@ const App = () => {
       link: new HttpLink({
         uri: "http://localhost:8080/graphql",
         headers: {
-          Authorization: `Bearer ` + window.sessionStorage.getItem("currentToken")
+          Authorization:
+            `Bearer ` + window.sessionStorage.getItem("currentToken")
         }
       }),
       cache: new InMemoryCache()
@@ -58,13 +59,12 @@ const App = () => {
   const href = useReactPath();
 
   useEffect(() => {
-    if(window.sessionStorage.getItem("currentToken")!=null){
-      setIsLoggedIn(true)
+    if (window.sessionStorage.getItem("currentToken") != null) {
+      setIsLoggedIn(true);
     }
     if (href.includes("id_token")) {
       setOldToken(token_id);
       if (!oldToken.includes(href.split("token=")[1])) {
-
         setIsProfileDetailPage(true);
         setTokenId(href.split("token=")[1]);
         window.sessionStorage.setItem("currentToken", href.split("token=")[1]);
@@ -74,7 +74,8 @@ const App = () => {
             link: new HttpLink({
               uri: "http://localhost:8080/graphql",
               headers: {
-                Authorization: `Bearer ` + window.sessionStorage.getItem("currentToken")
+                Authorization:
+                  `Bearer ` + window.sessionStorage.getItem("currentToken")
               }
             }),
             cache: new InMemoryCache()
@@ -85,7 +86,15 @@ const App = () => {
     if (href.includes("access_denied")) {
       setAccessDenied(true);
     }
-  }, [href, token_id, isProfileDetailPage, accessDenied, client, oldToken, isLoggedIn]);
+  }, [
+    href,
+    token_id,
+    isProfileDetailPage,
+    accessDenied,
+    client,
+    oldToken,
+    isLoggedIn
+  ]);
 
   const auth_url = (): string => {
     return (
@@ -121,31 +130,26 @@ const App = () => {
     <ApolloProvider client={client}>
       <Container component="main" className={classes.container}>
         <header>
-          {isLoggedIn && <MenuAppBar onLogout={logout}/>}
-          {!isLoggedIn &&
-          <div>
-            <h1 className={classes.fonts}>
-              WAECM Project
-            </h1>
-            < h1 className={classes.names}>
-              Max, Sigrid, Alicia, Elli
-            </h1>
-            <Divider variant="middle"/>
-          </div>
-          }
+          {isLoggedIn && <MenuAppBar onLogout={logout} />}
+          {!isLoggedIn && (
+            <div>
+              <h1 className={classes.fonts}>WAECM Project</h1>
+              <h1 className={classes.names}>Max, Sigrid, Alicia, Elli</h1>
+              <Divider variant="middle" />
+            </div>
+          )}
         </header>
-          {!isLoggedIn &&
-
+        {!isLoggedIn && (
           <Login
-              accessDenied={accessDenied}
-              onLogin={login}
-              onLogout={logout}
-              onRedirectStartpage={redirectStartPage}
-              isProfileDetailPage={isProfileDetailPage}
+            accessDenied={accessDenied}
+            onLogin={login}
+            onLogout={logout}
+            onRedirectStartpage={redirectStartPage}
+            isProfileDetailPage={isProfileDetailPage}
           />
-          }
+        )}
       </Container>
     </ApolloProvider>
   );
-}
+};
 export default App;

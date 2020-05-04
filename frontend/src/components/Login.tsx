@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center"
-  },
+  }
 }));
 
 export const Login: FC<LoginProps> = ({
