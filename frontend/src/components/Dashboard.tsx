@@ -30,12 +30,8 @@ export const Dashboard = () => {
     }
   );
 
-  const [noReddits] = useState(getData());
+  const [noReddits] = useState(data === undefined);
   const [showAddComponent, setAddComponent] = useState(false);
-
-  function getData(): boolean {
-    return data === undefined;
-  }
 
   const redirectSettings = useCallback(() => {
     setAddComponent(false);
@@ -67,7 +63,7 @@ export const Dashboard = () => {
                 name={elem.name}
                 description={elem.description}
                 icon={elem.icon}
-                number_answers={elem.answerCount}
+                number_answers={elem.answeredCommentIDs.length}
                 url={elem.answer}
               />
             ))}

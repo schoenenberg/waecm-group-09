@@ -9,23 +9,27 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Button } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 
-import { ADD_SUBREDDIT } from "../gql/addSubredditMutation";
-import { UPDATE_SUBREDDIT } from "../gql/updateSubredditMutation";
+import { ADD_SUBREDDIT, NewSubredditInput } from "../gql/addSubredditMutation";
+import {
+  UPDATE_SUBREDDIT,
+  UpdateSubredditInput
+} from "../gql/updateSubredditMutation";
 import {
   GET_ALL_SUBREDDITS,
   AllSubredditsData
 } from "../gql/allSubredditsQuery";
 
 import { useMutation, useQuery } from "@apollo/react-hooks";
+import { SubredditData } from "../gql/subredditQuery";
 
 type AddComponentPrompts = {
   onRedirectSettings: MouseEventHandler;
-  editName: String;
-  editKeywords: String[];
-  editAnswer: String;
+  editName: string;
+  editKeywords: string[];
+  editAnswer: string;
   editActive: boolean;
   editMode: boolean;
-  id: String;
+  id: string;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -80,7 +84,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 }) => {
   const classes = useStyles();
 
-  const [Inputstate, setInputState] = React.useState({
+  const [inputState, setInputState] = React.useState({
     active: editActive,
     redditState: "",
     keywordState: "",
@@ -98,44 +102,42 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //Reset all previous Alerts
     if (AlertState.emtyFieldState) {
-      setAlertState({ ...AlertState, ["emtyFieldState"]: false });
+      setAlertState({ ...AlertState, emtyFieldState: false });
     }
     if (AlertState.redditAmountState) {
-      setAlertState({ ...AlertState, ["redditAmountState"]: false });
+      setAlertState({ ...AlertState, redditAmountState: false });
     }
     if (AlertState.redditDuplicateState) {
-      setAlertState({ ...AlertState, ["redditDuplicateState"]: false });
+      setAlertState({ ...AlertState, redditDuplicateState: false });
     }
     if (AlertState.gqlErrorState) {
-      setAlertState({ ...AlertState, ["gqlErrorState"]: false });
+      setAlertState({ ...AlertState, gqlErrorState: false });
     }
     if (AlertState.storageState) {
-      setAlertState({ ...AlertState, ["storageState"]: false });
+      setAlertState({ ...AlertState, storageState: false });
     }
 
     //set the states depending on user input
-    setInputState({ ...Inputstate, [event.target.id]: event.target.value });
+    setInputState({ ...inputState, [event.target.id]: event.target.value });
   };
 
   const handleOnSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputState({ ...Inputstate, [event.target.id]: event.target.checked });
+    setInputState({ ...inputState, [event.target.id]: event.target.checked });
   };
 
   //GQL Querys and Mutations
-  const [addSubreddit] = useMutation(ADD_SUBREDDIT);
-  const [updateSubreddit] = useMutation(UPDATE_SUBREDDIT);
+  const [addSubreddit, { error: addError }] = useMutation<
+    { newSubredditData: SubredditData },
+    { input: NewSubredditInput }
+  >(ADD_SUBREDDIT);
+  const [updateSubreddit, { error: updateError }] = useMutation<
+    { updatedSubredditData: SubredditData },
+    { _id: string; input: UpdateSubredditInput }
+  >(UPDATE_SUBREDDIT);
   const { data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
 
   //get all Subreddits form GQL and store it in a array
-  const allReddits: any[] = getData();
-
-  function getData(): any[] {
-    if (data === undefined) {
-      return [];
-    } else {
-      return data.allSubreddits;
-    }
-  }
+  const allSubreddits = data ? data.allSubreddits : [];
 
   //Handle how to handle the saving/updating of a subreddit, depending on currend mode
   const handleSave = () => {
@@ -150,29 +152,29 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   const editModeSaveCheck = () => {
     console.log(id);
     //Check if requried fields are not empty
-    if (Inputstate.redditState != "") {
-      setAlertState({ ...AlertState, ["emtyFieldState"]: true });
-      editName = Inputstate.redditState;
+    if (inputState.redditState !== "") {
+      setAlertState({ ...AlertState, emtyFieldState: true });
+      editName = inputState.redditState;
     }
     //Check for duplicates
     if (!checkForDuplicates()) {
-      setAlertState({ ...AlertState, ["redditDuplicateState"]: true });
+      setAlertState({ ...AlertState, redditDuplicateState: true });
     } else {
-      const UpdateSubredditInput = {
+      const updateSubredditInput = {
         name: editName,
-        active: Inputstate.active
+        active: inputState.active
       };
 
       //Update the subreddit and check if it returns an error
       updateSubreddit({
-        variables: { _id: id, input: UpdateSubredditInput }
+        variables: { _id: id, input: updateSubredditInput }
       }).catch(err => {
-        setAlertState({ ...AlertState, ["gqlErrorState"]: true });
+        setAlertState({ ...AlertState, gqlErrorState: true });
         console.error("does not exist error " + err);
       });
 
       if (!AlertState.gqlErrorState) {
-        setAlertState({ ...AlertState, ["storageState"]: true });
+        setAlertState({ ...AlertState, storageState: true });
       }
     }
   };
@@ -181,54 +183,42 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   const normalModeSaveCheck = () => {
     //Check if fields are not empty
     if (
-      Inputstate.redditState === "" ||
-      Inputstate.keywordState === "" ||
-      Inputstate.answerState === ""
+      inputState.redditState === "" ||
+      inputState.keywordState === "" ||
+      inputState.answerState === ""
     ) {
-      setAlertState({ ...AlertState, ["emtyFieldState"]: true });
+      setAlertState({ ...AlertState, emtyFieldState: true });
       //Check for enough storage space
-    } else if (allReddits.length === 3) {
-      setAlertState({ ...AlertState, ["redditAmountState"]: true });
+    } else if (allSubreddits.length === 3) {
+      setAlertState({ ...AlertState, redditAmountState: true });
       //Check for duplicates
-    } else if (allReddits.length > 0 && !checkForDuplicates()) {
-      setAlertState({ ...AlertState, ["redditDuplicateState"]: true });
+    } else if (allSubreddits.length > 0 && !checkForDuplicates()) {
+      setAlertState({ ...AlertState, redditDuplicateState: true });
     } else {
-      //const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString();
-
-      const NewSubredditInput = {
-        name: Inputstate.redditState.toString(),
-        active: Inputstate.active,
-        answer: Inputstate.answerState.toString(),
-        keywords: Inputstate.keywordState.split(" ")
+      const newSubredditInput = {
+        name: inputState.redditState.toString(),
+        active: inputState.active,
+        answer: inputState.answerState.toString(),
+        keywords: inputState.keywordState.split(" "),
+        createdOn: new Date()
       };
 
-      addSubreddit({ variables: { input: NewSubredditInput } }).catch(err => {
-        setAlertState({ ...AlertState, ["gqlErrorState"]: true });
-        console.error("does not exist error " + err);
-      });
-
-      //wait for some second to see if error occures
-      setTimeout(() => {
-        if (!AlertState.gqlErrorState) {
-          setAlertState({ ...AlertState, ["storageState"]: true });
-        }
-      }, 3000);
+      addSubreddit({ variables: { input: newSubredditInput } })
+        .then(() => setAlertState({ ...AlertState, storageState: true }))
+        .catch(() => {});
     }
   };
 
   //Check if the subreddit already exists
   function checkForDuplicates(): boolean {
-    if (
-      allReddits.length === 0 &&
-      allReddits[0].name === Inputstate.redditState.toString()
-    ) {
+    if (allSubreddits.length === 0) {
       return false;
     } else {
-      for (let i = 0; i < allReddits.length; i++) {
+      for (let i = 0; i < allSubreddits.length; i++) {
         if (
-          allReddits.length > 0 &&
-          allReddits[i].name === Inputstate.redditState.toString() &&
-          !(allReddits[i].id == id)
+          allSubreddits.length > 0 &&
+          allSubreddits[i].name === inputState.redditState.toString() &&
+          !(allSubreddits[i]._id === id)
         ) {
           return false;
         }
@@ -265,12 +255,11 @@ export const AddComponent: FC<AddComponentPrompts> = ({
             disabled={editMode}
           />
         </form>
-
         <FormGroup className={classes.switch}>
           <FormControlLabel
             control={
               <Switch
-                checked={Inputstate.active}
+                checked={inputState.active}
                 onChange={handleOnSwitchChange}
                 color="primary"
                 id="active"
@@ -291,9 +280,8 @@ export const AddComponent: FC<AddComponentPrompts> = ({
             To many Items in Storage, delete First!
           </Alert>
         )}
-        {AlertState.gqlErrorState && (
-          <Alert severity="error">The subreddit does not exist!</Alert>
-        )}
+        {addError && <Alert severity="error"> {addError.message}</Alert>}
+        {updateError && <Alert severity="error"> {updateError.message}</Alert>}
         {AlertState.storageState && (
           <Alert severity="success">Subreddit successfully stored!</Alert>
         )}

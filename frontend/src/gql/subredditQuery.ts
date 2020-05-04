@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export type AllSubreddits = {
+export type SubredditData = {
   _id: string;
   name: string;
   description: string;
@@ -12,7 +12,7 @@ export type AllSubreddits = {
 };
 
 export type AllSubredditsData = {
-  allSubreddits: [AllSubreddits];
+  allSubreddits: [SubredditData];
 };
 
 export const GET_ALL_SUBREDDITS = gql`
@@ -22,7 +22,7 @@ export const GET_ALL_SUBREDDITS = gql`
       name
       description
       icon
-      answerCount
+      answeredCommentIDs
       answer
       active
       keywords

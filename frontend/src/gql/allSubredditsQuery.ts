@@ -5,7 +5,7 @@ export type AllSubreddits = {
   name: string;
   description: string;
   icon: string;
-  answerCount: number;
+  answeredCommentIDs: string[];
   answer: string;
   active: boolean;
   keywords: string[];
@@ -22,7 +22,7 @@ export const GET_ALL_SUBREDDITS = gql`
       name
       description
       icon
-      answerCount
+      answeredCommentIDs
       answer
       active
       keywords

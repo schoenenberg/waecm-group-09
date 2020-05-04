@@ -37,12 +37,12 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type SubredditPrompts = {
-  reddit: String;
+  reddit: string;
   date: any;
   id: any;
-  keywords: String[];
+  keywords: string[];
   active: boolean;
-  answer: String;
+  answer: string;
 };
 
 export const Subreddit: FC<SubredditPrompts> = ({

@@ -5,6 +5,7 @@ export type NewSubredditInput = {
   active: boolean;
   answer: string;
   keywords: string[];
+  createdOn: Date;
 };
 
 export const ADD_SUBREDDIT = gql`

@@ -5,8 +5,10 @@ export type RedditId = {
 };
 
 export type UpdateSubredditInput = {
-  name: string;
-  active: boolean;
+  name?: string;
+  active?: boolean;
+  answer?: string;
+  keywords?: string[];
 };
 
 export const UPDATE_SUBREDDIT = gql`
