@@ -14,7 +14,6 @@ import { UPDATE_SUBREDDIT } from '../gql/updateSubredditMutation';
 import { GET_ALL_SUBREDDITS, AllSubredditsData } from "../gql/allSubredditsQuery";
 
 import { useMutation, useQuery } from "@apollo/react-hooks";
-//import { onError } from 'apollo-link-error';
 
 type AddComponentPrompts = {
     onRedirectSettings: MouseEventHandler;
@@ -95,30 +94,38 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     })
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputState({ ...Inputstate, [event.target.id]: event.target.value})
+    //Reset all previous Alerts 
+    if(AlertState.emtyFieldState){
+      setAlertState({ ...AlertState, ["emtyFieldState"]: false});
+    } 
+    if(AlertState.redditAmountState){
+      setAlertState({ ...AlertState, ["redditAmountState"]: false});
+    } 
+    if(AlertState.redditDuplicateState){
+      setAlertState({ ...AlertState, ["redditDuplicateState"]: false});
+    } 
+    if(AlertState.gqlErrorState){
+      setAlertState({ ...AlertState, ["gqlErrorState"]: false});
+    } 
+    if(AlertState.storageState){
+      setAlertState({ ...AlertState, ["storageState"]: false});
+    } 
 
-    setAlertState({ ...AlertState, ["emtyFieldState"]: false});
-    setAlertState({ ...AlertState, ["storageState"]: false});
-    setAlertState({ ...AlertState, ["redditAmountState"]: false});
-    setAlertState({ ...AlertState, ["redditDuplicateState"]: false});
-    setAlertState({ ...AlertState, ["gqlErrorState"]: false});
+    //set the states depending on user input
+    setInputState({ ...Inputstate, [event.target.id]: event.target.value})
+    
   };
 
   const handleOnSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputState({ ...Inputstate, [event.target.id]: event.target.checked });
   };
 
-
-  const [addSubreddit, error] = useMutation(ADD_SUBREDDIT)
+  //GQL Querys and Mutations 
+  const [addSubreddit] = useMutation(ADD_SUBREDDIT)
   const [updateSubreddit] = useMutation(UPDATE_SUBREDDIT); 
+  const { data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
 
-  
-  const { data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS
-  //   , {
-  //   pollInterval: 100,
-  // }
-  );
-
+  //get all Subreddits form GQL and store it in a array
   const allReddits: any[] = getData(); 
 
   function getData(): any[] {
@@ -129,51 +136,43 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     }
   }
 
-
+  //Handle how to handle the saving/updating of a subreddit, depending on currend mode
   const handleSave = () => { 
-      if (editMode){
-        editModeSaveCheck();     
-      } else {
-        console.log("bevor" + allReddits.length);
-        normalModeSaveCheck();
-        //console.log(allReddits.length); 
-        //console.log(allReddits);
-      }
+    if (editMode){
+      editModeSaveCheck();     
+    } else {
+      normalModeSaveCheck();
+    }
   };
 
-  const editModeSaveCheck = () => {
-    
+  //Validity Checks for editing a subreddit
+  const editModeSaveCheck = () => {  
+    console.log(id); 
     //Check if requried fields are not empty
     if (Inputstate.redditState != ""){
-      //setAlertState({ ...AlertState, ["emtyFieldState"]: true});
+      setAlertState({ ...AlertState, ["emtyFieldState"]: true});
       editName = Inputstate.redditState; 
     } 
+    //Check for duplicates
     if (!checkForDuplicates()){
       setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
     } else {
-      console.log("edit");
+
       const UpdateSubredditInput = { 
         "name": editName, 
         "active": Inputstate.active
       };
-      updateSubreddit({variables: {_id: id, input: UpdateSubredditInput}}); 
 
-      //Check if GQL error occurred
-      // setTimeout(() => {
-      //   if(updateError){
-      //     console.log("error")
-      //     console.log(updateError)
-      //     //console.log(error.called)
-      //     setAlertState({ ...AlertState, ["gqlErrorState"]: true});
-      //   } else {
-      //     setAlertState({ ...AlertState, ["storageState"]: true});
-      //   } 
-      // }, 2000); 
-
-      //handleErrors();
+      //Update the subreddit and check if it returns an error
+      updateSubreddit({variables: {_id: id, input: UpdateSubredditInput}}).catch(err => {setAlertState({ ...AlertState, ["gqlErrorState"]: true}); console.error("does not exist error "+err); });   
+      
+      if(!AlertState.gqlErrorState){
+        setAlertState({ ...AlertState, ["storageState"]: true});
+      }
     }
   }; 
 
+  //Validity Checks for adding a new subreddit
   const normalModeSaveCheck = () => {
     //Check if fields are not empty
     if(Inputstate.redditState === "" || Inputstate.keywordState === "" || Inputstate.answerState === ""){
@@ -182,58 +181,41 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     } else if (allReddits.length === 3 ) {
         setAlertState({ ...AlertState, ["redditAmountState"]: true});
     //Check for duplicates
-    } else if ((allReddits.length > 0) && checkForDuplicates() === false) {
+    } else if ((allReddits.length > 0) && !checkForDuplicates()) {
         setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
     } else {
         //const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString(); 
 
-        //GQL
         const NewSubredditInput = { 
           "name": Inputstate.redditState.toString(), 
           "active": Inputstate.active,
           "answer": Inputstate.answerState.toString(),
           "keywords": Inputstate.keywordState.split(" ")
         }; 
-        console.log(NewSubredditInput); 
       
         addSubreddit({ variables: { input: NewSubredditInput }}).catch(err => {setAlertState({ ...AlertState, ["gqlErrorState"]: true}); console.error("does not exist error "+err); });
-
-        //Check if GQL error occurred
-        handleErrors(); 
-        //refetch();
-
-        console.log("After" + allReddits.length); 
-        // console.log("After" +allReddits);
-        
+ 
+        //wait for some second to see if error occures
+        setTimeout(() => {
+          if(!AlertState.gqlErrorState){
+            setAlertState({ ...AlertState, ["storageState"]: true});
+          }
+        }, 3000);
       }
   }
 
+  //Check if the subreddit already exists
   function checkForDuplicates (): boolean{
     if (allReddits.length === 0 && allReddits[0].name === Inputstate.redditState.toString()){
         return false; 
     } else {
       for(let i = 0; i < allReddits.length; i++){
-        if (allReddits.length > 0 && allReddits[i].name === Inputstate.redditState.toString()){
+        if (allReddits.length > 0 && allReddits[i].name === Inputstate.redditState.toString() && !(allReddits[i].id == id)){
             return false;
         }         
       }
     }  
     return true; 
-  }
-
-  const handleErrors =  () => {
-    setTimeout(() => {
-      if(AlertState.gqlErrorState){
-        console.log("error")
-        console.log(error)
-        console.log(error.called)
-        console.log(addSubreddit);
-        //setAlertState({ ...AlertState, ["gqlErrorState"]: true});
-      } else {
-        setAlertState({ ...AlertState, ["storageState"]: true});
-        console.log(addSubreddit);
-      } 
-    }, 2000);
   }
  
 
