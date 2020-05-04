@@ -1,18 +1,6 @@
 body, html {
   height: 100%;
   margin: 0;
-  /*background: url("./background_image.jpg");
-  background-position-x: center;
-  background-position-y: center;
-  background-size: cover;
-  background-repeat-x: no-repeat;
-  background-repeat-y: no-repeat;
-  background-attachment: fixed;*/
-} 
-
-.container {
-  height: 100%;
-  margin: 0;
   background: url("./background_image.jpg");
   background-position-x: center;
   background-position-y: center;
@@ -20,12 +8,7 @@ body, html {
   background-repeat-x: no-repeat;
   background-repeat-y: no-repeat;
   background-attachment: fixed;
-}
-
-.containerProfile {
-  background-color: white;
-  height: 100%;
-}
+} 
 
 .App {
   text-align: center;

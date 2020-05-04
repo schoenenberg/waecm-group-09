@@ -48,7 +48,6 @@ export const Settings: FC<SettingsPrompts> = ({
 
 
     const {loading, error, data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS, {
-        //variables: { breed },
         pollInterval: 500,
       });
 
@@ -89,7 +88,7 @@ export const Settings: FC<SettingsPrompts> = ({
                 <div>Loading...</div>
             ) : error ? (
                 <Alert title={"Error"}>Unauthorized</Alert>
-            ) :  data && showRedditList && (<div>{data.allSubreddits.map((elem) => (<Subreddit 
+            ) :  data && !showAddComponent && showRedditList && (<div>{data.allSubreddits.map((elem) => (<Subreddit 
                  //onDeleteReddit={deleteReddit}
                  reddit ={elem.name}
                  date = {"test"}

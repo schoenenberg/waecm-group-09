@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
       width: "90%",
       height: "100%",
-      //flexWrap: "wrap",
-      flexGrow: 1,
+      flexWrap: "wrap",
+      //flexGrow: 1,
       overflow: 'hidden',
       padding: theme.spacing(0, 2),
       "& > *": {
@@ -89,22 +89,43 @@ export const AddComponent: FC<AddComponentPrompts> = ({
       emtyFieldState: false,
       storageState: false,
       redditAmountState: false,
-      redditDuplicateState: false, 
+      redditDuplicateState: false,
+      gqlErrorState: false, 
     })
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //Reset all previous Alerts 
+    if(AlertState.emtyFieldState){
+      setAlertState({ ...AlertState, ["emtyFieldState"]: false});
+    } 
+    if(AlertState.redditAmountState){
+      setAlertState({ ...AlertState, ["redditAmountState"]: false});
+    } 
+    if(AlertState.redditDuplicateState){
+      setAlertState({ ...AlertState, ["redditDuplicateState"]: false});
+    } 
+    if(AlertState.gqlErrorState){
+      setAlertState({ ...AlertState, ["gqlErrorState"]: false});
+    } 
+    if(AlertState.storageState){
+      setAlertState({ ...AlertState, ["storageState"]: false});
+    } 
+
+    //set the states depending on user input
     setInputState({ ...Inputstate, [event.target.id]: event.target.value})
+    
   };
 
   const handleOnSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputState({ ...Inputstate, [event.target.id]: event.target.checked });
   };
 
-
-  const [addSubreddit] = useMutation(ADD_SUBREDDIT);
+  //GQL Querys and Mutations 
+  const [addSubreddit] = useMutation(ADD_SUBREDDIT)
   const [updateSubreddit] = useMutation(UPDATE_SUBREDDIT); 
   const { data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
 
+  //get all Subreddits form GQL and store it in a array
   const allReddits: any[] = getData(); 
 
   function getData(): any[] {
@@ -115,49 +136,85 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     }
   }
 
-  const handleSave = () => {
-      //Check for empty fiels
-      if(Inputstate.redditState === "" || Inputstate.keywordState === "" || Inputstate.answerState === ""){
-          setAlertState({ ...AlertState, ["emtyFieldState"]: true});
-      //Check for enough storage space
-      } else if (allReddits.length === 3 ) {
-          setAlertState({ ...AlertState, ["redditAmountState"]: true});
-      //Check for duplicates
-      } else if ((allReddits.length > 1) && checkForDuplicates() === false) {
-          setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
-      } else {
-          if(editMode){
-            const UpdateSubredditInput = { 
-              "name": Inputstate.redditState.toString(), 
-              "active": Inputstate.active
-            };
-
-            updateSubreddit({variables: {_id: id, input: UpdateSubredditInput}}); 
-          } else {
-          //const date = new Date();
-          //const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString(); 
-
-          //GQL
-          const NewSubredditInput = { 
-            "name": Inputstate.redditState.toString(), 
-            "answer": Inputstate.answerState.toString(),
-            "active": Inputstate.active,
-            "keywords": Inputstate.keywordState.split(" ")
-          }; 
-        
-          addSubreddit({ variables: { input: NewSubredditInput }});
-
-          setAlertState({ ...AlertState, ["storageState"]: true});
-        }
-      }
+  //Handle how to handle the saving/updating of a subreddit, depending on currend mode
+  const handleSave = () => { 
+    if (editMode){
+      editModeSaveCheck();     
+    } else {
+      normalModeSaveCheck();
+    }
   };
 
+  //Validity Checks for editing a subreddit
+  const editModeSaveCheck = () => {  
+    console.log(id); 
+    //Check if requried fields are not empty
+    if (Inputstate.redditState != ""){
+      setAlertState({ ...AlertState, ["emtyFieldState"]: true});
+      editName = Inputstate.redditState; 
+    } 
+    //Check for duplicates
+    if (!checkForDuplicates()){
+      setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
+    } else {
+
+      const UpdateSubredditInput = { 
+        "name": editName, 
+        "active": Inputstate.active
+      };
+
+      //Update the subreddit and check if it returns an error
+      updateSubreddit({variables: {_id: id, input: UpdateSubredditInput}}).catch(err => {setAlertState({ ...AlertState, ["gqlErrorState"]: true}); console.error("does not exist error "+err); });   
+      
+      if(!AlertState.gqlErrorState){
+        setAlertState({ ...AlertState, ["storageState"]: true});
+      }
+    }
+  }; 
+
+  //Validity Checks for adding a new subreddit
+  const normalModeSaveCheck = () => {
+    //Check if fields are not empty
+    if(Inputstate.redditState === "" || Inputstate.keywordState === "" || Inputstate.answerState === ""){
+      setAlertState({ ...AlertState, ["emtyFieldState"]: true});
+    //Check for enough storage space
+    } else if (allReddits.length === 3 ) {
+        setAlertState({ ...AlertState, ["redditAmountState"]: true});
+    //Check for duplicates
+    } else if ((allReddits.length > 0) && !checkForDuplicates()) {
+        setAlertState({ ...AlertState, ["redditDuplicateState"]: true});
+    } else {
+        //const dateOfAdding = date.getDate().toString() + "." + date.getMonth().toString() + "." + date.getFullYear().toString(); 
+
+        const NewSubredditInput = { 
+          "name": Inputstate.redditState.toString(), 
+          "active": Inputstate.active,
+          "answer": Inputstate.answerState.toString(),
+          "keywords": Inputstate.keywordState.split(" ")
+        }; 
+      
+        addSubreddit({ variables: { input: NewSubredditInput }}).catch(err => {setAlertState({ ...AlertState, ["gqlErrorState"]: true}); console.error("does not exist error "+err); });
+ 
+        //wait for some second to see if error occures
+        setTimeout(() => {
+          if(!AlertState.gqlErrorState){
+            setAlertState({ ...AlertState, ["storageState"]: true});
+          }
+        }, 3000);
+      }
+  }
+
+  //Check if the subreddit already exists
   function checkForDuplicates (): boolean{
-    for(let i = 0; i < allReddits.length; i++){
-        if (allReddits.length > 0 && allReddits[i].name === Inputstate.redditState.toString()){
+    if (allReddits.length === 0 && allReddits[0].name === Inputstate.redditState.toString()){
+        return false; 
+    } else {
+      for(let i = 0; i < allReddits.length; i++){
+        if (allReddits.length > 0 && allReddits[i].name === Inputstate.redditState.toString() && !(allReddits[i].id == id)){
             return false;
         }         
-    }
+      }
+    }  
     return true; 
   }
  
@@ -176,18 +233,13 @@ export const AddComponent: FC<AddComponentPrompts> = ({
                   label="Keywords"  
                   defaultValue={editKeywords} 
                   onChange={handleOnChange}
-                  // InputProps={{
-                  //   readOnly: {editMode},
-                  // }}
-                  />
+                  disabled={editMode}/>
         <TextField required 
                     id="answerState" 
                     label="Answer"  
                     defaultValue={editAnswer} 
                     onChange={handleOnChange}
-                    // InputProps={{
-                    //   readOnly: {editMode},
-                    // }}
+                    disabled={editMode}
                     />
         </form>
 
@@ -200,10 +252,12 @@ export const AddComponent: FC<AddComponentPrompts> = ({
         {AlertState.emtyFieldState && <Alert severity="error">Fill all Fields!</Alert>}
         {AlertState.redditDuplicateState && <Alert severity="error">Subreddit already exists!</Alert>}
         {AlertState.redditAmountState && <Alert severity="error">To many Items in Storage, delete First!</Alert>}
+        {AlertState.gqlErrorState && <Alert severity="error">The subreddit does not exist!</Alert>}
         {AlertState.storageState && <Alert severity="success">Subreddit successfully stored!</Alert>}
 
         <Button className={classes.button1} variant="contained" onClick={onRedirectSettings}>Cancel</Button>
         <Button className={classes.button2} variant="contained" onClick={handleSave}>Save</Button>
+        
       </Paper>
     </div>
   );

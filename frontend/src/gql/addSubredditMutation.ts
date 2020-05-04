@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
 export type NewSubredditInput = {    
-    name: string, 
-    answer: string,
+    name: string,  
     active: boolean,
+    answer: string,
     keywords: string[]
 };
 

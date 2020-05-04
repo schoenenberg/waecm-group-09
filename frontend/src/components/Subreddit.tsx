@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 400,
       margin: `${theme.spacing(1)}px auto`,
       padding: theme.spacing(2),
-      //background: '#b3cce6',
       color: '#b3cce6'  
     },
   }),
@@ -58,8 +57,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
     const [alertDialogOpen, setAlertDialogOpen] = useState(false);
     const [showAddComponent, setAddComponent] = useState(false);
 
-    const [deleteSubreddit] = useMutation(DELETE_SUBREDDIT);
-    
+    const [deleteSubreddit] = useMutation(DELETE_SUBREDDIT);   
 
     const onCloseAlertDialog = () => {
       setAlertDialogOpen(false);
@@ -75,7 +73,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
 return (
     <div className={classes.root}>
 
-      <Paper className={active ? classes.paper : classes.paperInactive} elevation={3} id={id}>
+      {!showAddComponent && <Paper className={active ? classes.paper : classes.paperInactive} elevation={3} id={id}>
         <Grid container wrap="nowrap" spacing={2}>
           <Grid item xs zeroMinWidth>
             <Typography component="div">
@@ -85,7 +83,7 @@ return (
                 </Link>
                 </Box>
                 <Box m={1}>
-                    Added: {date}
+                    Added: {date.toLocaleString()}
                 </Box>
             </Typography>
           </Grid>
@@ -97,13 +95,12 @@ return (
                                 alertDialogOpen ={alertDialogOpen}
                                 onCloseAlertDialog={onCloseAlertDialog}
                                 onAcceptDialog={deleteReddit}
-                                title={"Delte?"}
+                                title={"Delete?"}
                                 text={"Do you really want to delete this reddit?"}
                             />)}
-
           </Grid>
         </Grid>
-      </Paper>
+      </Paper>}
       {showAddComponent && <AddComponent 
                     onRedirectSettings={() => setAddComponent(false)}
                     editName= {reddit}
