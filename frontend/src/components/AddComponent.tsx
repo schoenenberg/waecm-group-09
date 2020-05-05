@@ -166,16 +166,9 @@ export const AddComponent: FC<AddComponentPrompts> = ({
       };
 
       //Update the subreddit and check if it returns an error
-      updateSubreddit({
-        variables: { _id: id, input: updateSubredditInput }
-      }).catch(err => {
-        setAlertState({ ...AlertState, gqlErrorState: true });
-        console.error("does not exist error " + err);
-      });
-
-      if (!AlertState.gqlErrorState) {
-        setAlertState({ ...AlertState, storageState: true });
-      }
+      updateSubreddit({ variables: { _id: id, input: updateSubredditInput } })
+        .then(() => setAlertState({ ...AlertState, storageState: true }))
+        .catch(() => {});
     }
   };
 
