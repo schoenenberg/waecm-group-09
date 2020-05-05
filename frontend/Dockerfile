@@ -16,5 +16,7 @@ RUN npm run build
 # Using nginx as serving image
 FROM nginx:1.17.9
 
-COPY --from=build-stage /usr/src/waecm/build/ /usr/share/nginx/html/
+EXPOSE 3000/tcp
+
 COPY nginx-custom.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-stage /usr/src/waecm/build/ /usr/share/nginx/html/
