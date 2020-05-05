@@ -1,16 +1,20 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { MaxLength } from 'class-validator';
+import { Length } from 'class-validator';
 
 @InputType()
 export class NewSubredditInput {
   @Field()
-  @MaxLength(40)
+  @Length(1, 30)
   name!: string;
 
   @Field()
+  @Length(1, 300)
   answer!: string;
 
   @Field(() => [String])
+  @Length(1, 30, {
+    each: true
+  })
   keywords!: string[];
 
   @Field()
