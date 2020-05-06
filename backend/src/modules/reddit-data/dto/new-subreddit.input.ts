@@ -1,18 +1,18 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { Length } from 'class-validator';
+import { Length, IsDate} from 'class-validator';
 
 @InputType()
 export class NewSubredditInput {
   @Field()
-  @Length(1, 30)
+  @Length(3, 20)
   name!: string;
 
   @Field()
-  @Length(1, 300)
+  @Length(2, 300)
   answer!: string;
 
   @Field(() => [String])
-  @Length(1, 30, {
+  @Length(2, 30, {
     each: true
   })
   keywords!: string[];
@@ -21,5 +21,6 @@ export class NewSubredditInput {
   active!: boolean;
 
   @Field()
+  @IsDate()
   createdOn!: Date;
 }

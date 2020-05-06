@@ -5,17 +5,17 @@ import { Length, IsOptional } from 'class-validator';
 export class UpdateSubredditInput {
   @Field({ nullable: true })
   @IsOptional()
-  @Length(1, 30)
+  @Length(3, 20)
   name?: string;
 
   @Field({ nullable: true })
   @IsOptional()
-  @Length(1, 300)
+  @Length(2, 300)
   answer?: string;
 
   @Field(() => [String], { nullable: true })
   @IsOptional()
-  @Length(1, 30, {
+  @Length(2, 30, {
     each: true
   })
   keywords?: string[];
