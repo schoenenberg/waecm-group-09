@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { FC } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
@@ -20,7 +20,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const Dashboard = () => {
+type DashboardProps = {
+  showAddComponent: boolean;
+  setAddComponent: (newValue: boolean) => void;
+  noReddits: boolean;
+};
+
+export const Dashboard: FC<DashboardProps> = ({
+  showAddComponent,
+  setAddComponent,
+  noReddits,
+  }) => {
   const classes = useStyles();
 
   const { loading, error, data } = useQuery<AllSubredditsData>(
@@ -30,12 +40,9 @@ export const Dashboard = () => {
     }
   );
 
-  const [noReddits] = useState(data === undefined);
-  const [showAddComponent, setAddComponent] = useState(false);
-
-  const redirectSettings = useCallback(() => {
+  const redirectSettings = () => {
     setAddComponent(false);
-  }, []);
+  };
 
   return (
     <div className={classes.root}>
@@ -64,17 +71,16 @@ export const Dashboard = () => {
                 description={elem.description}
                 icon={elem.icon}
                 number_answers={elem.answeredCommentIDs.length}
-                url={elem.answer}
               />
             ))}
           </div>
         )
       )}
       {noReddits && !showAddComponent && (
-        <Link href="#" onClick={() => setAddComponent(true)} color="inherit">
-          Add Subreddits now!
-        </Link>
+          <Link href="#" onClick={() => setAddComponent(true)} color="primary">
+            <strong> Add Subreddits now! </strong>
+          </Link>
       )}
     </div>
-  );
+  )
 };
