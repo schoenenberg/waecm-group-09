@@ -42,14 +42,18 @@ type SettingsPrompts = {
     showRedditList: boolean;
     setAddComponent: (newValue: boolean) => void;
     setShowRedditList: (newValue: boolean) => void;
+    showEditComponent: boolean;
+    setShowEditComponent: (newValue: boolean) => void;
 };
 
 export const Settings: FC<SettingsPrompts> = ({
-                                                  showAddComponent,
-                                                  showRedditList,
-                                                  setAddComponent,
-                                                  setShowRedditList
-                                              }) => {
+  showAddComponent,
+  showRedditList,
+  setAddComponent,
+  setShowRedditList,
+  showEditComponent,
+  setShowEditComponent
+}) => {
     const classes = useStyles();
 
     const {loading, error, data} = useQuery<AllSubredditsData>(
@@ -109,6 +113,8 @@ export const Settings: FC<SettingsPrompts> = ({
                                 keywords={elem.keywords}
                                 answer={elem.answer}
                                 active={elem.active}
+                                showEditComponent={showEditComponent}
+                                setShowEditComponent={setShowEditComponent}
                             />
                         ))}
                     </div>

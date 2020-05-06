@@ -83,6 +83,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
     const [alertDialogOpen, setAlertDialogOpen] = useState(false);
     const [showAddComponent, setAddComponent] = useState(false);
     const [showAddComponentDashboard, setAddComponentDashboard] = useState(false);
+    const [showEditComponent, setShowEditComponent] = useState(false);
     const [showRedditList, setShowRedditList] = useState(true);
     const allReddits: any[] = getData();
     const [noReddits, setNoReddits] = useState(allReddits.length === 0);
@@ -100,6 +101,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
     // called when clicked on a tab (also when clicked on same tab)
     const handleTabClick = () => {
         handleSetAddComponentDashboard(false);
+        handleSetEditComponent(false);
         if (allReddits.length === 0) {
             setNoReddits(true);
         } else {
@@ -115,6 +117,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
         setValue(newValue);
         handleSetAddComponentSettings(false);
         handleSetAddComponentDashboard(false);
+        handleSetEditComponent(false);
         handleShowRedditList(true);
         handleSetAddComponentDashboard(false);
         if (newValue === 0) {
@@ -132,6 +135,10 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
 
     const handleSetAddComponentDashboard = (newValue: boolean) => {
         setAddComponentDashboard(newValue);
+    };
+
+    const handleSetEditComponent = (newValue: boolean) => {
+        setShowEditComponent(newValue);
     };
 
     const handleShowRedditList = (newValue: boolean) => {
@@ -179,6 +186,8 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
                         setAddComponent={handleSetAddComponentSettings}
                         setShowRedditList={handleShowRedditList}
                         showRedditList={showRedditList}
+                        showEditComponent={showEditComponent}
+                        setShowEditComponent={setShowEditComponent}
                     />
                 )}
             </TabPanel>

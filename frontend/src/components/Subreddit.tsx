@@ -43,6 +43,8 @@ type SubredditPrompts = {
   keywords: string[];
   active: boolean;
   answer: string;
+  showEditComponent: boolean;
+  setShowEditComponent: (newValue: boolean) => void;
 };
 
 export const Subreddit: FC<SubredditPrompts> = ({
@@ -51,12 +53,12 @@ export const Subreddit: FC<SubredditPrompts> = ({
   id,
   keywords,
   active,
-  answer
+  answer,
+  showEditComponent,
+  setShowEditComponent
 }) => {
   const classes = useStyles();
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
-  const [showAddComponent, setAddComponent] = useState(false);
-
   const [deleteSubreddit] = useMutation(DELETE_SUBREDDIT);
 
   const onCloseAlertDialog = () => {
@@ -71,7 +73,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
 
   return (
     <div className={classes.root}>
-      {!showAddComponent && (
+      {!showEditComponent && (
         <Paper
           className={active ? classes.paper : classes.paperInactive}
           elevation={3}
@@ -83,7 +85,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
                 <Box fontSize="h6.fontSize" m={1}>
                   <Link
                     href="#"
-                    onClick={() => setAddComponent(true)}
+                    onClick={() => setShowEditComponent(true)}
                     color="inherit"
                   >
                     r/{reddit}
@@ -113,9 +115,9 @@ export const Subreddit: FC<SubredditPrompts> = ({
           </Grid>
         </Paper>
       )}
-      {showAddComponent && (
+      {showEditComponent && (
         <AddComponent
-          onRedirectSettings={() => setAddComponent(false)}
+          onRedirectSettings={() => setShowEditComponent(false)}
           editName={reddit}
           editKeywords={keywords}
           editAnswer={answer}
