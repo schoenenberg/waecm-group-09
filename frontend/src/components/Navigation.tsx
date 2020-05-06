@@ -86,7 +86,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
   const [showAddComponent, setAddComponent] = useState(false);
   const [showAddComponentDashboard, setAddComponentDashboard] = useState(false);
-  const [showEditComponent, setShowEditComponent] = useState(false);
+  const [editingASubreddit, setEditingASubreddit] = useState(false);
   const [showRedditList, setShowRedditList] = useState(true);
   
   const allSubreddits = data ? data.allSubreddits : []
@@ -100,10 +100,12 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
 
 
   const [noReddits, setNoReddits] = useState(allSubreddits.length === 0);
+  const [tabClick, setTabClick] = useState(false);
 
 
   // called when clicked on a tab (also when clicked on same tab)
   const handleTabClick = () => {
+    setTabClick(true);
     handleSetAddComponentDashboard(false);
     handleSetEditComponent(false);
     if (allSubreddits.length === 0) {
@@ -112,6 +114,10 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
       setNoReddits(false);
     }
   };
+
+  const handleSettingsTabClick = (value:boolean) => {
+    setTabClick(value);
+  }
 
   // called when the tab value changes
   const handleChange = (
@@ -142,7 +148,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
   };
 
   const handleSetEditComponent = (newValue: boolean) => {
-    setShowEditComponent(newValue);
+    setEditingASubreddit(newValue);
   };
 
   const handleShowRedditList = (newValue: boolean) => {
@@ -195,8 +201,10 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
             setAddComponent={handleSetAddComponentSettings}
             setShowRedditList={handleShowRedditList}
             showRedditList={showRedditList}
-            showEditComponent={showEditComponent}
-            setShowEditComponent={setShowEditComponent}
+            editingASubreddit={editingASubreddit}
+            setEditingASubreddit={handleSetEditComponent}
+            tabClick = {tabClick}
+            handleSettingsTabClick = {handleSettingsTabClick}
           />
         )}
       </TabPanel>
