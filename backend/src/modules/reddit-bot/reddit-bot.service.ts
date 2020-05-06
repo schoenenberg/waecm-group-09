@@ -9,15 +9,25 @@ export class RedditBotService {
   // bot runs every few seconds and retrieves some comments
   private readonly SECONDS_UNTIL_UPDATE: number;
   private readonly COMMENT_LIMIT: number;
+  private readonly EXTRA_KEYWORD: string;
+  private readonly ANSWERS_PER_RUN: number;
 
   constructor(
     private redditClient: RedditConnector,
     private readonly redditService: RedditService,
   ) {
-    this.COMMENT_LIMIT = (process.env.REDDIT_BOT_COMMENT_LIMIT)
-      ? parseInt(process.env.REDDIT_BOT_COMMENT_LIMIT) : 5;
-    this.SECONDS_UNTIL_UPDATE = (process.env.REDDIT_BOT_INTERVAL)
-      ? parseInt(process.env.REDDIT_BOT_INTERVAL) : 40;
+    this.COMMENT_LIMIT = process.env.REDDIT_BOT_COMMENT_LIMIT
+      ? parseInt(process.env.REDDIT_BOT_COMMENT_LIMIT)
+      : 5;
+    this.SECONDS_UNTIL_UPDATE = process.env.REDDIT_BOT_INTERVAL
+      ? parseInt(process.env.REDDIT_BOT_INTERVAL)
+      : 30;
+    this.EXTRA_KEYWORD = process.env.REDDIT_BOT_EXTRA_KEYWORD
+      ? process.env.REDDIT_BOT_EXTRA_KEYWORD
+      : 'waecm-2020-group-09';
+    this.ANSWERS_PER_RUN = process.env.REDDIT_BOT_ANSWERS_PER_RUN
+      ? parseInt(process.env.REDDIT_BOT_ANSWERS_PER_RUN)
+      : 1;
 
     setInterval(() => this.startBot(), this.SECONDS_UNTIL_UPDATE * 1000);
   }
@@ -27,27 +37,26 @@ export class RedditBotService {
       allSubreddits.forEach(async subredditDB => {
         const redditComments = await this.getNewComments(subredditDB.name);
 
-        // for testing: prints all new comments to the console
-        console.log('---------------------------------');
-        redditComments.map(redditComments =>
-          console.log('COMMENT: ', redditComments.body),
-        );
-
-        const alreadyAnweredIDs = subredditDB.answeredCommentIDs;
+        const alreadyAnsweredIDs = subredditDB.answeredCommentIDs;
         const keywords = subredditDB.keywords;
 
         const unansweredComments = await this.filterForUnansweredComments(
-          alreadyAnweredIDs,
+          alreadyAnsweredIDs,
           redditComments,
         );
 
-        const commentsWithKeywords = await this.filterForQuestionsWithKeywords(
+        const commentsWithKeywords = await this.filterForCommentsWithKeywords(
           keywords,
           unansweredComments,
+          this.EXTRA_KEYWORD,
         );
 
         // reply to filtered comments (unanswered and with keywords)
-        await this.replyCommentsAndSaveID(commentsWithKeywords, subredditDB);
+        await this.replyCommentsAndSaveID(
+          commentsWithKeywords,
+          subredditDB,
+          this.ANSWERS_PER_RUN,
+        );
       }),
     );
   }
@@ -66,39 +75,54 @@ export class RedditBotService {
   }
 
   private async filterForUnansweredComments(
-    alreadyAnweredIDs: string[],
+    alreadyAnsweredIDs: string[],
     redditComments: Comment[],
   ): Promise<Comment[]> {
     return redditComments.filter(
-      redditComment => !alreadyAnweredIDs.includes(redditComment.id),
+      redditComment => !alreadyAnsweredIDs.includes(redditComment.id),
     );
   }
 
-  private async filterForQuestionsWithKeywords(
+  private async filterForCommentsWithKeywords(
     keywords: string[],
     redditComments: Comment[],
+    extraKeywordFilter?: string,
   ) {
     const lowercasedKeywords = keywords.map(keyword => keyword.toLowerCase());
 
-    return redditComments.filter(redditComment =>
-      lowercasedKeywords.some(keyword => redditComment.body.includes(keyword)),
+    const commentsWithKeywords = redditComments.filter(redditComment =>
+      lowercasedKeywords.some(keyword =>
+        redditComment.body.toLowerCase().includes(keyword),
+      ),
     );
+
+    return extraKeywordFilter
+      ? commentsWithKeywords.filter(comment =>
+          comment.body.toLowerCase().includes(extraKeywordFilter),
+        )
+      : commentsWithKeywords;
   }
 
   private async replyCommentsAndSaveID(
     commentsToAnswer: Comment[],
     subredditDB: SubredditMongo,
+    maxAnswers?: number,
   ) {
     const answer = subredditDB.answer;
-    commentsToAnswer.forEach(comment => comment.reply(answer)
-      .then((c) => {
+
+    const maxCommentsToAnswer = maxAnswers
+      ? commentsToAnswer.slice(0, maxAnswers)
+      : commentsToAnswer;
+
+    maxCommentsToAnswer.forEach(comment =>
+      comment.reply(answer).then(c => {
         console.log('BOT: ' + c.id);
       }),
     );
 
     const id = subredditDB.id;
     const alreadyAnsweredIDs = subredditDB.answeredCommentIDs;
-    const newCommentIDs = commentsToAnswer.map(comment => comment.id);
+    const newCommentIDs = maxCommentsToAnswer.map(comment => comment.id);
 
     const oldAndNewCommentIDs = alreadyAnsweredIDs.concat(newCommentIDs);
 
