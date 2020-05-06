@@ -17,6 +17,9 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     marginTop: theme.spacing(25)
+  },
+  link:{
+    color: "#FFFFFF"
   }
 }));
 
@@ -77,7 +80,7 @@ export const Dashboard: FC<DashboardProps> = ({
         )
       )}
       {noReddits && !showAddComponent && (
-          <Link href="#" onClick={() => setAddComponent(true)} color="primary">
+          <Link href="#" onClick={() => setAddComponent(true)} className={classes.link}>
             <strong> Add Subreddits now! </strong>
           </Link>
       )}

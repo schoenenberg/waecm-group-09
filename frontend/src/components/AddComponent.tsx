@@ -39,34 +39,33 @@ const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap',
       justifyContent: "center",
       alignItems: "center",
-      padding: theme.spacing(0, 1),
       "& > *": {
         margin: theme.spacing(1),
-        width: theme.spacing(80),
-        height: theme.spacing(70),
+        width: '90%',
+        height: '80%'
       }
     },
     input: {
       "& > *": {
-        marginTop: theme.spacing(5),
-        marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(2),
-        //width: theme.spacing(40),
+        marginTop: '6%',
+        marginLeft: '5%',
+        marginRight: '5%',
+        width: '90%',
       }
     },
     switch: {
-      marginTop: theme.spacing(5),
-      marginLeft: theme.spacing(5)
+      marginTop: '6%',
+      marginLeft: '5%'
     },
     button1: {
-      marginTop: theme.spacing(5),
-      marginLeft: theme.spacing(5),
-      marginBottom: theme.spacing(5)
+      marginTop: '6%',
+      marginLeft: '5%',
+      marginBottom: '7%'
     },
     button2: {
-      marginTop: theme.spacing(5),
-      marginLeft: theme.spacing(10),
-      marginBottom: theme.spacing(5)
+      marginTop: '6%',
+      marginLeft: '5%',
+      marginBottom: '7%'
     }
   })
 );
@@ -95,8 +94,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     redditAmountState: false,
     redditDuplicateState: false,
   });
-
-  //const [FirstEdit, setFirstEdit] = React.useState(false); 
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //Reset all previous Alerts

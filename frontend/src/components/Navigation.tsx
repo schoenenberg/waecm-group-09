@@ -3,22 +3,22 @@ import React, {
     MouseEventHandler,
     ReactNode,
     /* useCallback,*/ useState
-} from "react";
+} from 'react';
 
-import {makeStyles} from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import {UserInformation} from "./UserInformation";
-import {Box, Tab, Tabs} from "@material-ui/core";
+import {makeStyles} from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import {UserInformation} from './UserInformation';
+import {Box, Tab, Tabs} from '@material-ui/core';
 
-import {Settings} from "./Settings";
-import {AlertDialog} from "./AlertDialog";
-import {PrimaryButton} from "./PrimaryButton";
-import {Dashboard} from "./Dashboard";
-import {useQuery} from "@apollo/react-hooks";
-import {AllSubredditsData, GET_ALL_SUBREDDITS} from "../gql/allSubredditsQuery";
+import {Settings} from './Settings';
+import {AlertDialog} from './AlertDialog';
+import {PrimaryButton} from './PrimaryButton';
+import {Dashboard} from './Dashboard';
+import {useQuery} from '@apollo/react-hooks';
+import {AllSubredditsData, GET_ALL_SUBREDDITS} from '../gql/allSubredditsQuery';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,15 +31,15 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1
     },
     appBar: {
-        background: "#336699"
+        background: '#336699'
     }
 }));
 
 const TabPanel: FC<TabPanelProps> = ({children, value, index, ...other}) => {
     return (
         <Typography
-            component="div"
-            role="tabpanel"
+            component='div'
+            role='tabpanel'
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
@@ -59,7 +59,7 @@ type TabPanelProps = {
 function a11yProps(index: number) {
     return {
         id: `simple-tab-${index}`,
-        "aria-controls": `simple-tabpanel-${index}`
+        'aria-controls': `simple-tabpanel-${index}`
     };
 }
 
@@ -130,12 +130,12 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
 
     return (
         <div className={classes.root}>
-            <AppBar position="fixed" className={classes.appBar}>
+            <AppBar position='fixed' className={classes.appBar}>
                 <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
+                    <Typography variant='h6' className={classes.title}>
                         <UserInformation/>
                     </Typography>
-                    <IconButton color="inherit">
+                    <IconButton color='inherit'>
                         <PrimaryButton onClickHandler={() => setAlertDialogOpen(true)}>
                             Logout
                         </PrimaryButton>
@@ -144,15 +144,15 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
                                 alertDialogOpen={alertDialogOpen}
                                 onCloseAlertDialog={onCloseAlertDialog}
                                 onAcceptDialog={onLogout}
-                                title={"Logout?"}
-                                text={"Do you really want to log out?"}
+                                title={'Logout?'}
+                                text={'Do you really want to log out?'}
                             />
                         )}
                     </IconButton>
                 </Toolbar>
-                <Tabs indicatorColor="primary" value={value} onChange={handleChange} onClick={handleTabClick}>
-                    <Tab label="Dashboard" {...a11yProps(0)} />
-                    <Tab label="Settings" {...a11yProps(1)} />
+                <Tabs indicatorColor='primary' value={value} onChange={handleChange} onClick={handleTabClick}>
+                    <Tab label='Dashboard' {...a11yProps(0)} />
+                    <Tab label='Settings' {...a11yProps(1)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
