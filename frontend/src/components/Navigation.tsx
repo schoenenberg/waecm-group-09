@@ -94,7 +94,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
 
   useEffect(() => {
     if(!error && !loading) {
-      setNoReddits(allReddits.length === 0);
+      setNoReddits(allSubreddits.length === 0);
     }
   }, [data, error, loading])
 
