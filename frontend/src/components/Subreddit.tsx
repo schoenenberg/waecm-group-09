@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
@@ -43,8 +43,10 @@ type SubredditPrompts = {
   keywords: string[];
   active: boolean;
   answer: string;
-  showEditComponent: boolean;
-  setShowEditComponent: (newValue: boolean) => void;
+  editingASubreddit: boolean;
+  setEditingASubreddit: (newValue: boolean) => void;
+  tabClick: boolean;
+  handleSettingsTabClick: (newValue: boolean) => void;
 };
 
 export const Subreddit: FC<SubredditPrompts> = ({
@@ -54,12 +56,15 @@ export const Subreddit: FC<SubredditPrompts> = ({
   keywords,
   active,
   answer,
-  showEditComponent,
-  setShowEditComponent,
+  editingASubreddit,
+  setEditingASubreddit,
+  tabClick,
+  handleSettingsTabClick,
 }) => {
   const classes = useStyles();
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
   const [deleteSubreddit] = useMutation(DELETE_SUBREDDIT);
+  const [edit, setEdit] = useState(false);
 
   const onCloseAlertDialog = () => {
     setAlertDialogOpen(false);
@@ -70,9 +75,23 @@ export const Subreddit: FC<SubredditPrompts> = ({
     setAlertDialogOpen(false);
   };
 
+  useEffect(() => {
+    console.log("showEdit" + editingASubreddit);
+    if(tabClick) {
+      setEdit(false);
+      handleSettingsTabClick(false);
+    }
+    if(edit){
+      //setShowEditComponent(true);
+    }
+    if(!edit){
+      //setShowEditComponent(false);
+    }
+  }, [tabClick, edit])
+
   return (
     <div className={classes.root}>
-      {!showEditComponent && (
+      {!edit && !editingASubreddit && (
         <Paper
           className={active ? classes.paper : classes.paperInactive}
           elevation={3}
@@ -84,8 +103,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
                 <Box fontSize="h6.fontSize" m={1}>
                   <Link
                     href="#"
-                    id ={id}
-                    onClick={() => setShowEditComponent(true)}
+                    onClick={() => {setEdit(true); setEditingASubreddit(true)}}
                     color="inherit"
                   >
                     r/{reddit}
@@ -115,9 +133,9 @@ export const Subreddit: FC<SubredditPrompts> = ({
           </Grid>
         </Paper>
       )}
-      {showEditComponent && (
+      {edit && (
         <AddComponent
-          onRedirectSettings={() => setShowEditComponent(false)}
+          onRedirectSettings={() => {setEdit(false); setEditingASubreddit(false)}}
           editName={reddit}
           editKeywords={keywords}
           editAnswer={answer}
