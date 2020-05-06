@@ -35,36 +35,36 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const TabPanel: FC<TabPanelProps> = ({children, value, index, ...other}) => {
-    return (
-        <Typography
-            component="div"
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box p={3}>{children}</Box>}
-        </Typography>
-    );
+const TabPanel: FC<TabPanelProps> = ({ children, value, index, ...other }) => {
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box p={3}>{children}</Box>}
+    </Typography>
+  );
 };
 
 type TabPanelProps = {
-    children?: ReactNode;
-    value: number;
-    index: number;
+  children?: ReactNode;
+  value: number;
+  index: number;
 };
 
 function a11yProps(index: number) {
-    return {
-        id: `simple-tab-${index}`,
-        "aria-controls": `simple-tabpanel-${index}`
-    };
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
 }
 
 type MenuAppBarProps = {
-    onLogout: MouseEventHandler;
+  onLogout: MouseEventHandler;
 };
 
 export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
@@ -112,82 +112,95 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
             setNoReddits(false);
         }
     }
+  };
 
-    // called when the tab value changes
-    const handleChange = (
-        _event: any,
-        newValue: React.SetStateAction<number>
-    ) => {
-        setValue(newValue);
-        handleSetAddComponentSettings(false);
-        handleSetAddComponentDashboard(false);
-        handleShowRedditList(true);
-        handleSetAddComponentDashboard(false);
-        if (newValue === 0) {
-            setSettingsComponent(true);
-        }
-    };
+  // called when the tab value changes
+  const handleChange = (
+    _event: any,
+    newValue: React.SetStateAction<number>,
+  ) => {
+    setValue(newValue);
+    handleSetAddComponentSettings(false);
+    handleSetAddComponentDashboard(false);
+    handleSetEditComponent(false);
+    handleShowRedditList(true);
+    handleSetAddComponentDashboard(false);
+    if (newValue === 0) {
+      setSettingsComponent(true);
+    }
+  };
 
-    const onCloseAlertDialog = () => {
-        setAlertDialogOpen(false);
-    };
+  const onCloseAlertDialog = () => {
+    setAlertDialogOpen(false);
+  };
 
-    const handleSetAddComponentSettings = (newValue: boolean) => {
-        setAddComponent(newValue);
-    };
+  const handleSetAddComponentSettings = (newValue: boolean) => {
+    setAddComponent(newValue);
+  };
 
-    const handleSetAddComponentDashboard = (newValue: boolean) => {
-        setAddComponentDashboard(newValue);
-    };
+  const handleSetAddComponentDashboard = (newValue: boolean) => {
+    setAddComponentDashboard(newValue);
+  };
 
-    const handleShowRedditList = (newValue: boolean) => {
-        setShowRedditList(newValue);
-    };
+  const handleSetEditComponent = (newValue: boolean) => {
+    setShowEditComponent(newValue);
+  };
 
-    return (
-        <div className={classes.root}>
-            <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
-                        <UserInformation/>
-                    </Typography>
-                    <IconButton color="inherit">
-                        <PrimaryButton onClickHandler={() => setAlertDialogOpen(true)}>
-                            Logout
-                        </PrimaryButton>
-                        {alertDialogOpen && (
-                            <AlertDialog
-                                alertDialogOpen={alertDialogOpen}
-                                onCloseAlertDialog={onCloseAlertDialog}
-                                onAcceptDialog={onLogout}
-                                title={"Logout?"}
-                                text={"Do you really want to log out?"}
-                            />
-                        )}
-                    </IconButton>
-                </Toolbar>
-                <Tabs indicatorColor="primary" value={value} onChange={handleChange} onClick={handleTabClick}>
-                    <Tab label="Dashboard" {...a11yProps(0)} />
-                    <Tab label="Settings" {...a11yProps(1)} />
-                </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-                <Dashboard
-                    showAddComponent={showAddComponentDashboard}
-                    setAddComponent={handleSetAddComponentDashboard}
-                    noReddits={noReddits}
-                />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                {showSettingsComponent && (
-                    <Settings
-                        showAddComponent={showAddComponent}
-                        setAddComponent={handleSetAddComponentSettings}
-                        setShowRedditList={handleShowRedditList}
-                        showRedditList={showRedditList}
-                    />
-                )}
-            </TabPanel>
-        </div>
-    );
+  const handleShowRedditList = (newValue: boolean) => {
+    setShowRedditList(newValue);
+  };
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" className={classes.title}>
+            <UserInformation />
+          </Typography>
+          <IconButton color="inherit">
+            <PrimaryButton onClickHandler={() => setAlertDialogOpen(true)}>
+              Logout
+            </PrimaryButton>
+            {alertDialogOpen && (
+              <AlertDialog
+                alertDialogOpen={alertDialogOpen}
+                onCloseAlertDialog={onCloseAlertDialog}
+                onAcceptDialog={onLogout}
+                title={'Logout?'}
+                text={'Do you really want to log out?'}
+              />
+            )}
+          </IconButton>
+        </Toolbar>
+        <Tabs
+          indicatorColor="primary"
+          value={value}
+          onChange={handleChange}
+          onClick={handleTabClick}
+        >
+          <Tab label="Dashboard" {...a11yProps(0)} />
+          <Tab label="Settings" {...a11yProps(1)} />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        <Dashboard
+          showAddComponent={showAddComponentDashboard}
+          setAddComponent={handleSetAddComponentDashboard}
+          noReddits={noReddits}
+        />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        {showSettingsComponent && (
+          <Settings
+            showAddComponent={showAddComponent}
+            setAddComponent={handleSetAddComponentSettings}
+            setShowRedditList={handleShowRedditList}
+            showRedditList={showRedditList}
+            showEditComponent={showEditComponent}
+            setShowEditComponent={setShowEditComponent}
+          />
+        )}
+      </TabPanel>
+    </div>
+  );
 };
