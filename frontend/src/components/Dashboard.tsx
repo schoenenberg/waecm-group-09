@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     marginTop: theme.spacing(25)
   },
-
   link:{
     color: "#FFFFFF"
   }

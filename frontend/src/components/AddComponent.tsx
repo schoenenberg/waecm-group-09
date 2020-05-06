@@ -35,42 +35,39 @@ type AddComponentPrompts = {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-      position: 'absolute',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '90%',
-      height: '100%',
+      display: 'flex',
       flexWrap: 'wrap',
-      //flexGrow: 1,
-      overflow: 'hidden',
-      padding: theme.spacing(0, 2),
-      '& > *': {
+      justifyContent: "center",
+      alignItems: "center",
+      "& > *": {
         margin: theme.spacing(1),
-      },
+        width: '90%',
+        height: '80%'
+      }
     },
     input: {
-      '& > *': {
-        marginTop: theme.spacing(5),
-        marginLeft: theme.spacing(10),
-        marginRight: theme.spacing(10),
-        width: '60vw',
-      },
+      "& > *": {
+        marginTop: '6%',
+        marginLeft: '5%',
+        marginRight: '5%',
+        width: '90%',
+      }
     },
     switch: {
-      marginTop: theme.spacing(5),
-      marginLeft: theme.spacing(10),
+      marginTop: '6%',
+      marginLeft: '5%'
     },
     button1: {
-      marginTop: theme.spacing(5),
-      marginLeft: theme.spacing(10),
-      marginBottom: theme.spacing(5),
+      marginTop: '6%',
+      marginLeft: '5%',
+      marginBottom: '7%'
     },
     button2: {
-      marginTop: theme.spacing(5),
-      marginLeft: theme.spacing(10),
-      marginBottom: theme.spacing(5),
-    },
-  }),
+      marginTop: '6%',
+      marginLeft: '5%',
+      marginBottom: '7%'
+    }
+  })
 );
 
 export const AddComponent: FC<AddComponentPrompts> = ({
@@ -96,7 +93,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     storageState: false,
     redditAmountState: false,
     redditDuplicateState: false,
-    gqlErrorState: false,
   });
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,9 +105,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     }
     if (AlertState.redditDuplicateState) {
       setAlertState({ ...AlertState, redditDuplicateState: false });
-    }
-    if (AlertState.gqlErrorState) {
-      setAlertState({ ...AlertState, gqlErrorState: false });
     }
     if (AlertState.storageState) {
       setAlertState({ ...AlertState, storageState: false });
@@ -150,25 +143,37 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   //Validity Checks for editing a subreddit
   const editModeSaveCheck = () => {
-    console.log(id);
-    //Check if requried fields are not empty
-    if (inputState.redditState !== '') {
-      setAlertState({ ...AlertState, emtyFieldState: true });
-      editName = inputState.redditState;
+    //Set default values to new input values
+    if(inputState.redditState !== ""){
+      editName = inputState.redditState; 
     }
+    if(inputState.keywordState !== ""){
+      editKeywords = inputState.keywordState.split(" ")
+    }
+    if(inputState.answerState !== ""){
+      editAnswer = inputState.answerState;
+    }
+    
+    if(inputState.redditState.length === 0){
+      setAlertState({ ...AlertState, emtyFieldState: true }); 
     //Check for duplicates
-    if (!checkForDuplicates()) {
+    } else if (!checkForDuplicates()) {
       setAlertState({ ...AlertState, redditDuplicateState: true });
     } else {
       const updateSubredditInput = {
         name: editName,
         active: inputState.active,
+        answer: editAnswer,
+        keywords: editKeywords
+
       };
 
       //Update the subreddit and check if it returns an error
       updateSubreddit({ variables: { _id: id, input: updateSubredditInput } })
         .then(() => setAlertState({ ...AlertState, storageState: true }))
         .catch(() => {});
+
+      console.log(updateSubredditInput);
     }
   };
 
@@ -237,7 +242,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
             label="Keywords"
             defaultValue={editKeywords}
             onChange={handleOnChange}
-            disabled={editMode}
           />
           <TextField
             required
@@ -245,7 +249,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
             label="Answer"
             defaultValue={editAnswer}
             onChange={handleOnChange}
-            disabled={editMode}
           />
         </form>
         <FormGroup className={classes.switch}>

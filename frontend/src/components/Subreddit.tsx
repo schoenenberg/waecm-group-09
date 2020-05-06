@@ -66,7 +66,6 @@ export const Subreddit: FC<SubredditPrompts> = ({
   };
 
   const deleteReddit = () => {
-    console.log(id);
     deleteSubreddit({ variables: { _id: id } });
     setAlertDialogOpen(false);
   };
@@ -91,7 +90,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
                     r/{reddit}
                   </Link>
                 </Box>
-                <Box m={1}>Added: {date.toLocaleString()}</Box>
+                <Box m={1}>Added: {date}</Box>
               </Typography>
             </Grid>
             <Grid item>

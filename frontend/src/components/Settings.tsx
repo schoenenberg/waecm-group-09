@@ -63,29 +63,23 @@ export const Settings: FC<SettingsPrompts> = ({
     },
   );
 
-  const allReddits: any[] = getData();
+    const allSubreddits = data ? data.allSubreddits : []
 
-  function getData(): any[] {
-    if (data === undefined) {
-      return [];
-    } else {
-      return data.allSubreddits;
-    }
-  }
+  
+    const redirectSettings = useCallback(() => {
+        setAddComponent(false);
+        setShowRedditList(true);
+    }, [setAddComponent, setShowRedditList]);
 
-  const redirectSettings = useCallback(() => {
-    setAddComponent(false);
-    setShowRedditList(true);
-  }, [setAddComponent, setShowRedditList]);
+    const handleAddRedditClick = () => {
+        if (allSubreddits.length === 3) {
+            setAddComponent(false);
+        } else {
+            setAddComponent(true);
+            setShowRedditList(false);
+        }
+    };
 
-  const handleAddRedditClick = () => {
-    if (allReddits.length === 3) {
-      setAddComponent(false);
-    } else {
-      setAddComponent(true);
-      setShowRedditList(false);
-    }
-  };
 
   return (
     <div className={classes.root}>
@@ -94,6 +88,7 @@ export const Settings: FC<SettingsPrompts> = ({
           <AddIcon />
         </Fab>
       </div>
+
 
       {loading ? (
         <div>Loading...</div>
@@ -106,9 +101,8 @@ export const Settings: FC<SettingsPrompts> = ({
           <div>
             {data.allSubreddits.map((elem) => (
               <Subreddit
-                //onDeleteReddit={deleteReddit}
                 reddit={elem.name}
-                date={'test'}
+                date={elem.createdOn}
                 id={elem._id}
                 keywords={elem.keywords}
                 answer={elem.answer}

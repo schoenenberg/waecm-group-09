@@ -51,6 +51,7 @@ const TabPanel: FC<TabPanelProps> = ({ children, value, index, ...other }) => {
       {value === index && <Box p={3}>{children}</Box>}
     </Typography>
   );
+
 };
 
 type TabPanelProps = {
@@ -87,6 +88,8 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
   const [showAddComponentDashboard, setAddComponentDashboard] = useState(false);
   const [showEditComponent, setShowEditComponent] = useState(false);
   const [showRedditList, setShowRedditList] = useState(true);
+  
+  const allSubreddits = data ? data.allSubreddits : []
 
 
   useEffect(() => {
@@ -95,23 +98,15 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
     }
   }, [data, error, loading])
 
-  const getData = (): any[]  => {
-    if (data === undefined) {
-      return [];
-    } else {
-      return data.allSubreddits;
-    }
-  }
 
-  const allReddits: any[] = getData();
-  const [noReddits, setNoReddits] = useState(allReddits.length === 0);
+  const [noReddits, setNoReddits] = useState(allSubreddits.length === 0);
 
 
   // called when clicked on a tab (also when clicked on same tab)
   const handleTabClick = () => {
     handleSetAddComponentDashboard(false);
     handleSetEditComponent(false);
-    if (allReddits.length === 0) {
+    if (allSubreddits.length === 0) {
       setNoReddits(true);
     } else {
       setNoReddits(false);
