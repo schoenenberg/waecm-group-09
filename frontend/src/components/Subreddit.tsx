@@ -1,39 +1,39 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState } from 'react';
 
-import Paper from "@material-ui/core/Paper";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Fab from "@material-ui/core/Fab";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Link from "@material-ui/core/Link";
+import Paper from '@material-ui/core/Paper';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Fab from '@material-ui/core/Fab';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Link from '@material-ui/core/Link';
 
-import { AlertDialog } from "./AlertDialog";
-import { AddComponent } from "./AddComponent";
-import { DELETE_SUBREDDIT } from "./../gql/deleteSubredditMutation";
+import { AlertDialog } from './AlertDialog';
+import { AddComponent } from './AddComponent';
+import { DELETE_SUBREDDIT } from './../gql/deleteSubredditMutation';
 
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from '@apollo/react-hooks';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      overflow: "hidden",
-      padding: theme.spacing(0, 2)
+      overflow: 'hidden',
+      padding: theme.spacing(0, 2),
     },
     paper: {
       maxWidth: 400,
       margin: `${theme.spacing(1)}px auto`,
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
     },
     paperInactive: {
       maxWidth: 400,
       margin: `${theme.spacing(1)}px auto`,
       padding: theme.spacing(2),
-      color: "#b3cce6"
-    }
-  })
+      color: '#b3cce6',
+    },
+  }),
 );
 
 type SubredditPrompts = {
@@ -43,6 +43,8 @@ type SubredditPrompts = {
   keywords: string[];
   active: boolean;
   answer: string;
+  showEditComponent: boolean;
+  setShowEditComponent: (newValue: boolean) => void;
 };
 
 export const Subreddit: FC<SubredditPrompts> = ({
@@ -51,12 +53,12 @@ export const Subreddit: FC<SubredditPrompts> = ({
   id,
   keywords,
   active,
-  answer
+  answer,
+  showEditComponent,
+  setShowEditComponent,
 }) => {
   const classes = useStyles();
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
-  const [showAddComponent, setAddComponent] = useState(false);
-
   const [deleteSubreddit] = useMutation(DELETE_SUBREDDIT);
 
   const onCloseAlertDialog = () => {
@@ -71,7 +73,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
 
   return (
     <div className={classes.root}>
-      {!showAddComponent && (
+      {!showEditComponent && (
         <Paper
           className={active ? classes.paper : classes.paperInactive}
           elevation={3}
@@ -83,7 +85,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
                 <Box fontSize="h6.fontSize" m={1}>
                   <Link
                     href="#"
-                    onClick={() => setAddComponent(true)}
+                    onClick={() => setShowEditComponent(true)}
                     color="inherit"
                   >
                     r/{reddit}
@@ -105,17 +107,17 @@ export const Subreddit: FC<SubredditPrompts> = ({
                   alertDialogOpen={alertDialogOpen}
                   onCloseAlertDialog={onCloseAlertDialog}
                   onAcceptDialog={deleteReddit}
-                  title={"Delete?"}
-                  text={"Do you really want to delete this reddit?"}
+                  title={'Delete?'}
+                  text={'Do you really want to delete this reddit?'}
                 />
               )}
             </Grid>
           </Grid>
         </Paper>
       )}
-      {showAddComponent && (
+      {showEditComponent && (
         <AddComponent
-          onRedirectSettings={() => setAddComponent(false)}
+          onRedirectSettings={() => setShowEditComponent(false)}
           editName={reddit}
           editKeywords={keywords}
           editAnswer={answer}

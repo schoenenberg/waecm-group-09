@@ -1,23 +1,23 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
-import { makeStyles } from "@material-ui/core/styles";
-import Link from "@material-ui/core/Link";
+import { makeStyles } from '@material-ui/core/styles';
+import Link from '@material-ui/core/Link';
 
-import { DashboardElement } from "./DashboardElement";
-import { AddComponent } from "./AddComponent";
-import { Alert } from "./Alert";
+import { DashboardElement } from './DashboardElement';
+import { AddComponent } from './AddComponent';
+import { Alert } from './Alert';
 
 import {
   GET_ALL_SUBREDDITS,
-  AllSubredditsData
-} from "../gql/allSubredditsQuery";
-import { useQuery } from "@apollo/react-hooks";
+  AllSubredditsData,
+} from '../gql/allSubredditsQuery';
+import { useQuery } from '@apollo/react-hooks';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    marginTop: theme.spacing(25)
-  }
+    marginTop: theme.spacing(25),
+  },
 }));
 
 type DashboardProps = {
@@ -30,14 +30,14 @@ export const Dashboard: FC<DashboardProps> = ({
   showAddComponent,
   setAddComponent,
   noReddits,
-  }) => {
+}) => {
   const classes = useStyles();
 
   const { loading, error, data } = useQuery<AllSubredditsData>(
     GET_ALL_SUBREDDITS,
     {
-      pollInterval: 500
-    }
+      pollInterval: 500,
+    },
   );
 
   const redirectSettings = () => {
@@ -49,23 +49,23 @@ export const Dashboard: FC<DashboardProps> = ({
       {showAddComponent && (
         <AddComponent
           onRedirectSettings={redirectSettings}
-          editName={""}
+          editName={''}
           editKeywords={[]}
-          editAnswer={""}
+          editAnswer={''}
           editActive={true}
           editMode={false}
-          id={""}
+          id={''}
         />
       )}
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
-        <Alert title={"Error"}>Unauthorized</Alert>
+        <Alert title={'Error'}>Unauthorized</Alert>
       ) : (
         data &&
         !showAddComponent && (
           <div>
-            {data.allSubreddits.map(elem => (
+            {data.allSubreddits.map((elem) => (
               <DashboardElement
                 name={elem.name}
                 description={elem.description}
@@ -77,10 +77,10 @@ export const Dashboard: FC<DashboardProps> = ({
         )
       )}
       {noReddits && !showAddComponent && (
-          <Link href="#" onClick={() => setAddComponent(true)} color="primary">
-            <strong> Add Subreddits now! </strong>
-          </Link>
+        <Link href="#" onClick={() => setAddComponent(true)} color="primary">
+          <strong> Add Subreddits now! </strong>
+        </Link>
       )}
     </div>
-  )
+  );
 };
