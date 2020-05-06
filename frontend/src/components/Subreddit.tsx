@@ -84,6 +84,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
                 <Box fontSize="h6.fontSize" m={1}>
                   <Link
                     href="#"
+                    id ={id}
                     onClick={() => setShowEditComponent(true)}
                     color="inherit"
                   >

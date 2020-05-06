@@ -7,6 +7,11 @@ import { Grid, Link } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    padding: theme.spacing(0),
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: "center",
+    alignItems: "center",
   },
   paper: {
     padding: theme.spacing(0),
@@ -40,18 +45,18 @@ export const DashboardElement: FC<DashboardElemProps> = ({
 
   return (
     <div className={classes.root}>
-      <Box
-        display="flex"
-        alignItems="center"
-        p={1}
-        m={1}
-        bgcolor="#80d8ff"
-        width={3 / 4}
+      <Box 
+              display="flex"
+              alignItems="center"
+              p={1}
+              m={1}
+              bgcolor="#80d8ff"
+              width={1}
       >
-        <Box p={1} bgcolor={color} width={1 / 4}>
+        <Box p={1} bgcolor={color} width={1 / 4} height={1}>
           <img src={icon} width="70%" height="70%" />
         </Box>
-        <Box p={1} bgcolor={color} width={1 / 2}>
+        <Box p={1} bgcolor={color} width={1 / 2} height={1}>
           <Grid container spacing={3} className={classes.name}>
             <Grid item xs={12}>
               <Link
@@ -71,7 +76,7 @@ export const DashboardElement: FC<DashboardElemProps> = ({
             </Grid>
           </Grid>
         </Box>
-        <Box p={1} bgcolor={color} width={1 / 4}>
+        <Box p={1} bgcolor={color} width={1 / 4} height={1}>
           <Grid container spacing={3} className={classes.paper}>
             <Grid item xs={12}>
               <ChatIcon />

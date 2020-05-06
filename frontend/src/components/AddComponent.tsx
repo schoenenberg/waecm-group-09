@@ -154,10 +154,11 @@ export const AddComponent: FC<AddComponentPrompts> = ({
       editAnswer = inputState.answerState;
     }
     
-    if(inputState.redditState.length === 0){
-      setAlertState({ ...AlertState, emtyFieldState: true }); 
+    // if(inputState.redditState.length === 0){
+    //   setAlertState({ ...AlertState, emtyFieldState: true }); 
     //Check for duplicates
-    } else if (!checkForDuplicates()) {
+    //} else 
+    if (!checkForDuplicates()) {
       setAlertState({ ...AlertState, redditDuplicateState: true });
     } else {
       const updateSubredditInput = {
