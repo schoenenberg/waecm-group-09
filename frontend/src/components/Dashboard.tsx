@@ -16,8 +16,12 @@ import { useQuery } from '@apollo/react-hooks';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    marginTop: theme.spacing(25),
+    marginTop: theme.spacing(25)
   },
+
+  link:{
+    color: "#FFFFFF"
+  }
 }));
 
 type DashboardProps = {
@@ -77,9 +81,9 @@ export const Dashboard: FC<DashboardProps> = ({
         )
       )}
       {noReddits && !showAddComponent && (
-        <Link href="#" onClick={() => setAddComponent(true)} color="primary">
-          <strong> Add Subreddits now! </strong>
-        </Link>
+          <Link href="#" onClick={() => setAddComponent(true)} className={classes.link}>
+            <strong> Add Subreddits now! </strong>
+          </Link>
       )}
     </div>
   );

@@ -1,41 +1,38 @@
 import React, {
-  FC,
-  MouseEventHandler,
-  ReactNode,
-  /* useCallback,*/ useState,
+    FC,
+    MouseEventHandler,
+    ReactNode, useEffect,
+    /* useCallback,*/ useState,
 } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import { UserInformation } from './UserInformation';
-import { Box, Tab, Tabs } from '@material-ui/core';
+import {makeStyles} from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import {UserInformation} from "./UserInformation";
+import {Box, Tab, Tabs} from "@material-ui/core";
 
-import { Settings } from './Settings';
-import { AlertDialog } from './AlertDialog';
-import { PrimaryButton } from './PrimaryButton';
-import { Dashboard } from './Dashboard';
-import { useQuery } from '@apollo/react-hooks';
-import {
-  AllSubredditsData,
-  GET_ALL_SUBREDDITS,
-} from '../gql/allSubredditsQuery';
+import {Settings} from "./Settings";
+import {AlertDialog} from "./AlertDialog";
+import {PrimaryButton} from "./PrimaryButton";
+import {Dashboard} from "./Dashboard";
+import {useQuery} from "@apollo/react-hooks";
+import {AllSubredditsData, GET_ALL_SUBREDDITS} from "../gql/allSubredditsQuery";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  appBar: {
-    background: '#336699',
-  },
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1
+    },
+    menuButton: {
+        marginRight: theme.spacing(2)
+    },
+    title: {
+        flexGrow: 1
+    },
+    appBar: {
+        background: "#336699"
+    }
 }));
 
 const TabPanel: FC<TabPanelProps> = ({ children, value, index, ...other }) => {
@@ -70,44 +67,50 @@ type MenuAppBarProps = {
   onLogout: MouseEventHandler;
 };
 
-export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
-  // query to get all subrredit data
-  const { loading, error, data } = useQuery<AllSubredditsData>(
-    GET_ALL_SUBREDDITS,
-    {
-      pollInterval: 500,
-    },
-  );
+export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
 
-  const classes = useStyles(); // defines styles for the class
-  const [value, setValue] = React.useState(0); // value of the tab (either settings or dashboard
-  const [showSettingsComponent, setSettingsComponent] = useState(true);
-  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
-  const [showAddComponent, setAddComponent] = useState(false);
-  const [showAddComponentDashboard, setAddComponentDashboard] = useState(false);
-  const [showEditComponent, setShowEditComponent] = useState(false);
-  const [showRedditList, setShowRedditList] = useState(true);
-  const allReddits: any[] = getData();
-  const [noReddits, setNoReddits] = useState(allReddits.length === 0);
+    // query to get all subrredit data
+    const {loading, error, data} = useQuery<AllSubredditsData>(
+        GET_ALL_SUBREDDITS,
+        {
+            pollInterval: 500
+        }
+    );
 
-  function getData(): any[] {
-    console.log(loading);
-    console.log(error);
-    if (data === undefined) {
-      return [];
-    } else {
-      return data.allSubreddits;
+    const classes = useStyles(); // defines styles for the class
+    const [value, setValue] = React.useState(0); // value of the tab (either settings or dashboard
+    const [showSettingsComponent, setSettingsComponent] = useState(true);
+    const [alertDialogOpen, setAlertDialogOpen] = useState(false);
+    const [showAddComponent, setAddComponent] = useState(false);
+    const [showAddComponentDashboard, setAddComponentDashboard] = useState(false);
+    const [showRedditList, setShowRedditList] = useState(true);
+
+    useEffect(() => {
+        if(!error && !loading) {
+            setNoReddits(allReddits.length === 0);
+        }
+    }, [data, error, loading])
+
+    const getData = (): any[]  => {
+        if (data === undefined) {
+            return [];
+        } else {
+            return data.allSubreddits;
+        }
     }
-  }
 
-  // called when clicked on a tab (also when clicked on same tab)
-  const handleTabClick = () => {
-    handleSetAddComponentDashboard(false);
-    handleSetEditComponent(false);
-    if (allReddits.length === 0) {
-      setNoReddits(true);
-    } else {
-      setNoReddits(false);
+    const allReddits: any[] = getData();
+    const [noReddits, setNoReddits] = useState(allReddits.length === 0);
+
+
+    // called when clicked on a tab (also when clicked on same tab)
+    const handleTabClick = () => {
+        handleSetAddComponentDashboard(false);
+        if (allReddits.length === 0) {
+            setNoReddits(true);
+        } else {
+            setNoReddits(false);
+        }
     }
   };
 
