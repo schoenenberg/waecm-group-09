@@ -18,10 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      marginTop: theme.spacing(20),
+      marginTop: theme.spacing(27),
       display: 'block',
       height: '100%',
-      background: '#fffff',
     },
     addButton: {
       '& > *': {

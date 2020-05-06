@@ -95,6 +95,12 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     redditDuplicateState: false,
   });
 
+  const [editedState, setEditedState] = React.useState({
+    redditState: false,
+    keywordState: false,
+    answerState: false,
+  });
+
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //Reset all previous Alerts
     if (AlertState.emtyFieldState) {
@@ -112,6 +118,9 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
     //set the states depending on user input
     setInputState({ ...inputState, [event.target.id]: event.target.value });
+
+    //change edit State
+    setEditedState({ ...editedState, [event.target.id]: true });
   };
 
   const handleOnSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,10 +163,13 @@ export const AddComponent: FC<AddComponentPrompts> = ({
       editAnswer = inputState.answerState;
     }
     
-    // if(inputState.redditState.length === 0){
-    //   setAlertState({ ...AlertState, emtyFieldState: true }); 
+    //Check if input field is empty
+    if((editedState.redditState && inputState.redditState.length === 0)  ||
+       (editedState.answerState && inputState.answerState.length === 0)  ||
+       (editedState.keywordState && inputState.keywordState.length === 0)){
+      setAlertState({ ...AlertState, emtyFieldState: true }); 
     //Check for duplicates
-    //} else 
+    } else 
     if (!checkForDuplicates()) {
       setAlertState({ ...AlertState, redditDuplicateState: true });
     } else {
@@ -166,7 +178,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
         active: inputState.active,
         answer: editAnswer,
         keywords: editKeywords
-
       };
 
       //Update the subreddit and check if it returns an error
