@@ -70,7 +70,7 @@ type MenuAppBarProps = {
 export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
 
     // query to get all subrredit data
-    const {loading, error, data} = useQuery<AllSubredditsData>(
+    const {data} = useQuery<AllSubredditsData>(
         GET_ALL_SUBREDDITS,
         {
             pollInterval: 500
@@ -84,23 +84,13 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
     const [showAddComponent, setAddComponent] = useState(false);
     const [showAddComponentDashboard, setAddComponentDashboard] = useState(false);
     const [showRedditList, setShowRedditList] = useState(true);
-    const allReddits: any[] = getData();
-    const [noReddits, setNoReddits] = useState(allReddits.length === 0);
-
-    function getData(): any[] {
-        console.log(loading);
-        console.log(error);
-        if (data === undefined) {
-            return [];
-        } else {
-            return data.allSubreddits;
-        }
-    }
+    const allSubreddits = data ? data.allSubreddits : []
+    const [noReddits, setNoReddits] = useState(allSubreddits.length === 0);
 
     // called when clicked on a tab (also when clicked on same tab)
     const handleTabClick = () => {
         handleSetAddComponentDashboard(false);
-        if (allReddits.length === 0) {
+        if (allSubreddits.length === 0) {
             setNoReddits(true);
         } else {
             setNoReddits(false);

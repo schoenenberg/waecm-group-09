@@ -59,23 +59,16 @@ export const Settings: FC<SettingsPrompts> = ({
         }
     );
 
-    const allReddits: any[] = getData();
+    const allSubreddits = data ? data.allSubreddits : []
 
-    function getData(): any[] {
-        if (data === undefined) {
-            return [];
-        } else {
-            return data.allSubreddits;
-        }
-    }
-
+  
     const redirectSettings = useCallback(() => {
         setAddComponent(false);
         setShowRedditList(true);
     }, [setAddComponent, setShowRedditList]);
 
     const handleAddRedditClick = () => {
-        if (allReddits.length === 3) {
+        if (allSubreddits.length === 3) {
             setAddComponent(false);
         } else {
             setAddComponent(true);
@@ -102,9 +95,8 @@ export const Settings: FC<SettingsPrompts> = ({
                     <div>
                         {data.allSubreddits.map(elem => (
                             <Subreddit
-                                //onDeleteReddit={deleteReddit}
                                 reddit={elem.name}
-                                date={"test"}
+                                date={elem.createdOn}
                                 id={elem._id}
                                 keywords={elem.keywords}
                                 answer={elem.answer}

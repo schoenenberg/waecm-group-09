@@ -35,34 +35,32 @@ type AddComponentPrompts = {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-      position: "absolute",
+      display: 'flex',
+      flexWrap: 'wrap',
       justifyContent: "center",
       alignItems: "center",
-      width: "90%",
-      height: "100%",
-      flexWrap: "wrap",
-      //flexGrow: 1,
-      overflow: "hidden",
-      padding: theme.spacing(0, 2),
+      padding: theme.spacing(0, 1),
       "& > *": {
-        margin: theme.spacing(1)
+        margin: theme.spacing(1),
+        width: theme.spacing(80),
+        height: theme.spacing(70),
       }
     },
     input: {
       "& > *": {
         marginTop: theme.spacing(5),
-        marginLeft: theme.spacing(10),
-        marginRight: theme.spacing(10),
-        width: "60vw"
+        marginLeft: theme.spacing(2),
+        marginRight: theme.spacing(2),
+        //width: theme.spacing(40),
       }
     },
     switch: {
       marginTop: theme.spacing(5),
-      marginLeft: theme.spacing(10)
+      marginLeft: theme.spacing(5)
     },
     button1: {
       marginTop: theme.spacing(5),
-      marginLeft: theme.spacing(10),
+      marginLeft: theme.spacing(5),
       marginBottom: theme.spacing(5)
     },
     button2: {
@@ -96,8 +94,9 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     storageState: false,
     redditAmountState: false,
     redditDuplicateState: false,
-    gqlErrorState: false
   });
+
+  //const [FirstEdit, setFirstEdit] = React.useState(false); 
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //Reset all previous Alerts
@@ -109,9 +108,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     }
     if (AlertState.redditDuplicateState) {
       setAlertState({ ...AlertState, redditDuplicateState: false });
-    }
-    if (AlertState.gqlErrorState) {
-      setAlertState({ ...AlertState, gqlErrorState: false });
     }
     if (AlertState.storageState) {
       setAlertState({ ...AlertState, storageState: false });
@@ -150,25 +146,36 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   //Validity Checks for editing a subreddit
   const editModeSaveCheck = () => {
-    console.log(id);
-    //Check if requried fields are not empty
-    if (inputState.redditState !== "") {
-      setAlertState({ ...AlertState, emtyFieldState: true });
-      editName = inputState.redditState;
+    //Set default values to new input values
+    if(inputState.redditState !== ""){
+      editName = inputState.redditState; 
     }
+    if(inputState.keywordState !== ""){
+      editKeywords = inputState.keywordState.split(" ")
+    }
+    if(inputState.answerState !== ""){
+      editAnswer = inputState.answerState;
+    }
+    
+    if(inputState.redditState.length === 0){
+      setAlertState({ ...AlertState, emtyFieldState: true }); 
     //Check for duplicates
-    if (!checkForDuplicates()) {
+    } else if (!checkForDuplicates()) {
       setAlertState({ ...AlertState, redditDuplicateState: true });
     } else {
       const updateSubredditInput = {
         name: editName,
-        active: inputState.active
+        active: inputState.active,
+        answer: editAnswer,
+        keywords: editKeywords
       };
 
       //Update the subreddit and check if it returns an error
       updateSubreddit({ variables: { _id: id, input: updateSubredditInput } })
         .then(() => setAlertState({ ...AlertState, storageState: true }))
         .catch(() => {});
+
+      console.log(updateSubredditInput);
     }
   };
 
@@ -237,7 +244,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
             label="Keywords"
             defaultValue={editKeywords}
             onChange={handleOnChange}
-            disabled={editMode}
           />
           <TextField
             required
@@ -245,7 +251,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
             label="Answer"
             defaultValue={editAnswer}
             onChange={handleOnChange}
-            disabled={editMode}
           />
         </form>
         <FormGroup className={classes.switch}>

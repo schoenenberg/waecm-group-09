@@ -9,6 +9,7 @@ export type AllSubreddits = {
   answer: string;
   active: boolean;
   keywords: string[];
+  createdOn: Date;
 };
 
 export type AllSubredditsData = {
@@ -26,6 +27,7 @@ export const GET_ALL_SUBREDDITS = gql`
       answer
       active
       keywords
+      createdOn
     }
   }
 `;
