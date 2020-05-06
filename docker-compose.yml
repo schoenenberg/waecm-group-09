@@ -1,6 +1,5 @@
 version: "3.7"
 services:
-
   backend:
     build:
       context: ./backend
@@ -39,7 +38,11 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=waecm20
     networks:
       - db_net
+    volumes:
+      - db-data:/data/db
 
 networks:
   db_net:
 
+volumes:
+  db-data:
