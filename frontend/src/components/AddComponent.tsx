@@ -1,26 +1,26 @@
-import React, { FC, MouseEventHandler } from "react";
+import React, { FC, MouseEventHandler } from 'react';
 
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
-import Switch from "@material-ui/core/Switch";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Button } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Switch from '@material-ui/core/Switch';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { Button } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
-import { ADD_SUBREDDIT, NewSubredditInput } from "../gql/addSubredditMutation";
+import { ADD_SUBREDDIT, NewSubredditInput } from '../gql/addSubredditMutation';
 import {
   UPDATE_SUBREDDIT,
-  UpdateSubredditInput
-} from "../gql/updateSubredditMutation";
+  UpdateSubredditInput,
+} from '../gql/updateSubredditMutation';
 import {
   GET_ALL_SUBREDDITS,
-  AllSubredditsData
-} from "../gql/allSubredditsQuery";
+  AllSubredditsData,
+} from '../gql/allSubredditsQuery';
 
-import { useMutation, useQuery } from "@apollo/react-hooks";
-import { SubredditData } from "../gql/subredditQuery";
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { SubredditData } from '../gql/subredditQuery';
 
 type AddComponentPrompts = {
   onRedirectSettings: MouseEventHandler;
@@ -35,42 +35,42 @@ type AddComponentPrompts = {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-      position: "absolute",
-      justifyContent: "center",
-      alignItems: "center",
-      width: "90%",
-      height: "100%",
-      flexWrap: "wrap",
+      position: 'absolute',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '90%',
+      height: '100%',
+      flexWrap: 'wrap',
       //flexGrow: 1,
-      overflow: "hidden",
+      overflow: 'hidden',
       padding: theme.spacing(0, 2),
-      "& > *": {
-        margin: theme.spacing(1)
-      }
+      '& > *': {
+        margin: theme.spacing(1),
+      },
     },
     input: {
-      "& > *": {
+      '& > *': {
         marginTop: theme.spacing(5),
         marginLeft: theme.spacing(10),
         marginRight: theme.spacing(10),
-        width: "60vw"
-      }
+        width: '60vw',
+      },
     },
     switch: {
       marginTop: theme.spacing(5),
-      marginLeft: theme.spacing(10)
+      marginLeft: theme.spacing(10),
     },
     button1: {
       marginTop: theme.spacing(5),
       marginLeft: theme.spacing(10),
-      marginBottom: theme.spacing(5)
+      marginBottom: theme.spacing(5),
     },
     button2: {
       marginTop: theme.spacing(5),
       marginLeft: theme.spacing(10),
-      marginBottom: theme.spacing(5)
-    }
-  })
+      marginBottom: theme.spacing(5),
+    },
+  }),
 );
 
 export const AddComponent: FC<AddComponentPrompts> = ({
@@ -80,15 +80,15 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   editAnswer,
   editActive,
   editMode,
-  id
+  id,
 }) => {
   const classes = useStyles();
 
   const [inputState, setInputState] = React.useState({
     active: editActive,
-    redditState: "",
-    keywordState: "",
-    answerState: ""
+    redditState: '',
+    keywordState: '',
+    answerState: '',
   });
 
   const [AlertState, setAlertState] = React.useState({
@@ -96,7 +96,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     storageState: false,
     redditAmountState: false,
     redditDuplicateState: false,
-    gqlErrorState: false
+    gqlErrorState: false,
   });
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,7 +152,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   const editModeSaveCheck = () => {
     console.log(id);
     //Check if requried fields are not empty
-    if (inputState.redditState !== "") {
+    if (inputState.redditState !== '') {
       setAlertState({ ...AlertState, emtyFieldState: true });
       editName = inputState.redditState;
     }
@@ -162,7 +162,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     } else {
       const updateSubredditInput = {
         name: editName,
-        active: inputState.active
+        active: inputState.active,
       };
 
       //Update the subreddit and check if it returns an error
@@ -176,9 +176,9 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   const normalModeSaveCheck = () => {
     //Check if fields are not empty
     if (
-      inputState.redditState === "" ||
-      inputState.keywordState === "" ||
-      inputState.answerState === ""
+      inputState.redditState === '' ||
+      inputState.keywordState === '' ||
+      inputState.answerState === ''
     ) {
       setAlertState({ ...AlertState, emtyFieldState: true });
       //Check for enough storage space
@@ -192,8 +192,8 @@ export const AddComponent: FC<AddComponentPrompts> = ({
         name: inputState.redditState.toString(),
         active: inputState.active,
         answer: inputState.answerState.toString(),
-        keywords: inputState.keywordState.split(" "),
-        createdOn: new Date()
+        keywords: inputState.keywordState.split(' '),
+        createdOn: new Date(),
       };
 
       addSubreddit({ variables: { input: newSubredditInput } })
@@ -256,7 +256,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
                 onChange={handleOnSwitchChange}
                 color="primary"
                 id="active"
-                inputProps={{ "aria-label": "secondary checkbox" }}
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
               />
             }
             label="Active"

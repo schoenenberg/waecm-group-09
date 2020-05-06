@@ -3,10 +3,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
-} from "@material-ui/core";
-import React, { FC, MouseEventHandler } from "react";
-import { PrimaryButton } from "./PrimaryButton";
+  DialogTitle,
+} from '@material-ui/core';
+import React, { FC, MouseEventHandler } from 'react';
+import { PrimaryButton } from './PrimaryButton';
 
 type AlertDialogProps = {
   alertDialogOpen: boolean;
@@ -21,7 +21,7 @@ export const AlertDialog: FC<AlertDialogProps> = ({
   alertDialogOpen,
   onAcceptDialog,
   title,
-  text
+  text,
 }) => {
   return (
     <div>
