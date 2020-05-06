@@ -42,8 +42,10 @@ type SettingsPrompts = {
   showRedditList: boolean;
   setAddComponent: (newValue: boolean) => void;
   setShowRedditList: (newValue: boolean) => void;
-  showEditComponent: boolean;
-  setShowEditComponent: (newValue: boolean) => void;
+  editingASubreddit: boolean;
+  setEditingASubreddit: (newValue: boolean) => void;
+  tabClick: boolean;
+  handleSettingsTabClick: (newValue: boolean) => void;
 };
 
 export const Settings: FC<SettingsPrompts> = ({
@@ -51,8 +53,10 @@ export const Settings: FC<SettingsPrompts> = ({
   showRedditList,
   setAddComponent,
   setShowRedditList,
-  showEditComponent,
-  setShowEditComponent,
+  editingASubreddit,
+  setEditingASubreddit,
+  tabClick,
+  handleSettingsTabClick
 }) => {
   const classes = useStyles();
 
@@ -107,8 +111,10 @@ export const Settings: FC<SettingsPrompts> = ({
                 keywords={elem.keywords}
                 answer={elem.answer}
                 active={elem.active}
-                showEditComponent={showEditComponent}
-                setShowEditComponent={setShowEditComponent}
+                editingASubreddit={editingASubreddit}
+                setEditingASubreddit={setEditingASubreddit}
+                tabClick={tabClick}
+                handleSettingsTabClick={handleSettingsTabClick}
               />
             ))}
           </div>
