@@ -1,9 +1,9 @@
 import React, {
     FC,
     MouseEventHandler,
-    ReactNode,
-    /* useCallback,*/ useState
-} from "react";
+    ReactNode, useEffect,
+    /* useCallback,*/ useState,
+} from 'react';
 
 import {makeStyles} from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -84,18 +84,24 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({onLogout}) => {
     const [showAddComponent, setAddComponent] = useState(false);
     const [showAddComponentDashboard, setAddComponentDashboard] = useState(false);
     const [showRedditList, setShowRedditList] = useState(true);
-    const allReddits: any[] = getData();
-    const [noReddits, setNoReddits] = useState(allReddits.length === 0);
 
-    function getData(): any[] {
-        console.log(loading);
-        console.log(error);
+    useEffect(() => {
+        if(!error && !loading) {
+            setNoReddits(allReddits.length === 0);
+        }
+    }, [data, error, loading])
+
+    const getData = (): any[]  => {
         if (data === undefined) {
             return [];
         } else {
             return data.allSubreddits;
         }
     }
+
+    const allReddits: any[] = getData();
+    const [noReddits, setNoReddits] = useState(allReddits.length === 0);
+
 
     // called when clicked on a tab (also when clicked on same tab)
     const handleTabClick = () => {
