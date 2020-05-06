@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler } from 'react';
+import React, { FC, MouseEventHandler, useState } from 'react';
 
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -81,6 +81,8 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 }) => {
   const classes = useStyles();
 
+  const [showGqlError, setShowGqlError] = useState(true);
+
   const [inputState, setInputState] = React.useState({
     active: editActive,
     redditState: '',
@@ -96,6 +98,8 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   });
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // reset gql errors
+    setShowGqlError(false);
     //Reset all previous Alerts
     if (AlertState.emtyFieldState) {
       setAlertState({ ...AlertState, emtyFieldState: false });
@@ -134,6 +138,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   //Handle how to handle the saving/updating of a subreddit, depending on currend mode
   const handleSave = () => {
+    setShowGqlError(true);
     if (editMode) {
       editModeSaveCheck();
     } else {
@@ -276,8 +281,8 @@ export const AddComponent: FC<AddComponentPrompts> = ({
             To many Items in Storage, delete First!
           </Alert>
         )}
-        {addError && <Alert severity="error"> {addError.message}</Alert>}
-        {updateError && <Alert severity="error"> {updateError.message}</Alert>}
+        {showGqlError && addError && <Alert severity="error"> {addError.message}</Alert>}
+        {showGqlError && updateError && <Alert severity="error"> {updateError.message}</Alert>}
         {AlertState.storageState && (
           <Alert severity="success">Subreddit successfully stored!</Alert>
         )}
