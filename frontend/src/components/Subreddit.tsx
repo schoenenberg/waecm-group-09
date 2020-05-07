@@ -75,19 +75,13 @@ export const Subreddit: FC<SubredditPrompts> = ({
     setAlertDialogOpen(false);
   };
 
-  useEffect(() => {
-    console.log("showEdit" + editingASubreddit);
+    useEffect(() => {
+    //called when user clicks on settings tab
     if(tabClick) {
       setEdit(false);
       handleSettingsTabClick(false);
     }
-    if(edit){
-      //setShowEditComponent(true);
-    }
-    if(!edit){
-      //setShowEditComponent(false);
-    }
-  }, [tabClick, edit])
+  }, [tabClick])
 
   return (
     <div className={classes.root}>
@@ -123,7 +117,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
               {alertDialogOpen && (
                 <AlertDialog
                   alertDialogOpen={alertDialogOpen}
-                  onCloseAlertDialog={onCloseAlertDialog}
+                  onCloseDialog={onCloseAlertDialog}
                   onAcceptDialog={deleteReddit}
                   title={'Delete?'}
                   text={'Do you really want to delete this reddit?'}

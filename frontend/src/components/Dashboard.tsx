@@ -26,17 +26,18 @@ const useStyles = makeStyles((theme) => ({
 
 type DashboardProps = {
   showAddComponent: boolean;
-  setAddComponent: (newValue: boolean) => void;
+  setShowAddComponent: (newValue: boolean) => void;
   noReddits: boolean;
 };
 
 export const Dashboard: FC<DashboardProps> = ({
   showAddComponent,
-  setAddComponent,
+  setShowAddComponent,
   noReddits,
 }) => {
   const classes = useStyles();
 
+  // query to get all subreddit data from db
   const { loading, error, data } = useQuery<AllSubredditsData>(
     GET_ALL_SUBREDDITS,
     {
@@ -44,8 +45,9 @@ export const Dashboard: FC<DashboardProps> = ({
     },
   );
 
+  // called when adding a component is finished
   const redirectSettings = () => {
-    setAddComponent(false);
+    setShowAddComponent(false);
   };
 
   return (
@@ -81,7 +83,7 @@ export const Dashboard: FC<DashboardProps> = ({
         )
       )}
       {noReddits && !showAddComponent && (
-          <Link href="#" onClick={() => setAddComponent(true)} className={classes.link}>
+          <Link href="#" onClick={() => setShowAddComponent(true)} className={classes.link}>
             <strong> Add Subreddits now! </strong>
           </Link>
       )}

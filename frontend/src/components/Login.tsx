@@ -46,8 +46,6 @@ export const Login: FC<LoginProps> = ({
   const styles = useStyles();
   const { error, loading } = useQuery(GET_CURRENT_USER);
 
-  console.log('error', error);
-
   const materialClass =
     accessDenied || (error && isProfileDetailPage)
       ? styles.access_denied
