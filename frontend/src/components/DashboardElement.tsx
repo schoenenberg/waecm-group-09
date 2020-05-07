@@ -60,7 +60,7 @@ export const DashboardElement: FC<DashboardElemProps> = ({
           width={3 / 4}
         >
           <Box p={1} bgcolor={color} width={2 / 6}>
-            <img src={icon} width="100%" height="100%" />
+            <img src={icon} width="100%" height="100%" alt="icon"/>
           </Box>
           <Box p={1} bgcolor={color} width={3 / 6}>
             <Grid container spacing={3} className={classes.name}>

@@ -104,7 +104,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
     if (!error && !loading) {
       setNoReddits(allSubreddits.length === 0);
     }
-  }, [data, error, loading]);
+  }, [data, error, loading, allSubreddits.length]);
 
   const [noReddits, setNoReddits] = useState(allSubreddits.length === 0);
   const [tabClick, setTabClick] = useState(false);

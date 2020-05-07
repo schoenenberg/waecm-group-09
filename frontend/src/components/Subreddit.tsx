@@ -80,7 +80,7 @@ export const Subreddit: FC<SubredditPrompts> = ({
       setEdit(false);
       handleSettingsTabClick(false);
     }
-  }, [tabClick]);
+  }, [tabClick, handleSettingsTabClick]);
 
   return (
     <div className={classes.root}>
