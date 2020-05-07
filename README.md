@@ -23,6 +23,9 @@ Bei der Datenbank wurde **MongoDB** ausgewählt, da ein guter Library-Support f�
 Der Linter wird im Frontend und im Backend über `npm run lint` aufgerufen.
 
 ## Containerisierung
+
+> **Wichtig: Vor dem ersten Starten die Umgebungsvariablen setzen !**
+
 Die Applikation kann mittels `docker-compose -f docker-compose-a2.yaml up` gestartet werden. Das Frontend ist auf [localhost:3000](http://localhost:3000) erreichbar.
 
 Um die Docker-Images von Source zu bauen und zu starten, kann dies einfach mit `docker-compose up --build` erreicht werden.
@@ -33,6 +36,19 @@ Das Backend nutzt `node:12.2-alpine` als Basis-Image, kompiliert dieses zu einem
 
 Das Frontend wird ebenfalls mit einem Multi-Stage-Build kompiliert und in ein `nginx:1.17.9`-Image installiert. Mit diesem Build werden ebenso die Ziele verfolgt die Kompilierungszeit (durch Layer-Chaching) möglichst gering zu halten, möglichst wenige Layer im Result-Image zu haben, sowie nicht den Quellcode, sondern nur die kompilierten und gebundelten Dateien im Result-Image zu installieren. 
 
+## Konfiguration
+Die Konfiguration des Backends wird über Environment-Variablen, die in der *Docker-Compose*-Datei eingetragen werden konfiguriert:
+
+| Variable | Required | Default-Value | Description |
+| -------- | -------- | ------------- | ----------- |
+| REDDIT_USERNAME | Yes | | The Reddit Username for the Bot. |
+| REDDIT_PASSWORD | Yes | | The Reddit Password for the Bot. |
+| REDDIT_CLIENT_ID | Yes | | The Reddit Client ID for the Bot. |
+| REDDIT_CLIENT_SECRET | Yes | | The Reddit Client-Secret for the Bot. |
+| COMMENT_LIMIT | No | 5 | Limits the Bot to how many comments per run should be read. |
+| SECONDS_UNTIL_UPDATE | No | 30 | Interval in Seconds for the Bot. |
+| EXTRA_KEYWORD | No | waecm-2020-group-09 | Adds an extra keyword to the filter for subreddit comments. |
+| ANSWERS_PER_RUN | No | 1 | Limits the number of answers of the Bot per run. |
 
 ## GraphQL Dokumentation
 
