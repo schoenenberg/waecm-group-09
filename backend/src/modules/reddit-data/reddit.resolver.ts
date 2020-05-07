@@ -10,28 +10,7 @@ import { User } from '../../types/user';
 
 @Resolver(() => SubredditModel)
 export class RedditResolver {
-  constructor(private readonly redditService: RedditService) {
-  }
-
-  // THIS IS JUST FOR TESTING ---- delete later --------------------------------
-  @Query(() => SubredditModel)
-  @UseGuards(GqlAuthGuard)
-  subreddit(): SubredditModel {
-    return {
-      _id: 'gfdsdfgsdfg',
-      name: '/r/reactjs-testData',
-      description: 'sample description',
-      icon: 'https://api.adorable.io/avatars/285/abott@adorable.png',
-      answeredCommentIDs: ['1', '2', '3'],
-      active: false,
-      answer: 'test Answer',
-      keywords: ['first', 'hello', 'last'],
-      createdOn: new Date(),
-      username: 'myusername',
-    };
-  }
-
-  // ---------------------------------------------------------------------------
+  constructor(private readonly redditService: RedditService) {}
 
   @Query(() => [SubredditModel])
   @UseGuards(GqlAuthGuard)
@@ -57,7 +36,10 @@ export class RedditResolver {
 
   @Mutation(() => SubredditModel)
   @UseGuards(GqlAuthGuard)
-  async createNewSubreddit(@Args('input') subredditInput: NewSubredditInput, @CurrentUser() user: User) {
+  async createNewSubreddit(
+    @Args('input') subredditInput: NewSubredditInput,
+    @CurrentUser() user: User,
+  ) {
     return await this.redditService.createSubreddit(subredditInput, user);
   }
 
