@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
       padding: theme.spacing(0.5),
       "& > *": {
-        width: '90%',
-        height: '80%'
+        width: '100%',
+        height: '100%'
       }
     },
     input: {

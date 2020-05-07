@@ -27,14 +27,16 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     flexGrow: 1,
+    margin: theme.spacing(0),
+  },
+  toolBar: {
+    padding: theme.spacing(0),
   },
   appBar: {
     background: '#336699',
+    padding: theme.spacing(0),
   },
 }));
 
@@ -157,7 +159,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar className={classes.toolBar}>
           <Typography variant="h6" className={classes.title}>
             <UserInformation />
           </Typography>
