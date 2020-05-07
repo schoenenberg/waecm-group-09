@@ -23,7 +23,4 @@ export class UpdateSubredditInput {
   @Field({ nullable: true })
   @IsOptional()
   active?: boolean;
-  
-  @Field()
-  username!: string;
 }
