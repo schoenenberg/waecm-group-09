@@ -16,20 +16,22 @@ Im Backend verwenden wir das Framework **Nest.js**, da dieses design patterns wi
 ### Kommunikation
 Für die Kommunikation wurde **GraphQL** verwendet, da es sowohl flexibler als auch effizienter als REST ist. Im Gegensatz zu REST reicht bei einer GraphQL-API eine einzige Anfrage an den Server aus, um alle relevanten Daten zu erhalten. Dadurch löst GraphQL das Problem, dass oft entweder zu viele oder zu wenige Daten abgerufen werden und ist somit ein aufsteigendes API-Konzept.
 
-Die Datenbank wird erst im zweiten Beispiel ausgewählt werden (vermutlich MongoDB/ Postgres ->kommt darauf an, welche Art von Daten gespeichert werden sollen).
+### Datenbank
+Bei der Datenbank wurde **MongoDB** ausgewählt, da ein guter Library-Support für die ausgewählte Backend-Technologie besteht, sowie die Daten - Konfigurationen von Subreddits - gut als Dokument gespeichert und durchsucht werden können.
 
 ## Linter Aufruf
 Der Linter wird im Frontend und im Backend über `npm run lint` aufgerufen.
 
 ## Containerisierung
-Die Applikation kann mittles `docker-compose -f docker-compose-a1.yaml up` gestartet werden. Das Frontend ist auf [localhost:3000](http://localhost:3000) erreichbar.
+Die Applikation kann mittels `docker-compose -f docker-compose-a2.yaml up` gestartet werden. Das Frontend ist auf [localhost:3000](http://localhost:3000) erreichbar.
 
 Um die Docker-Images von Source zu bauen und zu starten, kann dies einfach mit `docker-compose up --build` erreicht werden.
 
-Das Backend nutzt node:10-alpine als Basis-Image, kompiliert dieses und stellt dieses als "Production"-Build auf Port 8080 bereit.
+In dieser Aufgabe ist zum Deployment die Datenbank `MongoDB` hinzugekommen. Diese wird beim Starten des Docker-Compose mit gestartet. Nur das Backend kann diese erreichen, da Backend und Datenbank zusammen ein Docker-Netzwerk bilden. Damit die Datenbank persistent ist, wird ein Docker-Volume gemountet.
 
-Das Frontend wird mit einem Docker-Multi-Stage Build kompiliert und in ein nginx-Image installiert. Durch eine nginx-Config wird der Port auf 3000 gesetzt und das Frontend kann über localhost:3000 erreicht werden.
+Das Backend nutzt `node:12.2-alpine` als Basis-Image, kompiliert dieses zu einem *Production*-Build und stellt dieses daraufhin in einem neuen Image `node:12.2-alpine` auf Port 8080 bereit. Für diesen Build wird ein Multi-Stage-Build verwendet, um die Kompilierungszeit (durch Layer-Caching) zu reduzieren, und dennoch ein minimales Build-Image zu erhalten.
 
+Das Frontend wird ebenfalls mit einem Multi-Stage-Build kompiliert und in ein `nginx:1.17.9`-Image installiert. Mit diesem Build werden ebenso die Ziele verfolgt die Kompilierungszeit (durch Layer-Chaching) möglichst gering zu halten, möglichst wenige Layer im Result-Image zu haben, sowie nicht den Quellcode, sondern nur die kompilierten und gebundelten Dateien im Result-Image zu installieren. 
 
 
 ## GraphQL Dokumentation
