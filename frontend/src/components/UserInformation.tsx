@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/react-hooks';
 import Avatar from '@material-ui/core/Avatar';
-import React, { FC, useEffect, useState } from 'react';
-import { Alert } from './Alert';
+import React, { FC, useState, useEffect } from 'react';
+//import { Alert } from './Alert';
 import { CurrentUserData, GET_CURRENT_USER } from '../gql/currentUserQuery';
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
@@ -27,19 +27,27 @@ export const UserInformation: FC<UserInformationProps> = ({handleUnauthorized}) 
   useEffect(() => {
     if(error) {
       setErrorState(error.message);
-      if (errorMessage === "Unauthorized") {
+      if (errorMessage === "GraphQL error: Unauthorized") {
         handleUnauthorized();
+        console.log("test")
       }
     }
   }, [error]);
+
+  const check = () => {
+    if (errorMessage === "GraphQL error: Unauthorized") {
+      handleUnauthorized();
+    }
+  }
 
   return (
     <>
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
-        <Alert title={'Error'}>Unauthorized</Alert>
-      ) : (
+        check()
+      ) 
+      : (
         <div>
           {data && (
             <>
