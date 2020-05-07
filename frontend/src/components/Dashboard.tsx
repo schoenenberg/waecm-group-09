@@ -15,9 +15,9 @@ import { useQuery } from '@apollo/react-hooks';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: theme.spacing(27),
-    display: 'block',
+    marginTop: theme.spacing(22),
     height: '100%',
+    display: 'block',
   },
   link:{
     color: "#FFFFFF"
