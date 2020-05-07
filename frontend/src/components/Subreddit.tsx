@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       overflow: 'hidden',
       padding: theme.spacing(0.5),
+      flexWrap: 'wrap',
     },
     paper: {
       maxWidth: 400,

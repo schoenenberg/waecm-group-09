@@ -11,8 +11,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(0.5),
     overflow: 'hidden',
-    justifyContent: "center",
-    alignItems: "center", 
     display: 'block'   
   },
   wrappingPaper: {
