@@ -27,17 +27,19 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     flexGrow: 1,
+    margin: theme.spacing(0),
+  },
+  toolBar: {
+    padding: theme.spacing(0),
   },
   toolBar: {
     padding: theme.spacing(0),
   },
   appBar: {
     background: '#336699',
+    padding: theme.spacing(0),
   },
 }));
 
