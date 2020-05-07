@@ -20,7 +20,6 @@ import {
 } from '../gql/allSubredditsQuery';
 
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { SubredditData } from '../gql/subredditQuery';
 
 type AddComponentPrompts = {
   onRedirectSettings: MouseEventHandler;
@@ -39,8 +38,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap',
       justifyContent: "center",
       alignItems: "center",
+      padding: theme.spacing(0.5),
       "& > *": {
-        margin: theme.spacing(1),
         width: '90%',
         height: '80%'
       }
@@ -81,8 +80,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 }) => {
   const classes = useStyles();
 
-  //const [showGqlError, setShowGqlError] = useState(true);
-
   const [inputState, setInputState] = useState({
     active: editActive,
     redditState: '',
@@ -105,8 +102,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   });
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // reset gql errors
-    //setShowGqlError(false);
     //Reset all previous Alerts
     if (AlertState.emtyFieldState) {
       setAlertState({ ...AlertState, emtyFieldState: false });
@@ -137,11 +132,11 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   //GQL Querys and Mutations
   const [addSubreddit, { error: addError }] = useMutation<
-    { newSubredditData: SubredditData },
+    { newSubredditData: AllSubredditsData },
     { input: NewSubredditInput }
   >(ADD_SUBREDDIT);
   const [updateSubreddit, { error: updateError }] = useMutation<
-    { updatedSubredditData: SubredditData },
+    { updatedSubredditData: AllSubredditsData },
     { _id: string; input: UpdateSubredditInput }
   >(UPDATE_SUBREDDIT);
   const { data } = useQuery<AllSubredditsData>(GET_ALL_SUBREDDITS);
@@ -193,8 +188,6 @@ export const AddComponent: FC<AddComponentPrompts> = ({
       updateSubreddit({ variables: { _id: id, input: updateSubredditInput } })
         .then(() => setAlertState({ ...AlertState, storageState: true }))
         .catch(() => {});
-
-      console.log(updateSubredditInput);
     }
   };
 
