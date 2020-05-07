@@ -29,3 +29,108 @@ Um die Docker-Images von Source zu bauen und zu starten, kann dies einfach mit `
 Das Backend nutzt node:10-alpine als Basis-Image, kompiliert dieses und stellt dieses als "Production"-Build auf Port 8080 bereit.
 
 Das Frontend wird mit einem Docker-Multi-Stage Build kompiliert und in ein nginx-Image installiert. Durch eine nginx-Config wird der Port auf 3000 gesetzt und das Frontend kann über localhost:3000 erreicht werden.
+
+
+
+## GraphQL Dokumentation
+
+Die Dokumentation kann unter der Adresse [localhost:8080/graphql]() im Playground aufgerufen werden.
+
+
+
+Der **Return Type** von jeder Query und Mutation (die Subreddits betrifft) ist `SubredditModel`:
+
+| Variable           | type     | Description                                                  |
+| ------------------ | -------- | ------------------------------------------------------------ |
+| _id                | String   | ID which is created by the MongoDB at creation               |
+| name               | String   | The name of the subreddit (e.g. reactjs, test). Has a length of 3-20 letters. |
+| keywords           | [String] | An array with different keywords with each 2-30 letters. The bot responds to comments with those keywords, if the comment also includes the string 'waecm-2020-group-09'. |
+| answer             | String   | The answer, the bot gives when commenting. Has 2-300 letters. |
+| active             | Boolean  | Switches the bot off and on                                  |
+| description        | String   | The short subtitle of the subreddit (is fetched from Reddit) |
+| icon               | String   | The icon of the subreddit (is fetched from Reddit)           |
+| answeredCommentIDs | [String] | Saves the IDs of the already answered comments on Reddit.    |
+| createdOn          | DateTime | Date, at which the bot was created.                          |
+
+_____________________________________________
+
+#### Queries
+
+**allSubreddits**
+
+Arguments: Keine Arguments - User muss lediglich authentifiziert sein.
+
+Return Type:  `SubredditModel` 
+
+
+
+**currentUser**
+
+Arguments: Keine Arguments - User muss lediglich authentifiziert sein.
+
+Return Type:  `UserModel` (in der Tabelle)
+
+| Variable    | Type   |
+| ----------- | ------ |
+| username    | String |
+| picture     | String |
+| name        | String |
+| nickname    | String |
+| family_name | String |
+| given_name  | String |
+
+
+
+_____________________________________________
+
+#### Mutations
+
+**getSubreddit**
+
+Arguments: `_id: String`
+
+Return Type:  `SubredditModel`
+
+
+
+**updateSubreddit**
+
+Type in der Tabelle: *UpdateSubredditInput*
+
+| Variable | Type     | Description (ALL OPTIONAL)                                   |
+| -------- | -------- | ------------------------------------------------------------ |
+| name     | String   | The name of the subreddit (e.g. reactjs, test). Has a length of 3-20 letters. |
+| keywords | [String] | An array with different keywords with each 2-30 letters. The bot responds to comments with those keywords, if the comment also includes the string 'waecm-2020-group-09'. |
+| answer   | String   | The answer, the bot gives when commenting. Has 2-300 letters. |
+| active   | Boolean  | Switches the bot off and on                                  |
+
+Arguments: `_id: String`, `input: UpdateSubredditInput`
+
+Return Type:  `SubredditModel`
+
+
+
+
+**createNewSubreddit**
+
+Type in der Tabelle: *NewSubredditInput*
+
+| Variable | Type    | Description (ALL REQUIRED)                                   |
+| -------- | -------- | ------------------------------------------------------------ |
+| name     | String   | The name of the subreddit (e.g. reactjs, test). Has a length of 3-20 letters. |
+| keywords | [String] | An array with different keywords with each 2-30 letters. The bot responds to comments with those keywords, if the comment also includes the string 'waecm-2020-group-09'. |
+| answer   | String   | The answer, the bot gives when commenting. Has 2-300 letters. |
+| active   | Boolean  | Switches the bot off and on                                  |
+| createdOn | DateTime | Date, at which the bot was created.                          |
+
+Arguments:  `input: NewSubredditInput`
+
+Return Type:  `SubredditModel`
+
+
+
+**deleteSubreddit**
+
+Arguments:  `_id: String`
+
+Return Type:  `SubredditModel`
