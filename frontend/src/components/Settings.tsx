@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 type SettingsPrompts = {
   showAddComponent: boolean;
   showRedditList: boolean;
-  setAddComponent: (newValue: boolean) => void;
+  setShowAddComponent: (newValue: boolean) => void;
   setShowRedditList: (newValue: boolean) => void;
   editingASubreddit: boolean;
   setEditingASubreddit: (newValue: boolean) => void;
@@ -50,7 +50,7 @@ type SettingsPrompts = {
 export const Settings: FC<SettingsPrompts> = ({
   showAddComponent,
   showRedditList,
-  setAddComponent,
+  setShowAddComponent,
   setShowRedditList,
   editingASubreddit,
   setEditingASubreddit,
@@ -66,23 +66,23 @@ export const Settings: FC<SettingsPrompts> = ({
     },
   );
 
-    const allSubreddits = data ? data.allSubreddits : []
+  const allSubreddits = data ? data.allSubreddits : []
 
-  
+  // called when adding a subreddit is finished
     const redirectSettings = useCallback(() => {
-        setAddComponent(false);
+        setShowAddComponent(false);
         setShowRedditList(true);
-    }, [setAddComponent, setShowRedditList]);
+    }, [setShowAddComponent, setShowRedditList]);
 
+  // called add button for adding a subreddit is clicked
     const handleAddRedditClick = () => {
         if (allSubreddits.length === 3) {
-            setAddComponent(false);
+            setShowAddComponent(false);
         } else {
-            setAddComponent(true);
+            setShowAddComponent(true);
             setShowRedditList(false);
         }
     };
-
 
   return (
     <div className={classes.root}>

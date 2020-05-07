@@ -10,14 +10,14 @@ import { PrimaryButton } from './PrimaryButton';
 
 type AlertDialogProps = {
   alertDialogOpen: boolean;
-  onCloseAlertDialog: MouseEventHandler;
+  onCloseDialog: MouseEventHandler;
   onAcceptDialog: MouseEventHandler;
   title: string;
   text: string;
 };
 
 export const AlertDialog: FC<AlertDialogProps> = ({
-  onCloseAlertDialog,
+  onCloseDialog,
   alertDialogOpen,
   onAcceptDialog,
   title,
@@ -27,7 +27,7 @@ export const AlertDialog: FC<AlertDialogProps> = ({
     <div>
       <Dialog
         open={alertDialogOpen}
-        onClose={onCloseAlertDialog}
+        onClose={onCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -38,7 +38,7 @@ export const AlertDialog: FC<AlertDialogProps> = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <PrimaryButton onClickHandler={onCloseAlertDialog}>No</PrimaryButton>
+          <PrimaryButton onClickHandler={onCloseDialog}>No</PrimaryButton>
           <PrimaryButton onClickHandler={onAcceptDialog}>Yes</PrimaryButton>
         </DialogActions>
       </Dialog>

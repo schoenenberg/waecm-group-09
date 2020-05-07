@@ -38,17 +38,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TabPanel: FC<TabPanelProps> = ({ children, value, index, ...other }) => {
+const TabPanel: FC<TabPanelProps> = ({ children, value, tabIndex, ...other }) => {
   return (
     <Typography
       component="div"
       role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      hidden={value !== tabIndex}
+      id={`tabpanel-${tabIndex}`}
+      aria-labelledby={`tab-${tabIndex}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === tabIndex && <Box p={3}>{children}</Box>}
     </Typography>
   );
 
@@ -57,13 +57,13 @@ const TabPanel: FC<TabPanelProps> = ({ children, value, index, ...other }) => {
 type TabPanelProps = {
   children?: ReactNode;
   value: number;
-  index: number;
+  tabIndex: number;
 };
 
-function a11yProps(index: number) {
+const tabProps = (tabIndex: number) => {
   return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    id: `tab-${tabIndex}`,
+    'aria-controls': `tabpanel-${tabIndex}`,
   };
 }
 
@@ -81,17 +81,16 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
   );
 
   const classes = useStyles(); // defines styles for the class
-  const [value, setValue] = React.useState(0); // value of the tab (either settings or dashboard
-  const [showSettingsComponent, setSettingsComponent] = useState(true);
-  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
-  const [showAddComponent, setAddComponent] = useState(false);
-  const [showAddComponentDashboard, setAddComponentDashboard] = useState(false);
-  const [editingASubreddit, setEditingASubreddit] = useState(false);
+  const [value, setValue] = React.useState(0); // value of the tab (either settings or dashboard)
+  const [showSettingsComponent, setShowSettingsComponent] = useState(true);
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false); // when alert ist triggered, then alert is set viewable
+  const [showAddComponent, setShowAddComponent] = useState(false);
+  const [showAddComponentDashboard, setShowAddComponentDashboard] = useState(false);
+  const [editingASubreddit, setEditingASubreddit] = useState(false); // settings component can be in two states, either a subreddit is edited or the subreddit list is displayed
   const [showRedditList, setShowRedditList] = useState(true);
-  
   const allSubreddits = data ? data.allSubreddits : []
 
-
+  // check if subreddits exist
   useEffect(() => {
     if(!error && !loading) {
       setNoReddits(allSubreddits.length === 0);
@@ -115,10 +114,6 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
     }
   };
 
-  const handleSettingsTabClick = (value:boolean) => {
-    setTabClick(value);
-  }
-
   // called when the tab value changes
   const handleChange = (
     _event: any,
@@ -131,7 +126,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
     handleShowRedditList(true);
     handleSetAddComponentDashboard(false);
     if (newValue === 0) {
-      setSettingsComponent(true);
+      setShowSettingsComponent(true);
     }
   };
 
@@ -140,11 +135,11 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
   };
 
   const handleSetAddComponentSettings = (newValue: boolean) => {
-    setAddComponent(newValue);
+    setShowAddComponent(newValue);
   };
 
   const handleSetAddComponentDashboard = (newValue: boolean) => {
-    setAddComponentDashboard(newValue);
+    setShowAddComponentDashboard(newValue);
   };
 
   const handleSetEditComponent = (newValue: boolean) => {
@@ -154,6 +149,10 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
   const handleShowRedditList = (newValue: boolean) => {
     setShowRedditList(newValue);
   };
+
+  const handleSettingsTabClick = (newValue: boolean) => {
+    setTabClick(newValue);
+  }
 
   return (
     <div className={classes.root}>
@@ -169,7 +168,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
             {alertDialogOpen && (
               <AlertDialog
                 alertDialogOpen={alertDialogOpen}
-                onCloseAlertDialog={onCloseAlertDialog}
+                onCloseDialog={onCloseAlertDialog}
                 onAcceptDialog={onLogout}
                 title={'Logout?'}
                 text={'Do you really want to log out?'}
@@ -183,22 +182,22 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
           onChange={handleChange}
           onClick={handleTabClick}
         >
-          <Tab label="Dashboard" {...a11yProps(0)} />
-          <Tab label="Settings" {...a11yProps(1)} />
+          <Tab label="Dashboard" {...tabProps(0)} />
+          <Tab label="Settings" {...tabProps(1)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={value} tabIndex={0}>
         <Dashboard
           showAddComponent={showAddComponentDashboard}
-          setAddComponent={handleSetAddComponentDashboard}
+          setShowAddComponent={handleSetAddComponentDashboard}
           noReddits={noReddits}
         />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={value} tabIndex={1}>
         {showSettingsComponent && (
           <Settings
             showAddComponent={showAddComponent}
-            setAddComponent={handleSetAddComponentSettings}
+            setShowAddComponent={handleSetAddComponentSettings}
             setShowRedditList={handleShowRedditList}
             showRedditList={showRedditList}
             editingASubreddit={editingASubreddit}
