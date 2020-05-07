@@ -126,6 +126,13 @@ const App = () => {
     window.location.replace('http://localhost:3000');
   }, []);
 
+  // called when user is unautorized
+  const handleUnauthorized = () =>{
+    window.sessionStorage.removeItem('currentToken');
+    setIsLoggedIn(false);
+    window.location.replace('http://localhost:3000');
+  }
+
   return (
     <ApolloProvider client={client}>
       <Container component="main" className={classes.container}>
