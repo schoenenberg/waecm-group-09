@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(0.5),
     overflow: 'hidden',
-    display: 'block'   
+    display: 'block',
   },
   wrappingPaper: {
     maxWidth: 500,
@@ -50,53 +50,52 @@ export const DashboardElement: FC<DashboardElemProps> = ({
 
   return (
     <div className={classes.root}>
-      <Paper elevation={3}
-             className={classes.wrappingPaper}>
-      <Box
-        display="flex"
-        alignItems="center"
-        p={1}
-        m={1}
-        bgcolor="#80d8ff"
-        width={3 / 4}
-      >
-        <Box p={1} bgcolor={color} width={2 / 6}>
-          <img src={icon} width="100%" height="100%" />
+      <Paper elevation={3} className={classes.wrappingPaper}>
+        <Box
+          display="flex"
+          alignItems="center"
+          p={1}
+          m={1}
+          bgcolor="#80d8ff"
+          width={3 / 4}
+        >
+          <Box p={1} bgcolor={color} width={2 / 6}>
+            <img src={icon} width="100%" height="100%" alt="icon"/>
+          </Box>
+          <Box p={1} bgcolor={color} width={3 / 6}>
+            <Grid container spacing={3} className={classes.name}>
+              <Grid item xs={12}>
+                <Link
+                  component="button"
+                  variant="body1"
+                  onClick={() => {
+                    window.open('https://www.reddit.com/r/' + name, '_blank');
+                  }}
+                >
+                  r/{name}
+                </Link>
+              </Grid>
+            </Grid>
+            <Grid container spacing={3} className={classes.name}>
+              <Grid item xs={12}>
+                {description}
+              </Grid>
+            </Grid>
+          </Box>
+          <Box p={1} bgcolor={color} width={1 / 6}>
+            <Grid container spacing={3} className={classes.paper}>
+              <Grid item xs={12}>
+                <ChatIcon />
+              </Grid>
+            </Grid>
+            <Grid container spacing={3} className={classes.paper}>
+              <Grid item xs={12}>
+                {number_answers}
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
-        <Box p={1} bgcolor={color} width={3 / 6}>
-          <Grid container spacing={3} className={classes.name}>
-            <Grid item xs={12}>
-              <Link
-                component="button"
-                variant="body1"
-                onClick={() => {
-                  window.open('https://www.reddit.com/r/' + name, '_blank');
-                }}
-              >
-                r/{name}
-              </Link>
-            </Grid>
-          </Grid>
-          <Grid container spacing={3} className={classes.name}>
-            <Grid item xs={12}>
-              {description}
-            </Grid>
-          </Grid>
-        </Box>
-        <Box p={1} bgcolor={color} width={1 / 6}>
-          <Grid container spacing={3} className={classes.paper}>
-            <Grid item xs={12}>
-              <ChatIcon />
-            </Grid>
-          </Grid>
-          <Grid container spacing={3} className={classes.paper}>
-            <Grid item xs={12}>
-              {number_answers}
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-    </Paper> 
+      </Paper>
     </div>
   );
 };

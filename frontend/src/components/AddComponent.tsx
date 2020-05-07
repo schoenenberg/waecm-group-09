@@ -36,37 +36,37 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       display: 'flex',
       flexWrap: 'wrap',
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       padding: theme.spacing(0.5),
-      "& > *": {
+      '& > *': {
         width: '100%',
-        height: '100%'
-      }
+        height: '100%',
+      },
     },
     input: {
-      "& > *": {
+      '& > *': {
         marginTop: '6%',
         marginLeft: '5%',
         marginRight: '5%',
         width: '90%',
-      }
+      },
     },
     switch: {
       marginTop: '6%',
-      marginLeft: '5%'
+      marginLeft: '5%',
     },
     button1: {
       marginTop: '6%',
       marginLeft: '5%',
-      marginBottom: '7%'
+      marginBottom: '7%',
     },
     button2: {
       marginTop: '6%',
       marginLeft: '5%',
-      marginBottom: '7%'
-    }
-  })
+      marginBottom: '7%',
+    },
+  }),
 );
 
 export const AddComponent: FC<AddComponentPrompts> = ({
@@ -92,7 +92,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     storageState: false,
     redditAmountState: false,
     redditDuplicateState: false,
-    gqlErrorState: false, 
+    gqlErrorState: false,
   });
 
   const [editedState, setEditedState] = useState({
@@ -116,7 +116,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
       setAlertState({ ...AlertState, storageState: false });
     }
     if (AlertState.gqlErrorState) {
-      setAlertState({ ...AlertState, gqlErrorState: false})
+      setAlertState({ ...AlertState, gqlErrorState: false });
     }
 
     //set the states depending on user input
@@ -157,31 +157,33 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   //Validity Checks for editing a subreddit
   const editModeSaveCheck = () => {
     //Set default values to new input values
-    if(inputState.redditState !== ""){
-      editName = inputState.redditState; 
+    if (inputState.redditState !== '') {
+      editName = inputState.redditState;
     }
-    if(inputState.keywordState !== ""){
-      editKeywords = inputState.keywordState.split(" ")
+    if (inputState.keywordState !== '') {
+      editKeywords = inputState.keywordState.split(' ');
     }
-    if(inputState.answerState !== ""){
+    if (inputState.answerState !== '') {
       editAnswer = inputState.answerState;
     }
-    
+
     //Check if input field is empty
-    if((editedState.redditState && inputState.redditState.length === 0)  ||
-       (editedState.answerState && inputState.answerState.length === 0)  ||
-       (editedState.keywordState && inputState.keywordState.toString().length === 0)){
-      setAlertState({ ...AlertState, emtyFieldState: true }); 
-    //Check for duplicates
-    } else 
-    if (!checkForDuplicates()) {
+    if (
+      (editedState.redditState && inputState.redditState.length === 0) ||
+      (editedState.answerState && inputState.answerState.length === 0) ||
+      (editedState.keywordState &&
+        inputState.keywordState.toString().length === 0)
+    ) {
+      setAlertState({ ...AlertState, emtyFieldState: true });
+      //Check for duplicates
+    } else if (!checkForDuplicates()) {
       setAlertState({ ...AlertState, redditDuplicateState: true });
     } else {
       const updateSubredditInput = {
         name: editName,
         active: inputState.active,
         answer: editAnswer,
-        keywords: editKeywords
+        keywords: editKeywords,
       };
 
       //Update the subreddit and check if it returns an error
@@ -280,7 +282,10 @@ export const AddComponent: FC<AddComponentPrompts> = ({
           />
         </FormGroup>
         {AlertState.emtyFieldState && (
-          <Alert severity="error">All fields musst be filled and the input must be longer or equal to 2!</Alert>
+          <Alert severity="error">
+            All fields musst be filled and the input must be longer or equal to
+            2!
+          </Alert>
         )}
         {AlertState.redditDuplicateState && (
           <Alert severity="error">Subreddit already exists!</Alert>
@@ -290,8 +295,12 @@ export const AddComponent: FC<AddComponentPrompts> = ({
             To many Items in Storage, delete first!
           </Alert>
         )}
-        {AlertState.gqlErrorState && addError && <Alert severity="error"> {addError.message}</Alert>}
-        {AlertState.gqlErrorState && updateError && <Alert severity="error"> {updateError.message}</Alert>}
+        {AlertState.gqlErrorState && addError && (
+          <Alert severity="error"> {addError.message}</Alert>
+        )}
+        {AlertState.gqlErrorState && updateError && (
+          <Alert severity="error"> {updateError.message}</Alert>
+        )}
         {AlertState.storageState && (
           <Alert severity="success">Subreddit successfully stored!</Alert>
         )}
