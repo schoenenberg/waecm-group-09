@@ -9,4 +9,5 @@ export const SubredditSchema = new Schema({
   icon: String,
   answeredCommentIDs: [String],
   createdOn: Date,
+  username: String,
 });

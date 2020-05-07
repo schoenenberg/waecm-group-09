@@ -23,4 +23,7 @@ export class NewSubredditInput {
   @Field()
   @IsDate()
   createdOn!: Date;
+
+  @Field()
+  username!: string;
 }

@@ -6,6 +6,7 @@ export interface SubredditMongo extends Document {
   readonly answer: string;
   readonly active: boolean;
   readonly createdOn: Date;
+  readonly username: string;
   description: string;
   icon: string;
   answeredCommentIDs: string[];
