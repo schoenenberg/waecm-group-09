@@ -76,9 +76,10 @@ const tabProps = (tabIndex: number) => {
 
 type MenuAppBarProps = {
   onLogout: MouseEventHandler;
+  handleUnauthorized: () => void;
 };
 
-export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
+export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout, handleUnauthorized }) => {
   // query to get all subrredit data
   const { loading, error, data } = useQuery<AllSubredditsData>(
     GET_ALL_SUBREDDITS,
@@ -166,7 +167,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar className={classes.toolBar}>
           <Typography variant="h6" className={classes.title}>
-            <UserInformation />
+            <UserInformation handleUnauthorized={handleUnauthorized} />
           </Typography>
           <IconButton color="inherit">
             <PrimaryButton onClickHandler={() => setAlertDialogOpen(true)}>

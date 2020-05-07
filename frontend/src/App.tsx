@@ -137,7 +137,7 @@ const App = () => {
     <ApolloProvider client={client}>
       <Container component="main" className={classes.container}>
         <header>
-          {isLoggedIn && <MenuAppBar onLogout={logout} />}
+          {isLoggedIn && <MenuAppBar onLogout={logout} handleUnauthorized = {handleUnauthorized}/>}
           {!isLoggedIn && (
             <div>
               <h1 className={classes.fonts}>WAECM Project</h1>
