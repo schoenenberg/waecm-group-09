@@ -5,10 +5,13 @@ import { SubredditModel } from './subreddit.model';
 import { RedditService } from './reddit.service';
 import { NewSubredditInput } from './dto/new-subreddit.input';
 import { UpdateSubredditInput } from './dto/update-subreddit.input';
+import { CurrentUser } from '../user/user.decorator';
+import { User } from '../../types/user';
 
 @Resolver(() => SubredditModel)
 export class RedditResolver {
-  constructor(private readonly redditService: RedditService) {}
+  constructor(private readonly redditService: RedditService) {
+  }
 
   // THIS IS JUST FOR TESTING ---- delete later --------------------------------
   @Query(() => SubredditModel)
@@ -24,37 +27,43 @@ export class RedditResolver {
       answer: 'test Answer',
       keywords: ['first', 'hello', 'last'],
       createdOn: new Date(),
-      username: "myusername"
+      username: 'myusername',
     };
   }
 
   // ---------------------------------------------------------------------------
 
   @Query(() => [SubredditModel])
-  async allSubreddits() {
-    return this.redditService.findAll();
+  @UseGuards(GqlAuthGuard)
+  async allSubreddits(@CurrentUser() user: User) {
+    return this.redditService.findAllForUser(user);
   }
 
   @Mutation(() => SubredditModel)
-  async getSubreddit(@Args('_id') id: string) {
-    return await this.redditService.readOne(id);
+  @UseGuards(GqlAuthGuard)
+  async getSubreddit(@Args('_id') id: string, @CurrentUser() user: User) {
+    return await this.redditService.readOne(id, user);
   }
 
   @Mutation(() => SubredditModel)
+  @UseGuards(GqlAuthGuard)
   async updateSubreddit(
     @Args('_id') id: string,
     @Args('input') subredditInput: UpdateSubredditInput,
+    @CurrentUser() user: User,
   ) {
-    return await this.redditService.update(id, subredditInput);
+    return await this.redditService.update(id, subredditInput, user);
   }
 
   @Mutation(() => SubredditModel)
-  async createNewSubreddit(@Args('input') subredditInput: NewSubredditInput) {
-    return await this.redditService.createSubreddit(subredditInput);
+  @UseGuards(GqlAuthGuard)
+  async createNewSubreddit(@Args('input') subredditInput: NewSubredditInput, @CurrentUser() user: User) {
+    return await this.redditService.createSubreddit(subredditInput, user);
   }
 
   @Mutation(() => SubredditModel)
-  async deleteSubreddit(@Args('_id') id: string) {
-    return await this.redditService.delete(id);
+  @UseGuards(GqlAuthGuard)
+  async deleteSubreddit(@Args('_id') id: string, @CurrentUser() user: User) {
+    return await this.redditService.delete(id, user);
   }
 }
