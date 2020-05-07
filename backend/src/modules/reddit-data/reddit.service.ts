@@ -35,7 +35,7 @@ export class RedditService {
       .then(subreddit => {
         const additionalData = {
           description: subreddit.title,
-          icon: subreddit.icon_img,
+          icon: subreddit.community_icon,
           answeredCommentIDs: [],
           username: user.preferred_username,
         };
@@ -74,8 +74,8 @@ export class RedditService {
           return {
             ...subreddit,
             ...{
-              icon: val.icon_img,
-              description: val.description,
+              icon: val.community_icon,
+              description: val.title,
             },
           };
         })
