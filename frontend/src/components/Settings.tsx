@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      marginTop: theme.spacing(27),
+      marginTop: theme.spacing(22),
       display: 'block',
       height: '100%',
     },

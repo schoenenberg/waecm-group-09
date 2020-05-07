@@ -81,23 +81,24 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 }) => {
   const classes = useStyles();
 
-  const [showGqlError, setShowGqlError] = useState(true);
+  //const [showGqlError, setShowGqlError] = useState(true);
 
-  const [inputState, setInputState] = React.useState({
+  const [inputState, setInputState] = useState({
     active: editActive,
     redditState: '',
     keywordState: '',
     answerState: '',
   });
 
-  const [AlertState, setAlertState] = React.useState({
+  const [AlertState, setAlertState] = useState({
     emtyFieldState: false,
     storageState: false,
     redditAmountState: false,
     redditDuplicateState: false,
+    gqlErrorState: false, 
   });
 
-  const [editedState, setEditedState] = React.useState({
+  const [editedState, setEditedState] = useState({
     redditState: false,
     keywordState: false,
     answerState: false,
@@ -105,7 +106,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // reset gql errors
-    setShowGqlError(false);
+    //setShowGqlError(false);
     //Reset all previous Alerts
     if (AlertState.emtyFieldState) {
       setAlertState({ ...AlertState, emtyFieldState: false });
@@ -118,6 +119,9 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     }
     if (AlertState.storageState) {
       setAlertState({ ...AlertState, storageState: false });
+    }
+    if (AlertState.gqlErrorState) {
+      setAlertState({ ...AlertState, gqlErrorState: false})
     }
 
     //set the states depending on user input
@@ -147,7 +151,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
 
   //Handle how to handle the saving/updating of a subreddit, depending on currend mode
   const handleSave = () => {
-    setShowGqlError(true);
+    setAlertState({ ...AlertState, gqlErrorState: true });
     if (editMode) {
       editModeSaveCheck();
     } else {
@@ -171,7 +175,7 @@ export const AddComponent: FC<AddComponentPrompts> = ({
     //Check if input field is empty
     if((editedState.redditState && inputState.redditState.length === 0)  ||
        (editedState.answerState && inputState.answerState.length === 0)  ||
-       (editedState.keywordState && inputState.keywordState.length === 0)){
+       (editedState.keywordState && inputState.keywordState.toString().length === 0)){
       setAlertState({ ...AlertState, emtyFieldState: true }); 
     //Check for duplicates
     } else 
@@ -198,9 +202,9 @@ export const AddComponent: FC<AddComponentPrompts> = ({
   const normalModeSaveCheck = () => {
     //Check if fields are not empty
     if (
-      inputState.redditState === '' ||
-      inputState.keywordState === '' ||
-      inputState.answerState === ''
+      inputState.redditState.length < 2 ||
+      inputState.keywordState.toString().length < 2 ||
+      inputState.answerState.length < 2
     ) {
       setAlertState({ ...AlertState, emtyFieldState: true });
       //Check for enough storage space
@@ -283,18 +287,18 @@ export const AddComponent: FC<AddComponentPrompts> = ({
           />
         </FormGroup>
         {AlertState.emtyFieldState && (
-          <Alert severity="error">Fill all Fields!</Alert>
+          <Alert severity="error">All fields musst be filled and the input must be longer or equal to 2!</Alert>
         )}
         {AlertState.redditDuplicateState && (
           <Alert severity="error">Subreddit already exists!</Alert>
         )}
         {AlertState.redditAmountState && (
           <Alert severity="error">
-            To many Items in Storage, delete First!
+            To many Items in Storage, delete first!
           </Alert>
         )}
-        {showGqlError && addError && <Alert severity="error"> {addError.message}</Alert>}
-        {showGqlError && updateError && <Alert severity="error"> {updateError.message}</Alert>}
+        {AlertState.gqlErrorState && addError && <Alert severity="error"> {addError.message}</Alert>}
+        {AlertState.gqlErrorState && updateError && <Alert severity="error"> {updateError.message}</Alert>}
         {AlertState.storageState && (
           <Alert severity="success">Subreddit successfully stored!</Alert>
         )}

@@ -9,20 +9,14 @@ import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing(0),
-    display: 'flex',
-    flexWrap: 'wrap',
+    padding: theme.spacing(1),
+    overflow: 'hidden',
     justifyContent: "center",
-    alignItems: "center",
-    
+    alignItems: "center",    
   },
-  paper2: {
+  wrappingPaper: {
     maxWidth: 500,
-    margin: `${theme.spacing(1)}px auto`,
-    padding: theme.spacing(2),
     backgroundColor: '#80d8ff',
-    display: 'flex',
-
   },
   paper: {
     padding: theme.spacing(0),
@@ -57,7 +51,7 @@ export const DashboardElement: FC<DashboardElemProps> = ({
   return (
     <div className={classes.root}>
       <Paper elevation={3}
-             className={classes.paper2}>
+             className={classes.wrappingPaper}>
       <Box
         display="flex"
         alignItems="center"
