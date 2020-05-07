@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   backend:
-    image: macxx/waecm-2020-group-XX-bsp-2:backend
+    image: macxx/waecm-2020-group-09-bsp-2:backend
     ports:
       - target: 8080
         published: 8080
@@ -17,7 +17,7 @@ services:
       - db
 
   frontend:
-    image: macxx/waecm-2020-group-XX-bsp-2:frontend
+    image: macxx/waecm-2020-group-09-bsp-2:frontend
     ports:
       - target: 3000
         published: 3000
