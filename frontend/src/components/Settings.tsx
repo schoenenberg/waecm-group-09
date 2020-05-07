@@ -55,7 +55,7 @@ export const Settings: FC<SettingsPrompts> = ({
   editingASubreddit,
   setEditingASubreddit,
   tabClick,
-  handleSettingsTabClick
+  handleSettingsTabClick,
 }) => {
   const classes = useStyles();
 
@@ -66,23 +66,23 @@ export const Settings: FC<SettingsPrompts> = ({
     },
   );
 
-  const allSubreddits = data ? data.allSubreddits : []
+  const allSubreddits = data ? data.allSubreddits : [];
 
   // called when adding a subreddit is finished
-    const redirectSettings = useCallback(() => {
-        setShowAddComponent(false);
-        setShowRedditList(true);
-    }, [setShowAddComponent, setShowRedditList]);
+  const redirectSettings = useCallback(() => {
+    setShowAddComponent(false);
+    setShowRedditList(true);
+  }, [setShowAddComponent, setShowRedditList]);
 
   // called add button for adding a subreddit is clicked
-    const handleAddRedditClick = () => {
-        if (allSubreddits.length === 3) {
-            setShowAddComponent(false);
-        } else {
-            setShowAddComponent(true);
-            setShowRedditList(false);
-        }
-    };
+  const handleAddRedditClick = () => {
+    if (allSubreddits.length === 3) {
+      setShowAddComponent(false);
+    } else {
+      setShowAddComponent(true);
+      setShowRedditList(false);
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -91,7 +91,6 @@ export const Settings: FC<SettingsPrompts> = ({
           <AddIcon />
         </Fab>
       </div>
-
 
       {loading ? (
         <div>Loading...</div>

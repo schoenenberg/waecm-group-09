@@ -20,9 +20,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'block',
     height: '100%',
   },
-  link:{
-    color: "#FFFFFF"
-  }
+  link: {
+    color: '#FFFFFF',
+  },
 }));
 
 type DashboardProps = {
@@ -84,9 +84,13 @@ export const Dashboard: FC<DashboardProps> = ({
         )
       )}
       {noReddits && !showAddComponent && (
-          <Link href="#" onClick={() => setShowAddComponent(true)} className={classes.link}>
-            <strong> Add Subreddits now! </strong>
-          </Link>
+        <Link
+          href="#"
+          onClick={() => setShowAddComponent(true)}
+          className={classes.link}
+        >
+          <strong> Add Subreddits now! </strong>
+        </Link>
       )}
     </div>
   );

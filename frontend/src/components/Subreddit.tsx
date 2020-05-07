@@ -74,13 +74,13 @@ export const Subreddit: FC<SubredditPrompts> = ({
     setAlertDialogOpen(false);
   };
 
-    useEffect(() => {
+  useEffect(() => {
     //called when user clicks on settings tab
-    if(tabClick) {
+    if (tabClick) {
       setEdit(false);
       handleSettingsTabClick(false);
     }
-  }, [tabClick])
+  }, [tabClick]);
 
   return (
     <div className={classes.root}>
@@ -96,7 +96,10 @@ export const Subreddit: FC<SubredditPrompts> = ({
                 <Box fontSize="h6.fontSize" m={1}>
                   <Link
                     href="#"
-                    onClick={() => {setEdit(true); setEditingASubreddit(true)}}
+                    onClick={() => {
+                      setEdit(true);
+                      setEditingASubreddit(true);
+                    }}
                     color="inherit"
                   >
                     r/{reddit}
@@ -128,7 +131,10 @@ export const Subreddit: FC<SubredditPrompts> = ({
       )}
       {edit && (
         <AddComponent
-          onRedirectSettings={() => {setEdit(false); setEditingASubreddit(false)}}
+          onRedirectSettings={() => {
+            setEdit(false);
+            setEditingASubreddit(false);
+          }}
           editName={reddit}
           editKeywords={keywords}
           editAnswer={answer}

@@ -1,7 +1,8 @@
 import React, {
   FC,
   MouseEventHandler,
-  ReactNode, useEffect,
+  ReactNode,
+  useEffect,
   useState,
 } from 'react';
 
@@ -40,7 +41,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TabPanel: FC<TabPanelProps> = ({ children, value, tabIndex, ...other }) => {
+const TabPanel: FC<TabPanelProps> = ({
+  children,
+  value,
+  tabIndex,
+  ...other
+}) => {
   return (
     <Typography
       component="div"
@@ -53,7 +59,6 @@ const TabPanel: FC<TabPanelProps> = ({ children, value, tabIndex, ...other }) =>
       {value === tabIndex && <Box p={3}>{children}</Box>}
     </Typography>
   );
-
 };
 
 type TabPanelProps = {
@@ -67,7 +72,7 @@ const tabProps = (tabIndex: number) => {
     id: `tab-${tabIndex}`,
     'aria-controls': `tabpanel-${tabIndex}`,
   };
-}
+};
 
 type MenuAppBarProps = {
   onLogout: MouseEventHandler;
@@ -87,22 +92,22 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
   const [showSettingsComponent, setShowSettingsComponent] = useState(true);
   const [alertDialogOpen, setAlertDialogOpen] = useState(false); // when alert ist triggered, then alert is set viewable
   const [showAddComponent, setShowAddComponent] = useState(false);
-  const [showAddComponentDashboard, setShowAddComponentDashboard] = useState(false);
+  const [showAddComponentDashboard, setShowAddComponentDashboard] = useState(
+    false,
+  );
   const [editingASubreddit, setEditingASubreddit] = useState(false); // settings component can be in two states, either a subreddit is edited or the subreddit list is displayed
   const [showRedditList, setShowRedditList] = useState(true);
-  const allSubreddits = data ? data.allSubreddits : []
+  const allSubreddits = data ? data.allSubreddits : [];
 
   // check if subreddits exist
   useEffect(() => {
-    if(!error && !loading) {
+    if (!error && !loading) {
       setNoReddits(allSubreddits.length === 0);
     }
-  }, [data, error, loading])
-
+  }, [data, error, loading]);
 
   const [noReddits, setNoReddits] = useState(allSubreddits.length === 0);
   const [tabClick, setTabClick] = useState(false);
-
 
   // called when clicked on a tab (also when clicked on same tab)
   const handleTabClick = () => {
@@ -154,7 +159,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
 
   const handleSettingsTabClick = (newValue: boolean) => {
     setTabClick(newValue);
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -204,8 +209,8 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
             showRedditList={showRedditList}
             editingASubreddit={editingASubreddit}
             setEditingASubreddit={handleSetEditComponent}
-            tabClick = {tabClick}
-            handleSettingsTabClick = {handleSettingsTabClick}
+            tabClick={tabClick}
+            handleSettingsTabClick={handleSettingsTabClick}
           />
         )}
       </TabPanel>
