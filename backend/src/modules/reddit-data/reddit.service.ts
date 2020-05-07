@@ -22,7 +22,7 @@ export class RedditService {
 
   async findAllForUser(user: User): Promise<SubredditMongo[]> {
     return await this.subredditModel
-      .find({ username: user.nickname })
+      .find({ username: user.preferred_username })
       .exec();
   }
 
@@ -39,7 +39,7 @@ export class RedditService {
           description: subreddit.title,
           icon: subreddit.icon_img,
           answeredCommentIDs: [],
-          username: user.nickname
+          username: user.preferred_username
         };
 
         const combinedSubredditData = {
@@ -54,7 +54,7 @@ export class RedditService {
   }
 
   async readOne(id: string, user: User): Promise<SubredditMongo> {
-    const foundSubreddit = await this.subredditModel.findOne({ _id: id , username: user.nickname});
+    const foundSubreddit = await this.subredditModel.findOne({ _id: id , username: user.preferred_username});
     
     if (!foundSubreddit)
       throw new Error('ERROR: Could not be updated - ID not found');
@@ -81,7 +81,7 @@ export class RedditService {
       : subreddit;
 
     const updatedSubreddit = await this.subredditModel.findOneAndUpdate(
-      {_id: id, username: user.nickname},
+      {_id: id, username: user.preferred_username},
       data,
       {
         new: true,
@@ -98,7 +98,7 @@ export class RedditService {
 
   async delete(id: string, user: User): Promise<SubredditMongo> {
     const subredditToDelete = await this.subredditModel
-      .findOneAndRemove({_id: id, username: user.nickname});
+      .findOneAndRemove({_id: id, username: user.preferred_username});
 
     if (!subredditToDelete)
       throw new Error('ERROR: Could not be updated - ID not found');
