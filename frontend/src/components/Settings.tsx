@@ -1,121 +1,135 @@
-import React, { FC, /*MouseEventHandler,*/ useCallback, useState } from 'react';
+import React, { FC, useCallback } from 'react';
+
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
+import { AddComponent } from './AddComponent';
+import { Subreddit } from './Subreddit';
+import { Alert } from './Alert';
+import {
+  GET_ALL_SUBREDDITS,
+  AllSubredditsData,
+} from '../gql/allSubredditsQuery';
 
-import { AddComponent } from "./AddComponent";
-import { Subreddit } from "./Subreddit"; 
+import { useQuery } from '@apollo/react-hooks';
 
-const useStyles = makeStyles((theme: Theme) => 
-    createStyles({
-        root: {
-            flexGrow: 1,
-            marginTop: theme.spacing(20),
-        },
-        addButton: {
-            "& > *": {
-                position: 'absolute',
-                background: "#4287f5",
-                bottom: theme.spacing(3),
-                right: theme.spacing(3),
-            },
-        },
-        extendedIcon: {
-            marginRight: theme.spacing(1),
-        },
-    }),
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+      marginTop: theme.spacing(19),
+      display: 'block',
+      height: '100%',
+    },
+    addButton: {
+      '& > *': {
+        position: 'absolute',
+        background: '#336699',
+        right: theme.spacing(1),
+        bottom: theme.spacing(1),
+      },
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(1),
+    },
+  }),
 );
 
- type SettingsPrompts = {
-    // onShowSettings: MouseEventHandler; 
- }; 
+type SettingsPrompts = {
+  showAddComponent: boolean;
+  showRedditList: boolean;
+  setShowAddComponent: (newValue: boolean) => void;
+  setShowRedditList: (newValue: boolean) => void;
+  editingASubreddit: boolean;
+  setEditingASubreddit: (newValue: boolean) => void;
+  tabClick: boolean;
+  handleSettingsTabClick: (newValue: boolean) => void;
+};
 
 export const Settings: FC<SettingsPrompts> = ({
-    //onShowSettings,
+  showAddComponent,
+  showRedditList,
+  setShowAddComponent,
+  setShowRedditList,
+  editingASubreddit,
+  setEditingASubreddit,
+  tabClick,
+  handleSettingsTabClick
 }) => {
-    const classes = useStyles();
-    const [showAddComponent, setAddComponent] = useState(false);
-    const [showRedditList, setShowRedditList] = useState(true); 
+  const classes = useStyles();
 
-    const [showField, setShowField] = React.useState({
-    showReddit1: false, 
-    showReddit2: false, 
-    showReddit3: false, 
-    })
+  const { loading, error, data } = useQuery<AllSubredditsData>(
+    GET_ALL_SUBREDDITS,
+    {
+      pollInterval: 500,
+    },
+  );
 
-    const ls: any[] =  JSON.parse(localStorage.getItem("Reddit") || "[]");
+  const allSubreddits = data ? data.allSubreddits : []
 
-    const deleteReddit = useCallback(() => {
-    ls.splice(0, 1); 
-    localStorage.setItem("Reddit", JSON.stringify(ls));
-    setShowField({ ...showField, ["showReddit1"]: false});
-    }, []);
-
+  // called when adding a subreddit is finished
     const redirectSettings = useCallback(() => {
-    setAddComponent(false); 
-    setShowRedditList(true);
-    }, []);
+        setShowAddComponent(false);
+        setShowRedditList(true);
+    }, [setShowAddComponent, setShowRedditList]);
 
-   const handleAddRedditClick = () => {       
-       if (ls.length == 3){
-        setAddComponent(false);
-      } else {
-        setAddComponent(true); 
-        setShowRedditList(false); 
-      }
-   } 
-
-
-    const subredditElementList = ls.map(
-    index => {
-        switch (ls.length) {
-        case 1:
-            return <Subreddit onDeleteReddit={deleteReddit}
-            reddit ={index.reddit}
-            date = {index.date}/>;
-        case 2:
-            return (
-            <div>
-                <Subreddit onDeleteReddit={deleteReddit}
-                reddit ={ls[0].reddit}
-                date = {ls[0].date}/>
-                <Subreddit onDeleteReddit={deleteReddit}
-                reddit ={ls[1].reddit}
-                date = {ls[1].date}/>
-            </div>);
-        case 3:
-            return (
-            <div>
-            <Subreddit onDeleteReddit={deleteReddit}
-            reddit ={ls[0].reddit}
-            date = {ls[0].date}/>
-            <Subreddit onDeleteReddit={deleteReddit}
-            reddit ={ls[1].reddit}
-            date = {ls[1].date}/>
-            <Subreddit onDeleteReddit={deleteReddit}
-            reddit ={ls[2].reddit}
-            date = {ls[2].date}/>
-            </div>); 
-        default:
-            return (
-            <div></div>
-            );
+  // called add button for adding a subreddit is clicked
+    const handleAddRedditClick = () => {
+        if (allSubreddits.length === 3) {
+            setShowAddComponent(false);
+        } else {
+            setShowAddComponent(true);
+            setShowRedditList(false);
         }
-    }
-    )[0];
+    };
 
-
-    return (
+  return (
     <div className={classes.root}>
-        <div className={classes.addButton} onClick={handleAddRedditClick}>
+      <div className={classes.addButton} onClick={handleAddRedditClick}>
         <Fab color="primary" aria-label="add">
-            <AddIcon />
+          <AddIcon />
         </Fab>
-        </div>
-        
-        {showRedditList && <div>{subredditElementList}</div>}
-        {showAddComponent && <AddComponent onRedirectSettings={redirectSettings}/>}
+      </div>
+
+
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <Alert title={'Error'}>Unauthorized</Alert>
+      ) : (
+        data &&
+        !showAddComponent &&
+        showRedditList && (
+          <div>
+            {data.allSubreddits.map((elem) => (
+              <Subreddit
+                reddit={elem.name}
+                date={elem.createdOn}
+                id={elem._id}
+                keywords={elem.keywords}
+                answer={elem.answer}
+                active={elem.active}
+                editingASubreddit={editingASubreddit}
+                setEditingASubreddit={setEditingASubreddit}
+                tabClick={tabClick}
+                handleSettingsTabClick={handleSettingsTabClick}
+              />
+            ))}
+          </div>
+        )
+      )}
+      {showAddComponent && (
+        <AddComponent
+          onRedirectSettings={redirectSettings}
+          editName={''}
+          editKeywords={[]}
+          editAnswer={''}
+          editActive={true}
+          editMode={false}
+          id={''}
+        />
+      )}
     </div>
-    );
-}
+  );
+};

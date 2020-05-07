@@ -14,8 +14,7 @@ export class RedditService {
   constructor(
     @InjectModel('Subreddit') private subredditModel: Model<SubredditMongo>,
     private redditClient: RedditConnector,
-  ) {
-  }
+  ) {}
 
   async findAll(): Promise<SubredditMongo[]> {
     return await this.subredditModel.find().exec();
@@ -56,7 +55,7 @@ export class RedditService {
 
   async readOne(id: string, user: User): Promise<SubredditMongo> {
     const foundSubreddit = await this.subredditModel.findOne({ _id: id , username: user.nickname});
-
+    
     if (!foundSubreddit)
       throw new Error('ERROR: Could not be updated - ID not found');
 
@@ -75,7 +74,7 @@ export class RedditService {
             ...subreddit,
             ...{
               icon: val.icon_img,
-              description: val.title,
+              description: val.description,
             },
           };
         })

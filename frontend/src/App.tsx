@@ -1,17 +1,16 @@
-import React, { useState, useCallback } from "react";
-import "./App.css";
-import Container from "@material-ui/core/Container";
-import { uuid } from "uuidv4";
-import { useEffect } from "react";
-import ApolloClient from "apollo-client";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { HttpLink } from "apollo-link-http";
-import { ApolloProvider } from "@apollo/react-hooks";
-import { useStyles } from "./materialStyles";
-import { Login } from "./components/Login";
-
-import Divider from "@material-ui/core/Divider";
-import {MenuAppBar} from "./components/Navigation";
+import React, { useState, useCallback } from 'react';
+import './App.css';
+import Container from '@material-ui/core/Container';
+import { uuid } from 'uuidv4';
+import { useEffect } from 'react';
+import ApolloClient from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { useStyles } from './materialStyles';
+import { Login } from './components/Login';
+import Divider from '@material-ui/core/Divider';
+import { MenuAppBar } from './components/Navigation';
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -20,9 +19,9 @@ const useReactPath = () => {
     setWindowHref(currentWindowHref);
   };
   useEffect(() => {
-    window.addEventListener("popstate", listenToPopstate);
+    window.addEventListener('popstate', listenToPopstate);
     return () => {
-      window.removeEventListener("popstate", listenToPopstate);
+      window.removeEventListener('popstate', listenToPopstate);
     };
   }, []);
   return windowHref;
@@ -30,60 +29,83 @@ const useReactPath = () => {
 
 const App = () => {
   const classes = useStyles();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [token_id, setTokenId] = useState("");
-  const [oldToken, setOldToken] = useState("");
+
+  // check if user is already logged in
+  const getIsLoggedIn = () => {
+    if (window.sessionStorage.getItem('currentToken') == null) {
+      return false;
+    }
+    return true;
+  };
+  const initialValue = getIsLoggedIn();
+  const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
+  const [token_id, setTokenId] = useState('');
+  const [oldToken, setOldToken] = useState('');
   const [isProfileDetailPage, setIsProfileDetailPage] = useState(false);
   const [accessDenied, setAccessDenied] = useState(false);
   const [client, setClient] = useState(
     new ApolloClient({
       link: new HttpLink({
-        uri: "http://localhost:8080/graphql",
+        uri: 'http://localhost:8080/graphql',
         headers: {
-          Authorization: `Bearer ` + token_id
-        }
+          Authorization:
+            `Bearer ` + window.sessionStorage.getItem('currentToken'),
+        },
       }),
-      cache: new InMemoryCache()
-    })
+      cache: new InMemoryCache(),
+    }),
   );
 
   const href = useReactPath();
 
   useEffect(() => {
-    if (href.includes("id_token")) {
+    if (window.sessionStorage.getItem('currentToken') != null) {
+      setIsLoggedIn(true);
+    }
+    if (href.includes('id_token')) {
       setOldToken(token_id);
-      if (!oldToken.includes(href.split("token=")[1])) {
-          setIsLoggedIn(true)
+      if (!oldToken.includes(href.split('token=')[1])) {
         setIsProfileDetailPage(true);
-        setTokenId(href.split("token=")[1]);
+        setTokenId(href.split('token=')[1]);
+        window.sessionStorage.setItem('currentToken', href.split('token=')[1]);
+
         setClient(
           new ApolloClient({
             link: new HttpLink({
-              uri: "http://localhost:8080/graphql",
+              uri: 'http://localhost:8080/graphql',
               headers: {
-                Authorization: `Bearer ` + token_id
-              }
+                Authorization:
+                  `Bearer ` + window.sessionStorage.getItem('currentToken'),
+              },
             }),
-            cache: new InMemoryCache()
-          })
+            cache: new InMemoryCache(),
+          }),
         );
       }
     }
-    if (href.includes("access_denied")) {
+    if (href.includes('access_denied')) {
       setAccessDenied(true);
     }
-  }, [href, token_id, isProfileDetailPage, accessDenied, client, oldToken, isLoggedIn]);
+  }, [
+    href,
+    token_id,
+    isProfileDetailPage,
+    accessDenied,
+    client,
+    oldToken,
+    isLoggedIn,
+  ]);
 
   const auth_url = (): string => {
     return (
-      "https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/auth" +
-      "?client_id=waecm" +
-      "&response_type=id_token" +
-      "&prompt=consent" +
-      "&nonce=" +
+      'https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/auth' +
+      '?client_id=waecm' +
+      '&response_type=id_token' +
+      '&prompt=consent' +
+      '&nonce=' +
       uuid() +
-      "&scope=openid%20profile" +
-      "&redirect_uri=http://localhost:3000"
+      '&scope=openid%20profile' +
+      '&redirect_uri=http://localhost:3000'
     );
   };
 
@@ -93,45 +115,41 @@ const App = () => {
 
   const logout = useCallback(() => {
     window.location.replace(
-      "https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/logout?post_logout_redirect_uri=http://localhost:3000"
+      'https://waecm-sso.inso.tuwien.ac.at/auth/realms/waecm/protocol/openid-connect/logout?post_logout_redirect_uri=http://localhost:3000',
     );
     setIsProfileDetailPage(false);
+    window.sessionStorage.removeItem('currentToken');
     setIsLoggedIn(false);
   }, []);
 
   const redirectStartPage = useCallback(() => {
-    window.location.replace("http://localhost:3000");
+    window.location.replace('http://localhost:3000');
   }, []);
 
   return (
     <ApolloProvider client={client}>
       <Container component="main" className={classes.container}>
         <header>
-          {isLoggedIn && <MenuAppBar onLogout={logout}/>}
-          {!isLoggedIn &&
-          <div>
-            <h1 className={classes.fonts}>
-              WAECM Project
-            </h1>
-            < h1 className={classes.names}>
-              Max, Sigrid, Alicia, Elli
-            </h1>
-            <Divider variant="middle"/>
-          </div>
-          }
+          {isLoggedIn && <MenuAppBar onLogout={logout} />}
+          {!isLoggedIn && (
+            <div>
+              <h1 className={classes.fonts}>WAECM Project</h1>
+              <h1 className={classes.names}>Max, Sigrid, Alicia, Elli</h1>
+              <Divider variant="middle" />
+            </div>
+          )}
         </header>
-          {!isLoggedIn &&
-
+        {!isLoggedIn && (
           <Login
-              accessDenied={accessDenied}
-              onLogin={login}
-              onLogout={logout}
-              onRedirectStartpage={redirectStartPage}
-              isProfileDetailPage={isProfileDetailPage}
+            accessDenied={accessDenied}
+            onLogin={login}
+            onLogout={logout}
+            onRedirectStartpage={redirectStartPage}
+            isProfileDetailPage={isProfileDetailPage}
           />
-          }
+        )}
       </Container>
     </ApolloProvider>
   );
-}
+};
 export default App;
