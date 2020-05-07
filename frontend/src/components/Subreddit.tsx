@@ -20,17 +20,15 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
       overflow: 'hidden',
-      padding: theme.spacing(1),
+      padding: theme.spacing(0.5),
     },
     paper: {
       maxWidth: 400,
-      margin: `${theme.spacing(1)}px auto`,
-      padding: theme.spacing(1),
+      padding: theme.spacing(0.5),
     },
     paperInactive: {
       maxWidth: 400,
-      margin: `${theme.spacing(1)}px auto`,
-      padding: theme.spacing(1),
+      padding: theme.spacing(0.5),
       color: '#b3cce6',
     },
   }),

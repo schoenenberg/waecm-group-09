@@ -18,16 +18,16 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      marginTop: theme.spacing(22),
+      marginTop: theme.spacing(19),
       display: 'block',
       height: '100%',
     },
     addButton: {
       '& > *': {
         position: 'absolute',
-        background: 'primary',
-        bottom: theme.spacing(3),
-        right: theme.spacing(3),
+        background: '#336699',
+        right: theme.spacing(1),
+        bottom: theme.spacing(1),
       },
     },
     extendedIcon: {

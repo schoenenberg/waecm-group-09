@@ -9,14 +9,16 @@ import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing(1),
+    padding: theme.spacing(0.5),
     overflow: 'hidden',
     justifyContent: "center",
-    alignItems: "center",    
+    alignItems: "center", 
+    display: 'block'   
   },
   wrappingPaper: {
     maxWidth: 500,
     backgroundColor: '#80d8ff',
+    padding: theme.spacing(0.5),
   },
   paper: {
     padding: theme.spacing(0),
