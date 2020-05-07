@@ -2,7 +2,7 @@ import React, {
   FC,
   MouseEventHandler,
   ReactNode, useEffect,
-  /* useCallback,*/ useState,
+  useState,
 } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     margin: theme.spacing(0),
-  },
-  toolBar: {
-    padding: theme.spacing(0),
   },
   toolBar: {
     padding: theme.spacing(0),

@@ -9,8 +9,8 @@ import { IconButton } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: theme.palette.secondary.main,
-    width: theme.spacing(5),
-    height: theme.spacing(5),
+    width: theme.spacing(4),
+    height: theme.spacing(4),
   },
 }));
 
