@@ -7,7 +7,7 @@ type AlertProps = {
   children: string;
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   alert: {
     marginBottom: theme.spacing(3),
   },
@@ -16,8 +16,12 @@ const useStyles = makeStyles((theme) => ({
 export const Alert: FC<AlertProps> = ({ title, children }) => {
   const styles = useStyles();
   return (
-    <MaterialAlert severity="error" className={styles.alert}>
-      <AlertTitle> {title} </AlertTitle>
+    <MaterialAlert
+      data-testid={'alert-container'}
+      severity="error"
+      className={styles.alert}
+    >
+      <AlertTitle data-testid={'alert-title'}> {title} </AlertTitle>
       {children}
     </MaterialAlert>
   );
