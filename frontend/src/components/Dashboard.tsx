@@ -5,7 +5,7 @@ import Link from '@material-ui/core/Link';
 
 import { DashboardElement } from './DashboardElement';
 import { AddComponent } from './AddComponent';
-import { Alert } from './Alert';
+import { AlertWithTitle } from './AlertWithTitle';
 
 import {
   GET_ALL_SUBREDDITS,
@@ -13,7 +13,7 @@ import {
 } from '../gql/allSubredditsQuery';
 import { useQuery } from '@apollo/react-hooks';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     marginTop: theme.spacing(19),
@@ -67,12 +67,12 @@ export const Dashboard: FC<DashboardProps> = ({
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
-        <Alert title={'Error'}>Unauthorized</Alert>
+        <AlertWithTitle title={'Error'}>Unauthorized</AlertWithTitle>
       ) : (
         data &&
         !showAddComponent && (
           <div>
-            {data.allSubreddits.map((elem) => (
+            {data.allSubreddits.map(elem => (
               <DashboardElement
                 name={elem.name}
                 description={elem.description}

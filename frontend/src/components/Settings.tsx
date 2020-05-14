@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import { AddComponent } from './AddComponent';
 import { Subreddit } from './Subreddit';
-import { Alert } from './Alert';
+import { AlertWithTitle } from './AlertWithTitle';
 import {
   GET_ALL_SUBREDDITS,
   AllSubredditsData,
@@ -95,13 +95,13 @@ export const Settings: FC<SettingsPrompts> = ({
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
-        <Alert title={'Error'}>Unauthorized</Alert>
+        <AlertWithTitle title={'Error'}>Unauthorized</AlertWithTitle>
       ) : (
         data &&
         !showAddComponent &&
         showRedditList && (
           <div>
-            {data.allSubreddits.map((elem) => (
+            {data.allSubreddits.map(elem => (
               <Subreddit
                 reddit={elem.name}
                 date={elem.createdOn}
