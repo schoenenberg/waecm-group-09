@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/react-hooks';
 import Avatar from '@material-ui/core/Avatar';
 import React from 'react';
-import { Alert } from './Alert';
+import { AlertWithTitle } from './AlertWithTitle';
 import { CurrentUserData, GET_CURRENT_USER } from '../gql/currentUserQuery';
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
@@ -24,7 +24,7 @@ export const UserInformation = () => {
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
-        <Alert title={'Error'}>Unauthorized</Alert>
+        <AlertWithTitle title={'Error'}>Unauthorized</AlertWithTitle>
       ) : (
         <div>
           {data && (
