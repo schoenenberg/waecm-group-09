@@ -1,6 +1,6 @@
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Alert } from './Alert';
+import { AlertWithTitle } from './AlertWithTitle';
 import { PrimaryButton } from './PrimaryButton';
 import React, { MouseEventHandler, FC } from 'react';
 import { useQuery } from '@apollo/react-hooks';
@@ -15,7 +15,7 @@ type LoginProps = {
   isProfileDetailPage: boolean;
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   login: {
     marginTop: theme.spacing(15),
     display: 'flex',
@@ -72,7 +72,9 @@ export const Login: FC<LoginProps> = ({
       <CssBaseline />
       <div className={materialClass}>
         {accessDenied && (
-          <Alert title={'Error'}>Unfortunately the access was denied!</Alert>
+          <AlertWithTitle title={'Error'}>
+            Unfortunately the access was denied!
+          </AlertWithTitle>
         )}
         <PrimaryButton
           onClickHandler={onClick}
