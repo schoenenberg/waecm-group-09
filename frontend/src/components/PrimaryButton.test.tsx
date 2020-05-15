@@ -41,8 +41,8 @@ it('renders disabled state correctly', () => {
 });
 
 
-it('executes click handler on click', () => {
-  let title = "title";
+it('executes click handler on button click', () => {
+  const title = "title";
   const handleClick = jest.fn();
 
   const { getByTestId } = render(
@@ -53,5 +53,5 @@ it('executes click handler on click', () => {
 
   fireEvent.click(getByTestId('primary-button'));
 
-  expect(getByTestId('primary-button')).toHaveBeenCalled();
+  expect(handleClick).toHaveBeenCalled();
 });
