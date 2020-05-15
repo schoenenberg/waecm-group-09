@@ -35,6 +35,7 @@ export const PrimaryButton: FC<PrimaryButtonProps> = ({
       className={styles.button}
       onClick={onClickHandler}
       disabled={disabled}
+      data-testid={'primary-button'}
     >
       {children}
     </Button>
