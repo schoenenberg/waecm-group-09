@@ -12,6 +12,8 @@ import { Login } from './components/Login';
 import Divider from '@material-ui/core/Divider';
 import { MenuAppBar } from './components/Navigation';
 
+import './web-components/banner'
+
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
   const listenToPopstate = () => {
@@ -126,8 +128,11 @@ const App = () => {
     window.location.replace('http://localhost:3000');
   }, []);
 
+
   return (
     <ApolloProvider client={client}>
+      {/* <script src="./custom_elements/custom_banner.js"></script> */}
+      
       <Container component="main" className={classes.container}>
         <header>
           {isLoggedIn && <MenuAppBar onLogout={logout} />}
@@ -149,6 +154,7 @@ const App = () => {
           />
         )}
       </Container>
+      <custom-banner></custom-banner>
     </ApolloProvider>
   );
 };
