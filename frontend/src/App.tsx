@@ -32,10 +32,8 @@ const App = () => {
 
   // check if user is already logged in
   const getIsLoggedIn = () => {
-    if (window.sessionStorage.getItem('currentToken') == null) {
-      return false;
-    }
-    return true;
+    return window.sessionStorage.getItem('currentToken') != null;
+
   };
   const initialValue = getIsLoggedIn();
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
@@ -149,6 +147,11 @@ const App = () => {
           />
         )}
       </Container>
+      <custom-banner
+        application-name={"waecm-project"}
+        policy-link={"TODO: link"}
+        on-accept={() => {}}
+      />
     </ApolloProvider>
   );
 };
