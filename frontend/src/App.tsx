@@ -41,6 +41,7 @@ const App = () => {
   const [oldToken, setOldToken] = useState('');
   const [isProfileDetailPage, setIsProfileDetailPage] = useState(false);
   const [accessDenied, setAccessDenied] = useState(false);
+  const [interactionAllowed, setInteractionAllowed] = useState(classes.noInteraction);
   const [client, setClient] = useState(
     new ApolloClient({
       link: new HttpLink({
@@ -126,6 +127,7 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
+      <div className = {interactionAllowed} >
       <Container component="main" className={classes.container}>
         <header>
           {isLoggedIn && <MenuAppBar onLogout={logout} />}
@@ -147,10 +149,11 @@ const App = () => {
           />
         )}
       </Container>
+      </div>
       <custom-banner
         application-name={"waecm-project"}
         policy-link={"TODO: link"}
-        on-accept={() => {}}
+        on-accept={() => {setInteractionAllowed(classes.withInteraction)}}
       />
     </ApolloProvider>
   );

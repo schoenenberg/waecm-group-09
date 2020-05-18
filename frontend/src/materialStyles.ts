@@ -9,6 +9,16 @@ export const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
     headerMode: 'screen',
   },
+
+  noInteraction:{
+    pointerEvents: 'none',
+    pointerEnabled: false
+  },
+
+  withInteraction:{
+    pointerEnabled: true
+  },
+
   fonts: {
     ...theme.typography.h4,
     paddingTop: theme.spacing(5),
