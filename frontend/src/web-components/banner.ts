@@ -14,7 +14,7 @@ export const customBanner = () => {
     </style>
   
     <div class="container">
-      <p> Um Ihnen den bestmöglichen Service zu gewähleisten speichert WAECM personenbezogene Daten.
+      <p> Um Ihnen den bestmöglichen Service zu gewährleisten speichert WAECM personenbezogene Daten.
        Wenn Sie auf der Seite weitersurfen stimmen Sie  bitte dem Link zu.</p>
     </div>
 `;
