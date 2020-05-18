@@ -35,8 +35,7 @@ class Banner extends HTMLElement {
  
         this.$button.addEventListener('click', () => {
             alert(this.accept);
-        });
-    
+        });  
       }
      
       //set and get application name
@@ -64,6 +63,10 @@ class Banner extends HTMLElement {
 
       set accept(event){
           this.setAttribute('on-accept', event);
+      }
+     
+      static get observedAttributes() {
+        return ['application-name', 'privacy-link', 'on-accept'];
       }
      
       attributeChangedCallback(name, oldVal, newVal) {
