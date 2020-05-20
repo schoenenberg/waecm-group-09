@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, createRef } from 'react';
 import './App.css';
 import Container from '@material-ui/core/Container';
 import { uuid } from 'uuidv4';
@@ -12,7 +12,7 @@ import { Login } from './components/Login';
 import Divider from '@material-ui/core/Divider';
 import { MenuAppBar } from './components/Navigation';
 
-import 'custom-banner-web-element';
+import 'custom-banner-web-element'
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -30,22 +30,21 @@ const useReactPath = () => {
 };
 
 const App = () => {
-
   const classes = useStyles();
+
+  const footerRef = createRef(); 
 
   // check if user is already logged in
   const getIsLoggedIn = () => {
     return window.sessionStorage.getItem('currentToken') != null;
 
   };
-
   const initialValue = getIsLoggedIn();
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
   const [token_id, setTokenId] = useState('');
   const [oldToken, setOldToken] = useState('');
   const [isProfileDetailPage, setIsProfileDetailPage] = useState(false);
   const [accessDenied, setAccessDenied] = useState(false);
-  const [interaction] = useState(classes.noInteraction);
   const [client, setClient] = useState(
     new ApolloClient({
       link: new HttpLink({
@@ -62,7 +61,11 @@ const App = () => {
   const href = useReactPath();
 
   useEffect(() => {
-    //Local Storge  
+    const el: any = footerRef.current;
+    el.addEventListener('on-accept', () => {
+      // callback function for whatever you want to do after accept is clicked
+      console.log("test");
+     });
 
     if (window.sessionStorage.getItem('currentToken') != null) {
       setIsLoggedIn(true);
@@ -133,7 +136,6 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <div className = {interaction}>
       <Container component="main" className={classes.container}>
         <header>
           {isLoggedIn && <MenuAppBar onLogout={logout} />}
@@ -155,13 +157,11 @@ const App = () => {
           />
         )}
       </Container>
-      </div>
- 
-      <custom-banner-js 
-        application-name="WAECM" 
-        policy-link="Link"
-        on-accept="tst">
-      </custom-banner-js>
+      <custom-banner
+        ref={footerRef} 
+        application-name="WAECM"
+        policy-link="Link">
+      </custom-banner>
     </ApolloProvider>
   );
 };
