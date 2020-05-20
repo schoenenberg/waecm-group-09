@@ -11,7 +11,7 @@ import { useStyles } from './materialStyles';
 import { Login } from './components/Login';
 import Divider from '@material-ui/core/Divider';
 import { MenuAppBar } from './components/Navigation';
-
+import './web-components/banner_js'
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
   const listenToPopstate = () => {
@@ -147,11 +147,11 @@ const App = () => {
           />
         )}
       </Container>
-      <custom-banner
-        application-name={"waecm-project"}
-        policy-link={"TODO: link"}
-        on-accept={() => {}}
-      />
+      <custom-banner-js
+        application-name="WAECM"
+        policy-link="Link"
+        on-accept={"Datenschutz-Richtlinie akzeptieret!"}>
+      </custom-banner-js>
     </ApolloProvider>
   );
 };
