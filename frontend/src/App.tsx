@@ -32,7 +32,7 @@ const useReactPath = () => {
 const App = () => {
   const classes = useStyles();
 
-  const footerRef = createRef(); 
+  const ref = createRef(); 
 
   // check if user is already logged in
   const getIsLoggedIn = () => {
@@ -40,6 +40,7 @@ const App = () => {
 
   };
   const initialValue = getIsLoggedIn();
+  const [interactionAllowed, setInteractionAllowed] = useState(classes.noInteraction);
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
   const [token_id, setTokenId] = useState('');
   const [oldToken, setOldToken] = useState('');
@@ -61,10 +62,13 @@ const App = () => {
   const href = useReactPath();
 
   useEffect(() => {
-    const el: any = footerRef.current;
+
+    //add functionality to 
+    const el: any = ref.current;
     el.addEventListener('on-accept', () => {
       // callback function for whatever you want to do after accept is clicked
       console.log("test");
+      setInteractionAllowed(classes.withInteraction)
      });
 
     if (window.sessionStorage.getItem('currentToken') != null) {
@@ -136,6 +140,7 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
+      <div className = {interactionAllowed} >
       <Container component="main" className={classes.container}>
         <header>
           {isLoggedIn && <MenuAppBar onLogout={logout} />}
@@ -157,8 +162,9 @@ const App = () => {
           />
         )}
       </Container>
+      </div>
       <custom-banner
-        ref={footerRef} 
+        ref={ref} 
         application-name="WAECM"
         policy-link="Link">
       </custom-banner>
