@@ -12,8 +12,7 @@ import { Login } from './components/Login';
 import Divider from '@material-ui/core/Divider';
 import { MenuAppBar } from './components/Navigation';
 
-//import './web-components/banner_js'; 
-//import 'custom-banner-web-element';
+import 'custom-banner-web-element';
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -158,10 +157,11 @@ const App = () => {
       </Container>
       </div>
  
-      {/* <custom-banner-js 
+      <custom-banner-js 
         application-name="WAECM" 
-        policy-link="Link">
-      </custom-banner-js> */}
+        policy-link="Link"
+        on-accept="tst">
+      </custom-banner-js>
     </ApolloProvider>
   );
 };
