@@ -22,7 +22,8 @@ template.innerHTML = `
   </div>
 `;
  
-class Banner extends HTMLElement {
+export class Banner extends HTMLElement {
+ 
     constructor() {
         super();
      
@@ -35,8 +36,10 @@ class Banner extends HTMLElement {
  
         this.$button.addEventListener('click', () => {
             alert(this.accept);
+            
+            //Local Storage 
         });  
-      }
+    }
      
       //set and get application name
       get application(){
@@ -63,6 +66,20 @@ class Banner extends HTMLElement {
 
       set accept(event){
           this.setAttribute('on-accept', event);
+      }
+
+
+      //disable banner
+      get disabled() {
+        return this.hasAttribute('disabled');
+      }
+      
+      set disabled(val) {
+        if(val) {
+          this.setAttribute('disabled', val);
+        } else {
+          this.removeAttribute('disabled');
+        }
       }
      
       static get observedAttributes() {

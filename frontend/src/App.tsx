@@ -11,9 +11,9 @@ import { useStyles } from './materialStyles';
 import { Login } from './components/Login';
 import Divider from '@material-ui/core/Divider';
 import { MenuAppBar } from './components/Navigation';
-// import Alert from '@material-ui/lab/Alert';
 
-import './web-components/banner_js'
+//import './web-components/banner_js'; 
+//import 'custom-banner-web-element';
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -31,6 +31,7 @@ const useReactPath = () => {
 };
 
 const App = () => {
+
   const classes = useStyles();
 
   // check if user is already logged in
@@ -38,7 +39,7 @@ const App = () => {
     return window.sessionStorage.getItem('currentToken') != null;
 
   };
-  // const [accepted, setAccepted] = useState(false);
+
   const initialValue = getIsLoggedIn();
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
   const [token_id, setTokenId] = useState('');
@@ -62,6 +63,8 @@ const App = () => {
   const href = useReactPath();
 
   useEffect(() => {
+    //Local Storge  
+
     if (window.sessionStorage.getItem('currentToken') != null) {
       setIsLoggedIn(true);
     }
@@ -155,20 +158,10 @@ const App = () => {
       </Container>
       </div>
  
-      <custom-banner-js 
+      {/* <custom-banner-js 
         application-name="WAECM" 
-        policy-link="Link"
-        on-accept={"Datenschutz-Richtlinie akzeptieret!"}>
-      </custom-banner-js>
-      
-      {/* {accepted && (
-          <Alert severity="success">Datenschutzrichtline akzeptiert!</Alert>
-        )} */}
-      {/* <custom-banner 
-         application-name={"waecm-project"}
-         policy-link={"TODO: link"}
-         on-accept={() => {}}
-      /> */}
+        policy-link="Link">
+      </custom-banner-js> */}
     </ApolloProvider>
   );
 };
