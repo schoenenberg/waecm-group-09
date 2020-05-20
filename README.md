@@ -152,3 +152,30 @@ Return Type:  `SubredditModel`
 Arguments:  `_id: String`
 
 Return Type:  `SubredditModel`
+
+
+
+------
+
+------
+
+
+
+## Aufgabe 3 - Beschreibung der Lösungen
+
+### Continous Integration
+
+
+
+### Komponenten-Tests
+
+Wir haben für die Komponenten `AlertWithTitle` und `PrimaryButton` Tests geschrieben, da diese nicht von externen State abhängig sind und - wie in der Aufgabenstellung beschrieben - sehr einfach aufgebaut sind. Zum Testen haben wir die `react-testing-library` verwendet, da es durch diese Library vereinfacht wird, Tests zu schreiben, welche nicht von einzelnen Implementierungsdetails abhängen, sondern rein die Funktionalität testen.
+
+### Custom Element
+
+Da es mit TypeScript an dieser Stelle ein paar Schwierigkeiten gab, entschieden wir uns das Custom Element als JavaScript File einzubinden. Damit dieses vorhanden ist, bevor React gestartet wird, wurde das Element in `index.tsx` noch vor rendern der App eingebunden. 
+
+Beim Durchsuchen von GitHub Repos sind wir auf [LitElement](https://github.com/Polymer/lit-element) gestoßen, was das Erstellen von Web Components vereinfachen soll. Wir haben kurz überlegt auf diese Technologie zu wechseln, da wir aber schon fast fertig waren, blieben wir bei der Standard JavaScript API Implementierung von Custom Elements.
+
+Da später noch ein Update zu dieser Aufgabe ins Forum geschrieben wurde, haben wir das Element in ein externes Repo ausgelagert, auf npm gepublished und so eingebunden.
+
