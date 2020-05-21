@@ -19,7 +19,6 @@ type GuidelineProps = {
   setGuidelineAccepted: (newValue: boolean) => void;
 };
 
-
 export const Guidelines: FC<GuidelineProps> = (
   {
     guidelineAccepted,

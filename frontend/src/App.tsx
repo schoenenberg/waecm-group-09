@@ -33,13 +33,24 @@ const useReactPath = () => {
 const App = () => {
   const classes = useStyles();
 
-  const ref = createRef(); 
+  const ref = createRef();
 
   // check if user is already logged in
   const getIsLoggedIn = () => {
     return window.sessionStorage.getItem('currentToken') != null;
 
   };
+
+  /*const getGuidelineAccepted = () => {
+    const guidelineAcceptedStorageValue = window.sessionStorage.getItem('guidelineAccepted');
+    if (guidelineAcceptedStorageValue != null) {
+      return guidelineAcceptedStorageValue === "true";
+    } else {
+      return false;
+    }
+  };*/
+
+  const [guidelineAccepted, setGuidelineAccepted] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
   const [policyAcceptedMessage, setPolicyAcceptedMessage] = useState(false);
   const initialValue = getIsLoggedIn();
@@ -64,16 +75,38 @@ const App = () => {
 
   const href = useReactPath();
 
+  /*const getGuidelineState = (() => {
+    const guidelineAcceptedStorageValue = window.sessionStorage.getItem('guidelineAccepted');
+    if (guidelineAcceptedStorageValue != null) {
+      return guidelineAcceptedStorageValue === "true";
+    } else {
+      return false;
+    }
+  });*/
+
   useEffect(() => {
 
     //add functionality to 
     const el: any = ref.current;
     el.addEventListener('on-accept', () => {
       // callback function for whatever you want to do after accept is clicked
-      setPolicyAcceptedMessage(true);
-      setInteractionAllowed(classes.withInteraction)
-      setBannerVisible(false); 
+      setInteractionAllowed(classes.withInteraction);
+      handleGuidelineAccepted(true);
+      setBannerVisible(false);
      });
+
+    const guidelineAcceptedStorageValue = window.sessionStorage.getItem('guidelineAccepted');
+    if (guidelineAcceptedStorageValue != null) {
+      if (guidelineAcceptedStorageValue === "true") {
+        setGuidelineAccepted(true);
+        setInteractionAllowed(classes.withInteraction);
+        setBannerVisible(false);
+      } else {
+        setGuidelineAccepted(false);
+      }
+    } else {
+      setGuidelineAccepted(false);
+    }
 
     if (window.sessionStorage.getItem('currentToken') != null) {
       setIsLoggedIn(true);
@@ -125,6 +158,17 @@ const App = () => {
     );
   };
 
+  const handleGuidelineAccepted = useCallback((newState: boolean) => {
+      if (newState) {
+        setGuidelineAccepted(true);
+        setBannerVisible(false);
+        window.sessionStorage.setItem("guidelineAccepted", "true");
+      } else {
+        setGuidelineAccepted(false);
+        window.sessionStorage.setItem("guidelineAccepted", "false");
+      }
+    } ,[])
+
   const login = useCallback(() => {
     setPolicyAcceptedMessage(false);
     window.location.replace(auth_url());
@@ -148,7 +192,7 @@ const App = () => {
       <Container component="main" className={classes.container}>
       <div className = {interactionAllowed} >
         <header>
-          {isLoggedIn && <MenuAppBar onLogout={logout} guidelineAccepted={!bannerVisible} setGuidelineAccepted={setBannerVisible}/>}
+          {isLoggedIn && <MenuAppBar onLogout={logout} guidelineAccepted={guidelineAccepted} setGuidelineAccepted={handleGuidelineAccepted}/>}
           {!isLoggedIn && (
             <div>
               <h1 className={classes.fonts}>WAECM Project</h1>
@@ -167,17 +211,14 @@ const App = () => {
           />
         )}
         </div>
-        { policyAcceptedMessage &&
-          <Alert severity="success" className = {classes.policyAccepted}>Datenschutz-Richtlinie zugestimmt</Alert>
-        }
-        { bannerVisible &&
+        { bannerVisible && !guidelineAccepted &&
         <custom-banner class={classes.banner}
-          ref={ref} 
+          ref={ref}
           application-name="WAECM"
           policy-link="Link">
         </custom-banner>}
       </Container>
-      
+
     </ApolloProvider>
   );
 };
