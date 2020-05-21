@@ -11,8 +11,11 @@ import { useStyles } from './materialStyles';
 import { Login } from './components/Login';
 import Divider from '@material-ui/core/Divider';
 import { MenuAppBar } from './components/Navigation';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Guidelines } from './components/Guidelines';
+import Button from '@material-ui/core/Button';
 
-import 'custom-banner-web-element'
+import 'custom-banner-web-element';
 import { Alert } from '@material-ui/lab';
 
 const useReactPath = () => {
@@ -33,17 +36,20 @@ const useReactPath = () => {
 const App = () => {
   const classes = useStyles();
 
-  const ref = createRef(); 
+  const ref = createRef();
 
   // check if user is already logged in
   const getIsLoggedIn = () => {
     return window.sessionStorage.getItem('currentToken') != null;
-
   };
+
+  const [guidelineAccepted, setGuidelineAccepted] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
   const [policyAcceptedMessage, setPolicyAcceptedMessage] = useState(false);
   const initialValue = getIsLoggedIn();
-  const [interactionAllowed, setInteractionAllowed] = useState(classes.noInteraction);
+  const [interactionAllowed, setInteractionAllowed] = useState(
+    classes.noInteraction,
+  );
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
   const [token_id, setTokenId] = useState('');
   const [oldToken, setOldToken] = useState('');
@@ -64,16 +70,53 @@ const App = () => {
 
   const href = useReactPath();
 
-  useEffect(() => {
+  /*const getGuidelineState = (() => {
+    const guidelineAcceptedStorageValue = window.sessionStorage.getItem('guidelineAccepted');
+    if (guidelineAcceptedStorageValue != null) {
+      return guidelineAcceptedStorageValue === "true";
+    } else {
+      return false;
+    }
+  });*/
 
-    //add functionality to 
-    const el: any = ref.current;
-    el.addEventListener('on-accept', () => {
-      // callback function for whatever you want to do after accept is clicked
-      setPolicyAcceptedMessage(true);
-      setInteractionAllowed(classes.withInteraction)
-      setBannerVisible(false); 
-     });
+  const handleGuidelineAccepted = useCallback((newState: boolean) => {
+    if (newState) {
+      setGuidelineAccepted(true);
+      setBannerVisible(false);
+      window.sessionStorage.setItem('guidelineAccepted', 'true');
+    } else {
+      setGuidelineAccepted(false);
+      window.sessionStorage.setItem('guidelineAccepted', 'false');
+    }
+  }, []);
+
+  useEffect(() => {
+    //add functionality to
+    if (bannerVisible) {
+      const el: any = ref.current;
+      el.addEventListener('on-accept', () => {
+        // callback function for whatever you want to do after accept is clicked
+        setPolicyAcceptedMessage(true);
+        setInteractionAllowed(classes.withInteraction);
+        handleGuidelineAccepted(true);
+        setBannerVisible(false);
+      });
+    }
+
+    const guidelineAcceptedStorageValue = window.sessionStorage.getItem(
+      'guidelineAccepted',
+    );
+    if (guidelineAcceptedStorageValue != null) {
+      if (guidelineAcceptedStorageValue === 'true') {
+        setGuidelineAccepted(true);
+        setInteractionAllowed(classes.withInteraction);
+        setBannerVisible(false);
+      } else {
+        setGuidelineAccepted(false);
+      }
+    } else {
+      setGuidelineAccepted(false);
+    }
 
     if (window.sessionStorage.getItem('currentToken') != null) {
       setIsLoggedIn(true);
@@ -110,6 +153,10 @@ const App = () => {
     client,
     oldToken,
     isLoggedIn,
+    bannerVisible,
+    ref,
+    classes.withInteraction,
+    handleGuidelineAccepted,
   ]);
 
   const auth_url = (): string => {
@@ -145,39 +192,90 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <Container component="main" className={classes.container}>
-      <div className = {interactionAllowed} >
-        <header>
-          {isLoggedIn && <MenuAppBar onLogout={logout} />}
-          {!isLoggedIn && (
-            <div>
-              <h1 className={classes.fonts}>WAECM Project</h1>
-              <h1 className={classes.names}>Max, Sigrid, Alicia, Elli</h1>
-              <Divider variant="middle" />
-            </div>
-          )}
-        </header>
-        {!isLoggedIn && (
-          <Login
-            accessDenied={accessDenied}
-            onLogin={login}
-            onLogout={logout}
-            onRedirectStartpage={redirectStartPage}
-            isProfileDetailPage={isProfileDetailPage}
-          />
-        )}
-        </div>
-        { policyAcceptedMessage &&
-          <Alert severity="success" className = {classes.policyAccepted}>Datenschutz-Richtlinie zugestimmt</Alert>
-        }
-        { bannerVisible &&
-        <custom-banner class={classes.banner}
-          ref={ref} 
-          application-name="WAECM"
-          policy-link="Link">
-        </custom-banner>}
-      </Container>
-      
+      <Router>
+        <Switch>
+          <Route path={'/policy'}>
+            <Container component="main" className={classes.container}>
+              <div className={classes.flexCentering}>
+                <header>
+                  <div>
+                    <h1 className={classes.fonts}>Datenschutz-Richtlinien</h1>
+                    <Divider variant="middle" />
+                  </div>
+                </header>
+                <Guidelines
+                  guidelineAccepted={guidelineAccepted}
+                  setGuidelineAccepted={handleGuidelineAccepted}
+                />
+                <Link to="/">
+                  <Button
+                    variant="contained"
+                    className={classes.backButton}
+                    onClick={() => {}}
+                  >
+                    {'Back'}
+                  </Button>
+                </Link>
+              </div>
+
+              {bannerVisible && !guidelineAccepted && (
+                <custom-banner
+                  class={classes.banner}
+                  ref={ref}
+                  application-name="WAECM"
+                  policy-link="policy"
+                />
+              )}
+            </Container>
+          </Route>
+          <Route path={'/'}>
+            <Container component="main" className={classes.container}>
+              <div className={interactionAllowed}>
+                <header>
+                  {isLoggedIn && (
+                    <MenuAppBar
+                      onLogout={logout}
+                      guidelineAccepted={guidelineAccepted}
+                      setGuidelineAccepted={handleGuidelineAccepted}
+                    />
+                  )}
+                  {!isLoggedIn && (
+                    <div>
+                      <h1 className={classes.fonts}>WAECM Project</h1>
+                      <h1 className={classes.names}>
+                        Max, Sigrid, Alicia, Elli
+                      </h1>
+                      <Divider variant="middle" />
+                    </div>
+                  )}
+                </header>
+                {!isLoggedIn && (
+                  <Login
+                    accessDenied={accessDenied}
+                    onLogin={login}
+                    onLogout={logout}
+                    onRedirectStartpage={redirectStartPage}
+                    isProfileDetailPage={isProfileDetailPage}
+                  />
+                )}
+              </div>
+              {policyAcceptedMessage && (
+                <Alert severity="success" className={classes.policyAccepted}>
+                  Datenschutz-Richtlinie zugestimmt
+                </Alert>
+              )}
+              {bannerVisible && !guidelineAccepted && (
+                <custom-banner
+                  class={classes.banner}
+                  ref={ref}
+                  application-name="WAECM"
+                  policy-link="policy"
+                />
+              )}
+            </Container>
+          </Route>
+        </Switch>
+      </Router>
     </ApolloProvider>
   );
 };
