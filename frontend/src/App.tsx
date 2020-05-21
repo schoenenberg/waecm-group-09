@@ -39,6 +39,7 @@ const App = () => {
     return window.sessionStorage.getItem('currentToken') != null;
 
   };
+  const [bannerVisible, setBannerVisible] = useState(true);
   const initialValue = getIsLoggedIn();
   const [interactionAllowed, setInteractionAllowed] = useState(classes.noInteraction);
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
@@ -67,8 +68,8 @@ const App = () => {
     const el: any = ref.current;
     el.addEventListener('on-accept', () => {
       // callback function for whatever you want to do after accept is clicked
-      console.log("test");
       setInteractionAllowed(classes.withInteraction)
+      setBannerVisible(false); 
      });
 
     if (window.sessionStorage.getItem('currentToken') != null) {
@@ -163,11 +164,12 @@ const App = () => {
         )}
       </Container>
       </div>
+      { bannerVisible &&
       <custom-banner
         ref={ref} 
         application-name="WAECM"
         policy-link="Link">
-      </custom-banner>
+      </custom-banner>}
     </ApolloProvider>
   );
 };
