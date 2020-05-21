@@ -14,6 +14,11 @@ export const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(1),
   },
 
+  policyAccepted: {
+    position: 'absolute',
+    bottom: theme.spacing(1),
+  },
+
   noInteraction:{
     pointerEnabled: false,
     pointerEvents: 'none'
