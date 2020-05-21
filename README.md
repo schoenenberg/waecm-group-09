@@ -45,6 +45,11 @@ Das Frontend wird ebenfalls mit einem Multi-Stage-Build kompiliert und in ein `n
 
 Für die Continuous Integration wird in diesem Projekt *Github Actions* verwendet. Diese kompilieren automatisiert jeden Git-Push (sollten mehrere Commits auf einmal gepushed werden, wird nur der letzte gebaut). Diese kompiliert das Frontend und das Backend mithilfe von Docker und pushed daraufhin die gebauten Docker-Images auf die *Github Packages - Docker*-Registry.
 
+Die gebauten Docker-Images können wie im Bild gezeigt, gefunden werden:
+![Hier sollte ein Bild zu sehen sein!](https://raw.githubusercontent.com/schoenenberg/waecm-group-09/readme-update/Screenshot%202020-05-21%20at%2014.17.54.png?token=ACEV2AX4TOH2PTMZD4ENEUK6Z6WYE)
+
+Sollte es zu einem Fehler während eines Builds kommen, wird der Committer per E-Mail benachrichtigt.
+
 ## Konfiguration
 Die Konfiguration des Backends wird über Environment-Variablen, die in der *Docker-Compose*-Datei eingetragen werden konfiguriert:
 
