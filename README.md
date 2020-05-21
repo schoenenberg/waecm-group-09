@@ -1,6 +1,8 @@
 # Web Application Engineering & Content Management
-- Master: ![master](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=master) 
-- Develop: ![develop](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=develop)
+| Branch  | CI-Status |
+| ------- | --------- |
+| Master  | ![master](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=master) |
+| Develop | ![develop](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=develop) |
 
 ## Gruppenteilnehmer
 | Name                   | Matrikelnummer |
@@ -58,9 +60,9 @@ Sollte es zu einem Fehler während eines Builds kommen, wird der Committer per E
 ### Manuelles Triggern eines Builds
 Das manuelle Triggern der *Github Actions* ist noch ein [Feature Request](https://github.community/t5/GitHub-Actions/GitHub-Actions-Manual-Trigger-Approvals/td-p/31504) und aktuell noch nicht möglich, jedoch kann ein bereits durchgeführter Commit, erneut durchgeführt werden:
 
-1. Klicke auf *Actions* im oberen Reiter.
+1. Klicke auf **Actions** im oberen Reiter.
 2. Wähle einen Build aus.
-3. Klicke auf der linken Seitenleiste auf den Job *build*.
+3. Klicke auf der linken Seitenleiste auf den Workflow **build**.
 4. Klicke auf den Button **Re-run jobs**.
 
 
@@ -214,7 +216,7 @@ Das Element kann einfach über npm install als Dependecy hinzugefügt werden:
 Um es in einer React App zu nutzen 
 1. ein declarations.d.ts file erstellen: 
 
-```
+```typescript
 declare namespace JSX {
     interface IntrinsicElements {
         "custom-banner": any;
@@ -223,7 +225,7 @@ declare namespace JSX {
 ```
 
 2. in dem Komponenten: 
-```
+```typescript
 import 'custom-banner-web-element'
 
 ...
@@ -250,7 +252,7 @@ el.addEventListener('on-accept', () => {
 ```
 
 Um es in PlainJS zu nutzen, kann einfach das Banner.js file aus dem Repository in das HTML zu übernehmen und mit 
-```
+```typescript
 <custom-banner 
           ref={ref} 
           application-name="Name"
@@ -258,4 +260,3 @@ Um es in PlainJS zu nutzen, kann einfach das Banner.js file aus dem Repository i
 </custom-banner>
 ```
 einzubinden.
-
