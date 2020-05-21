@@ -38,17 +38,7 @@ const App = () => {
   // check if user is already logged in
   const getIsLoggedIn = () => {
     return window.sessionStorage.getItem('currentToken') != null;
-
   };
-
-  /*const getGuidelineAccepted = () => {
-    const guidelineAcceptedStorageValue = window.sessionStorage.getItem('guidelineAccepted');
-    if (guidelineAcceptedStorageValue != null) {
-      return guidelineAcceptedStorageValue === "true";
-    } else {
-      return false;
-    }
-  };*/
 
   const [guidelineAccepted, setGuidelineAccepted] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
@@ -86,14 +76,16 @@ const App = () => {
 
   useEffect(() => {
 
-    //add functionality to 
-    const el: any = ref.current;
-    el.addEventListener('on-accept', () => {
-      // callback function for whatever you want to do after accept is clicked
-      setInteractionAllowed(classes.withInteraction);
-      handleGuidelineAccepted(true);
-      setBannerVisible(false);
-     });
+    //add functionality to
+    if (bannerVisible) {
+      const el: any = ref.current;
+      el.addEventListener('on-accept', () => {
+        // callback function for whatever you want to do after accept is clicked
+        setInteractionAllowed(classes.withInteraction);
+        handleGuidelineAccepted(true);
+        setBannerVisible(false);
+      });
+    }
 
     const guidelineAcceptedStorageValue = window.sessionStorage.getItem('guidelineAccepted');
     if (guidelineAcceptedStorageValue != null) {
