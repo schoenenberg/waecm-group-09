@@ -1,0 +1,42 @@
+version: "3.7"
+services:
+  backend:
+    image: macxx/waecm-2020-group-09-bsp-3:backend
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+    networks:
+      - db_net
+    environment:
+      - REDDIT_USERNAME=unset
+      - REDDIT_PASSWORD=unset
+      - REDDIT_CLIENT_ID=unset
+      - REDDIT_CLIENT_SECRET=unset
+    depends_on:
+      - db
+
+  frontend:
+    image: macxx/waecm-2020-group-09-bsp-3:frontend
+    ports:
+      - target: 3000
+        published: 3000
+        protocol: tcp
+    depends_on:
+      - backend
+
+  db:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=waecm
+      - MONGO_INITDB_ROOT_PASSWORD=waecm20
+    networks:
+      - db_net
+    volumes:
+      - db-data:/data/db
+
+networks:
+  db_net:
+
+volumes:
+  db-data:
