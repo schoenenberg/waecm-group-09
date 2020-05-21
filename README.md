@@ -2,8 +2,6 @@
 - Master: ![master](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=master) 
 - Develop: ![develop](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=develop)
 
-[toc]
-
 ## Gruppenteilnehmer
 | Name                   | Matrikelnummer |
 | ---------------------- | -------------- |
