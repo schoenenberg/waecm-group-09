@@ -2,6 +2,8 @@
 - Master: ![master](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=master) 
 - Develop: ![develop](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=develop)
 
+[toc]
+
 ## Gruppenteilnehmer
 | Name                   | Matrikelnummer |
 | ---------------------- | -------------- |
@@ -195,10 +197,6 @@ Die Komponenten Tests sind hier zu finden:
 - `src/components/PrimaryButton.test.tsx`
 
 ## Aufgabe 3 - Beschreibung der Lösungen
-
-### Continous Integration
-
-
 
 ### Komponenten-Tests
 
