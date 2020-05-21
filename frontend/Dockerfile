@@ -8,9 +8,9 @@ WORKDIR /usr/src/waecm
 # Copy sources and build app
 COPY package.json package-lock.json tsconfig.json /usr/src/waecm/
 COPY public/ /usr/src/waecm/public/
-RUN npm ci
+RUN CI=true npm ci
 COPY src/ /usr/src/waecm/src/
-RUN npm run build
+RUN CI=true npm cit
 
 # ========= RUN =========
 # Using nginx as serving image
