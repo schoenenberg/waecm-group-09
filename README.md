@@ -3,7 +3,12 @@
 - Develop: ![develop](https://github.com/schoenenberg/waecm-group-09/workflows/CI/badge.svg?branch=develop)
 
 ## Gruppenteilnehmer
-Maximilian Schönenberg 11931241, Sigrid Huemer 51824175, Alicia Schwabenbauer 11925878, Elena Nuiding 11925876
+| Name                   | Matrikelnummer |
+| ---------------------- | -------------- |
+| Sigrid Huemer          | 51824175       |
+| Elena Nuiding          | 11925876       |
+| Maximilian Schönenberg | 11931241       |
+| Alicia Schwabenbauer   | 11925878       |
 
 ## Technologieauswahl
 
@@ -36,19 +41,23 @@ Das Backend nutzt `node:12.2-alpine` als Basis-Image, kompiliert dieses zu einem
 
 Das Frontend wird ebenfalls mit einem Multi-Stage-Build kompiliert und in ein `nginx:1.17.9`-Image installiert. Mit diesem Build werden ebenso die Ziele verfolgt die Kompilierungszeit (durch Layer-Chaching) möglichst gering zu halten, möglichst wenige Layer im Result-Image zu haben, sowie nicht den Quellcode, sondern nur die kompilierten und gebundelten Dateien im Result-Image zu installieren. 
 
+## Continuous Integration (CI)
+
+Für die Continuous Integration wird in diesem Projekt *Github Actions* verwendet. Diese kompilieren automatisiert jeden Git-Push (sollten mehrere Commits auf einmal gepushed werden, wird nur der letzte gebaut). Diese kompiliert das Frontend und das Backend mithilfe von Docker und pushed daraufhin die gebauten Docker-Images auf die *Github Packages - Docker*-Registry.
+
 ## Konfiguration
 Die Konfiguration des Backends wird über Environment-Variablen, die in der *Docker-Compose*-Datei eingetragen werden konfiguriert:
 
-| Variable | Required | Default-Value | Description |
-| -------- | -------- | ------------- | ----------- |
-| REDDIT_USERNAME | Yes | | The Reddit Username for the Bot. |
-| REDDIT_PASSWORD | Yes | | The Reddit Password for the Bot. |
-| REDDIT_CLIENT_ID | Yes | | The Reddit Client ID for the Bot. |
-| REDDIT_CLIENT_SECRET | Yes | | The Reddit Client-Secret for the Bot. |
-| COMMENT_LIMIT | No | 5 | Limits the Bot to how many comments per run should be read. |
-| SECONDS_UNTIL_UPDATE | No | 30 | Interval in Seconds for the Bot. |
-| EXTRA_KEYWORD | No | waecm-2020-group-09 | Adds an extra keyword to the filter for subreddit comments. |
-| ANSWERS_PER_RUN | No | 1 | Limits the number of answers of the Bot per run. |
+| Variable             | Required | Default-Value       | Description                                                 |
+| -------------------- | -------- | ------------------- | ----------------------------------------------------------- |
+| REDDIT_USERNAME      | Yes      |                     | The Reddit Username for the Bot.                            |
+| REDDIT_PASSWORD      | Yes      |                     | The Reddit Password for the Bot.                            |
+| REDDIT_CLIENT_ID     | Yes      |                     | The Reddit Client ID for the Bot.                           |
+| REDDIT_CLIENT_SECRET | Yes      |                     | The Reddit Client-Secret for the Bot.                       |
+| COMMENT_LIMIT        | No       | 5                   | Limits the Bot to how many comments per run should be read. |
+| SECONDS_UNTIL_UPDATE | No       | 30                  | Interval in Seconds for the Bot.                            |
+| EXTRA_KEYWORD        | No       | waecm-2020-group-09 | Adds an extra keyword to the filter for subreddit comments. |
+| ANSWERS_PER_RUN      | No       | 1                   | Limits the number of answers of the Bot per run.            |
 
 ## GraphQL Dokumentation
 
@@ -58,17 +67,17 @@ Die Dokumentation kann unter der Adresse [localhost:8080/graphql]() im Playgroun
 
 Der **Return Type** von jeder Query und Mutation (die Subreddits betrifft) ist `SubredditModel`:
 
-| Variable           | type     | Description                                                  |
-| ------------------ | -------- | ------------------------------------------------------------ |
-| _id                | String   | ID which is created by the MongoDB at creation               |
+| Variable           | type     | Description                                                                   |
+| ------------------ | -------- | ----------------------------------------------------------------------------- |
+| _id                | String   | ID which is created by the MongoDB at creation                                |
 | name               | String   | The name of the subreddit (e.g. reactjs, test). Has a length of 3-20 letters. |
 | keywords           | [String] | An array with different keywords with each 2-30 letters. The bot responds to comments with those keywords, if the comment also includes the string 'waecm-2020-group-09'. |
-| answer             | String   | The answer, the bot gives when commenting. Has 2-300 letters. |
-| active             | Boolean  | Switches the bot off and on                                  |
-| description        | String   | The short subtitle of the subreddit (is fetched from Reddit) |
-| icon               | String   | The icon of the subreddit (is fetched from Reddit)           |
-| answeredCommentIDs | [String] | Saves the IDs of the already answered comments on Reddit.    |
-| createdOn          | DateTime | Date, at which the bot was created.                          |
+| answer             | String   | The answer, the bot gives when commenting. Has 2-300 letters.                 |
+| active             | Boolean  | Switches the bot off and on                                                   |
+| description        | String   | The short subtitle of the subreddit (is fetched from Reddit)                  |
+| icon               | String   | The icon of the subreddit (is fetched from Reddit)                            |
+| answeredCommentIDs | [String] | Saves the IDs of the already answered comments on Reddit.                     |
+| createdOn          | DateTime | Date, at which the bot was created.                                           |
 
 _____________________________________________
 
@@ -115,12 +124,12 @@ Return Type:  `SubredditModel`
 
 Type in der Tabelle: *UpdateSubredditInput*
 
-| Variable | Type     | Description (ALL OPTIONAL)                                   |
-| -------- | -------- | ------------------------------------------------------------ |
+| Variable | Type     | Description (ALL OPTIONAL)                                                    |
+| -------- | -------- | ----------------------------------------------------------------------------- |
 | name     | String   | The name of the subreddit (e.g. reactjs, test). Has a length of 3-20 letters. |
 | keywords | [String] | An array with different keywords with each 2-30 letters. The bot responds to comments with those keywords, if the comment also includes the string 'waecm-2020-group-09'. |
-| answer   | String   | The answer, the bot gives when commenting. Has 2-300 letters. |
-| active   | Boolean  | Switches the bot off and on                                  |
+| answer   | String   | The answer, the bot gives when commenting. Has 2-300 letters.                 |
+| active   | Boolean  | Switches the bot off and on                                                   |
 
 Arguments: `_id: String`, `input: UpdateSubredditInput`
 
@@ -133,13 +142,13 @@ Return Type:  `SubredditModel`
 
 Type in der Tabelle: *NewSubredditInput*
 
-| Variable | Type    | Description (ALL REQUIRED)                                   |
-| -------- | -------- | ------------------------------------------------------------ |
-| name     | String   | The name of the subreddit (e.g. reactjs, test). Has a length of 3-20 letters. |
-| keywords | [String] | An array with different keywords with each 2-30 letters. The bot responds to comments with those keywords, if the comment also includes the string 'waecm-2020-group-09'. |
-| answer   | String   | The answer, the bot gives when commenting. Has 2-300 letters. |
-| active   | Boolean  | Switches the bot off and on                                  |
-| createdOn | DateTime | Date, at which the bot was created.                          |
+| Variable  | Type     | Description (ALL REQUIRED)                                                    |
+| --------- | -------- | ----------------------------------------------------------------------------- |
+| name      | String   | The name of the subreddit (e.g. reactjs, test). Has a length of 3-20 letters. |
+| keywords  | [String] | An array with different keywords with each 2-30 letters. The bot responds to comments with those keywords, if the comment also includes the string 'waecm-2020-group-09'. |
+| answer    | String   | The answer, the bot gives when commenting. Has 2-300 letters.                 |
+| active    | Boolean  | Switches the bot off and on                                                   |
+| createdOn | DateTime | Date, at which the bot was created.                                           |
 
 Arguments:  `input: NewSubredditInput`
 
