@@ -11,12 +11,11 @@ import { useStyles } from './materialStyles';
 import { Login } from './components/Login';
 import Divider from '@material-ui/core/Divider';
 import { MenuAppBar } from './components/Navigation';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { Guidelines } from './components/Guidelines';
-import Button from '@material-ui/core/Button';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import 'custom-banner-web-element';
 import { Alert } from '@material-ui/lab';
+import { Policy } from './pages/Policy';
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -36,7 +35,7 @@ const useReactPath = () => {
 const App = () => {
   const classes = useStyles();
 
-  const ref = createRef();
+  const bannerRef = createRef();
 
   // check if user is already logged in
   const getIsLoggedIn = () => {
@@ -93,7 +92,7 @@ const App = () => {
   useEffect(() => {
     //add functionality to
     if (bannerVisible) {
-      const el: any = ref.current;
+      const el: any = bannerRef.current;
       el.addEventListener('on-accept', () => {
         // callback function for whatever you want to do after accept is clicked
         setPolicyAcceptedMessage(true);
@@ -154,7 +153,7 @@ const App = () => {
     oldToken,
     isLoggedIn,
     bannerVisible,
-    ref,
+    bannerRef,
     classes.withInteraction,
     handleGuidelineAccepted,
   ]);
@@ -195,38 +194,10 @@ const App = () => {
       <Router>
         <Switch>
           <Route path={'/policy'}>
-            <Container component="main" className={classes.container}>
-              <div className={classes.flexCentering}>
-                <header>
-                  <div>
-                    <h1 className={classes.fonts}>Datenschutz-Richtlinien</h1>
-                    <Divider variant="middle" />
-                  </div>
-                </header>
-                <Guidelines
-                  guidelineAccepted={guidelineAccepted}
-                  setGuidelineAccepted={handleGuidelineAccepted}
-                />
-                <Link to="/">
-                  <Button
-                    variant="contained"
-                    className={classes.backButton}
-                    onClick={() => {}}
-                  >
-                    {'Back'}
-                  </Button>
-                </Link>
-              </div>
-
-              {bannerVisible && !guidelineAccepted && (
-                <custom-banner
-                  class={classes.banner}
-                  ref={ref}
-                  application-name="WAECM"
-                  policy-link="policy"
-                />
-              )}
-            </Container>
+            <Policy
+              guidelineAccepted={guidelineAccepted}
+              setGuidelineAccepted={handleGuidelineAccepted}
+            />
           </Route>
           <Route path={'/'}>
             <Container component="main" className={classes.container}>
@@ -259,23 +230,23 @@ const App = () => {
                   />
                 )}
               </div>
-              {policyAcceptedMessage && (
-                <Alert severity="success" className={classes.policyAccepted}>
-                  Datenschutz-Richtlinie zugestimmt
-                </Alert>
-              )}
-              {bannerVisible && !guidelineAccepted && (
-                <custom-banner
-                  class={classes.banner}
-                  ref={ref}
-                  application-name="WAECM"
-                  policy-link="policy"
-                />
-              )}
             </Container>
           </Route>
         </Switch>
       </Router>
+      {policyAcceptedMessage && (
+        <Alert severity="success" className={classes.policyAccepted}>
+          Datenschutz-Richtlinie zugestimmt
+        </Alert>
+      )}
+      {bannerVisible && !guidelineAccepted && (
+        <custom-banner
+          class={classes.banner}
+          ref={bannerRef}
+          application-name="WAECM"
+          policy-link="policy"
+        />
+      )}
     </ApolloProvider>
   );
 };
