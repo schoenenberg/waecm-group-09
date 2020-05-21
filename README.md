@@ -159,7 +159,12 @@ Return Type:  `SubredditModel`
 
 ------
 
+## Komponenten-Tests
 
+Die Komponenten Tests sind hier zu finden:
+
+- `src/components/AlertWithTitle.test.tsx`
+- `src/components/PrimaryButton.test.tsx`
 
 ## Aufgabe 3 - Beschreibung der Lösungen
 
@@ -218,7 +223,7 @@ el.addEventListener('on-accept', () => {
           application-name="Name"
           policy-link="Link">
 </custom-banner>
-``` 
+```
 
 Um es in PlainJS zu nutzen, kann einfach das Banner.js file aus dem Repository in das HTML zu übernehmen und mit 
 ```
