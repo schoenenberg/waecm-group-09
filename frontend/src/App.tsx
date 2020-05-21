@@ -141,8 +141,8 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <div className = {interactionAllowed} >
       <Container component="main" className={classes.container}>
+      <div className = {interactionAllowed} >
         <header>
           {isLoggedIn && <MenuAppBar onLogout={logout} />}
           {!isLoggedIn && (
@@ -162,14 +162,15 @@ const App = () => {
             isProfileDetailPage={isProfileDetailPage}
           />
         )}
+        </div>
+        { bannerVisible &&
+        <custom-banner class={classes.banner}
+          ref={ref} 
+          application-name="WAECM"
+          policy-link="Link">
+        </custom-banner>}
       </Container>
-      </div>
-      { bannerVisible &&
-      <custom-banner
-        ref={ref} 
-        application-name="WAECM"
-        policy-link="Link">
-      </custom-banner>}
+      
     </ApolloProvider>
   );
 };
