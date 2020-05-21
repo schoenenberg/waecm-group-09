@@ -2,6 +2,8 @@
 # Using node image as build-stage
 FROM node:12.2.0-alpine AS build-stage
 
+ENV CI=true
+
 # set working directory
 WORKDIR /usr/src/waecm
 
@@ -10,7 +12,8 @@ COPY package.json package-lock.json tsconfig.json /usr/src/waecm/
 COPY public/ /usr/src/waecm/public/
 RUN npm ci
 COPY src/ /usr/src/waecm/src/
-RUN npm run build
+RUN npm cit\
+ && npm run build
 
 # ========= RUN =========
 # Using nginx as serving image
