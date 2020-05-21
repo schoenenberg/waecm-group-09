@@ -34,7 +34,7 @@ Der Linter wird im Frontend und im Backend über `npm run lint` aufgerufen.
 
 > **Wichtig: Vor dem ersten Starten die Umgebungsvariablen setzen !**
 
-Die Applikation kann mittels `docker-compose -f docker-compose-a2.yaml up` gestartet werden. Das Frontend ist auf [localhost:3000](http://localhost:3000) erreichbar.
+Die Applikation kann mittels `docker-compose -f docker-compose-a3.yaml up` gestartet werden. Das Frontend ist auf [localhost:3000](http://localhost:3000) erreichbar.
 
 Um die Docker-Images von Source zu bauen und zu starten, kann dies einfach mit `docker-compose up --build` erreicht werden.
 
