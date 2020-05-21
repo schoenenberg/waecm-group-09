@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { MongooseModule } from '@nestjs/mongoose';
 import { Request } from 'express';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { RedditModule } from './modules/reddit/reddit.module';
+import { RedditModule } from './modules/reddit-data/reddit.module';
+import { RedditConnectorModule } from './modules/reddit-connector/reddit-connector.module';
+import { RedditBotModule } from "./modules/reddit-bot/reddit-bot.module";
 
 @Module({
   imports: [
@@ -13,9 +16,20 @@ import { RedditModule } from './modules/reddit/reddit.module';
     GraphQLModule.forRoot({
       debug: false,
       playground: true,
-      autoSchemaFile: 'schema.gql',
+      autoSchemaFile: 'schema.graphql',
       context: ({ req }: { req: Request }) => ({ req }),
     }),
+    MongooseModule.forRoot('mongodb://db:27017/', {
+      user: 'waecm',
+      pass: 'waecm20',
+      db: 'test',
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    }),
+    RedditConnectorModule,
+    RedditBotModule
   ],
 })
-export class AppModule {}
+export class AppModule {
+}

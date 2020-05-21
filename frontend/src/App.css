@@ -1,7 +1,8 @@
-body, html {
+body,
+html {
   height: 100%;
   margin: 0;
-  background: url("./background_image.jpg");
+  background: url('./background_image.jpg');
   background-position-x: center;
   background-position-y: center;
   background-size: cover;

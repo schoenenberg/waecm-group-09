@@ -1,6 +1,6 @@
-import Button from "@material-ui/core/Button";
-import React, { FC, MouseEventHandler } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import Button from '@material-ui/core/Button';
+import React, { FC, MouseEventHandler } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
 type PrimaryButtonProps = {
   onClickHandler: MouseEventHandler;
@@ -8,23 +8,23 @@ type PrimaryButtonProps = {
   children: string;
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   button: {
-    margin: theme.spacing(3, 0, 2),
-    background: "linear-gradient(45deg, #b3cce6 30%, #c6d9ec 90%)",
+    margin: theme.spacing(0),
+    background: 'linear-gradient(45deg, #b3cce6 30%, #c6d9ec 90%)',
     borderRadius: 3,
     border: 0,
-    color: "#132639",
+    color: '#132639',
     height: 48,
-    padding: "0 30px",
-    boxShadow: "0 5px 7px 4px rgba(19, 38, 57, .5)"
-  }
+    padding: '0%',
+    boxShadow: '0 5px 7px 4px rgba(19, 38, 57, .5)',
+  },
 }));
 
 export const PrimaryButton: FC<PrimaryButtonProps> = ({
   onClickHandler,
   disabled = false,
-  children
+  children,
 }) => {
   const styles = useStyles();
 
@@ -32,10 +32,10 @@ export const PrimaryButton: FC<PrimaryButtonProps> = ({
     <Button
       fullWidth
       variant="contained"
-      // color="primary"
       className={styles.button}
       onClick={onClickHandler}
       disabled={disabled}
+      data-testid={'primary-button'}
     >
       {children}
     </Button>
