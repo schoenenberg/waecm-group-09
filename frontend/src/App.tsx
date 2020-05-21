@@ -217,11 +217,12 @@ const App = () => {
             )}
           </Route>
           <Route path={'/'}>
-            <Container component="main" className={classes.container}>
-              <div className={interactionAllowed}>
-                <header>
-                  {isLoggedIn && <Redirect to={'/dashboard'} />}
-                  {!isLoggedIn && (
+            {isLoggedIn ? (
+              <Redirect to={'/dashboard'} />
+            ) : (
+              <Container component="main" className={classes.container}>
+                <div className={interactionAllowed}>
+                  <header>
                     <div>
                       <h1 className={classes.fonts}>WAECM Project</h1>
                       <h1 className={classes.names}>
@@ -229,9 +230,8 @@ const App = () => {
                       </h1>
                       <Divider variant="middle" />
                     </div>
-                  )}
-                </header>
-                {!isLoggedIn && (
+                    )}
+                  </header>
                   <Login
                     accessDenied={accessDenied}
                     onLogin={login}
@@ -239,9 +239,9 @@ const App = () => {
                     onRedirectStartpage={redirectStartPage}
                     isProfileDetailPage={isProfileDetailPage}
                   />
-                )}
-              </div>
-            </Container>
+                </div>
+              </Container>
+            )}
           </Route>
         </Switch>
       </Router>
