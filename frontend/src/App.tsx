@@ -16,6 +16,7 @@ import { Guidelines } from './components/Guidelines';
 import Button from '@material-ui/core/Button';
 
 import 'custom-banner-web-element';
+import { Alert } from '@material-ui/lab';
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -95,6 +96,7 @@ const App = () => {
       const el: any = ref.current;
       el.addEventListener('on-accept', () => {
         // callback function for whatever you want to do after accept is clicked
+        setPolicyAcceptedMessage(true);
         setInteractionAllowed(classes.withInteraction);
         handleGuidelineAccepted(true);
         setBannerVisible(false);
@@ -257,6 +259,11 @@ const App = () => {
                   />
                 )}
               </div>
+              {policyAcceptedMessage && (
+                <Alert severity="success" className={classes.policyAccepted}>
+                  Datenschutz-Richtlinie zugestimmt
+                </Alert>
+              )}
               {bannerVisible && !guidelineAccepted && (
                 <custom-banner
                   class={classes.banner}
