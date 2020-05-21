@@ -24,6 +24,9 @@ Für die Kommunikation wurde **GraphQL** verwendet, da es sowohl flexibler als a
 ### Datenbank
 Bei der Datenbank wurde **MongoDB** ausgewählt, da ein guter Library-Support für die ausgewählte Backend-Technologie besteht, sowie die Daten - Konfigurationen von Subreddits - gut als Dokument gespeichert und durchsucht werden können.
 
+### Continuous Integration
+Für die Continuous Integration wurde **Github Actions** als CI-Technologie und **Github Packages** als Build-Artefact-Speicher (in diesem Fall als Docker-Registy) ausgewählt, damit auf einer einzigen Plattform das gesamte Projekt gemanaged werden kann. Zudem gibt es dadurch am wenigsten Berechtigungsprobleme.
+
 ## Linter Aufruf
 Der Linter wird im Frontend und im Backend über `npm run lint` aufgerufen.
 
@@ -43,12 +46,23 @@ Das Frontend wird ebenfalls mit einem Multi-Stage-Build kompiliert und in ein `n
 
 ## Continuous Integration (CI)
 
-Für die Continuous Integration wird in diesem Projekt *Github Actions* verwendet. Diese kompilieren automatisiert jeden Git-Push (sollten mehrere Commits auf einmal gepushed werden, wird nur der letzte gebaut). Diese kompiliert das Frontend und das Backend mithilfe von Docker und pushed daraufhin die gebauten Docker-Images auf die *Github Packages - Docker*-Registry.
+Für die CI wird in diesem Projekt *Github Actions* verwendet. Diese kompiliert automatisiert jeden Git-Push (sollten mehrere Commits auf einmal gepushed werden, wird nur der letzte gebaut).
+
+Da das Frontend und das Backend als Docker-Images ausgeliefert werden sollen, werden diese direkt mit Docker von der CI gebaut. Die fertigen Images werden auf die *Github Packages - Docker*-Registry gepushed.
 
 Die gebauten Docker-Images können wie im Bild gezeigt, gefunden werden:
 ![Hier sollte ein Bild zu sehen sein!](https://raw.githubusercontent.com/schoenenberg/waecm-group-09/readme-update/Screenshot%202020-05-21%20at%2014.17.54.png?token=ACEV2AX4TOH2PTMZD4ENEUK6Z6WYE)
 
 Sollte es zu einem Fehler während eines Builds kommen, wird der Committer per E-Mail benachrichtigt.
+
+### Manuelles Triggern eines Builds
+Das manuelle Triggern der *Github Actions* ist noch ein [Feature Request](https://github.community/t5/GitHub-Actions/GitHub-Actions-Manual-Trigger-Approvals/td-p/31504) und aktuell noch nicht möglich, jedoch kann ein bereits durchgeführter Commit, erneut durchgeführt werden:
+
+1. Klicke auf *Actions* im oberen Reiter.
+2. Wähle einen Build aus.
+3. Klicke auf der linken Seitenleiste auf den Job *build*.
+4. Klicke auf den Button **Re-run jobs**
+
 
 ## Konfiguration
 Die Konfiguration des Backends wird über Environment-Variablen, die in der *Docker-Compose*-Datei eingetragen werden konfiguriert:
