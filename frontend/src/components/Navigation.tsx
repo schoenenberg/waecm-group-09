@@ -3,8 +3,8 @@ import React, {
   MouseEventHandler,
   ReactNode,
   useEffect,
-  useState,
-} from 'react';
+  useState
+} from "react";
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -23,6 +23,7 @@ import {
   AllSubredditsData,
   GET_ALL_SUBREDDITS,
 } from '../gql/allSubredditsQuery';
+import { Guidelines } from "./Guidelines";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,6 +98,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
   );
   const [editingASubreddit, setEditingASubreddit] = useState(false); // settings component can be in two states, either a subreddit is edited or the subreddit list is displayed
   const [showRedditList, setShowRedditList] = useState(true);
+  const [showGuidelinesComponent, setShowGuidelinesComponent] = useState(false);
   const allSubreddits = data ? data.allSubreddits : [];
 
   // check if subreddits exist
@@ -134,6 +136,8 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
     handleSetAddComponentDashboard(false);
     if (newValue === 0) {
       setShowSettingsComponent(true);
+    } else if (newValue === 2) {
+      setShowGuidelinesComponent(true);
     }
   };
 
@@ -191,6 +195,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
         >
           <Tab label="Dashboard" {...tabProps(0)} />
           <Tab label="Settings" {...tabProps(1)} />
+          <Tab label="Guidelines" {...tabProps(2)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} tabIndex={0}>
@@ -212,6 +217,11 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
             tabClick={tabClick}
             handleSettingsTabClick={handleSettingsTabClick}
           />
+        )}
+      </TabPanel>
+      <TabPanel value={value} tabIndex={2}>
+        { showGuidelinesComponent && (
+        <Guidelines guidelineAccepted={true}/>
         )}
       </TabPanel>
     </div>
