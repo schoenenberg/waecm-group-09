@@ -13,6 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import { MenuAppBar } from './components/Navigation';
 
 import 'custom-banner-web-element'
+import { Alert } from '@material-ui/lab';
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -40,6 +41,7 @@ const App = () => {
 
   };
   const [bannerVisible, setBannerVisible] = useState(true);
+  const [policyAcceptedMessage, setPolicyAcceptedMessage] = useState(false);
   const initialValue = getIsLoggedIn();
   const [interactionAllowed, setInteractionAllowed] = useState(classes.noInteraction);
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
@@ -68,6 +70,7 @@ const App = () => {
     const el: any = ref.current;
     el.addEventListener('on-accept', () => {
       // callback function for whatever you want to do after accept is clicked
+      setPolicyAcceptedMessage(true);
       setInteractionAllowed(classes.withInteraction)
       setBannerVisible(false); 
      });
@@ -123,6 +126,7 @@ const App = () => {
   };
 
   const login = useCallback(() => {
+    setPolicyAcceptedMessage(false);
     window.location.replace(auth_url());
   }, []);
 
@@ -163,6 +167,9 @@ const App = () => {
           />
         )}
         </div>
+        { policyAcceptedMessage &&
+          <Alert severity="success" className = {classes.policyAccepted}>Datenschutz-Richtlinie zugestimmt</Alert>
+        }
         { bannerVisible &&
         <custom-banner class={classes.banner}
           ref={ref} 
