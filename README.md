@@ -61,7 +61,7 @@ Das manuelle Triggern der *Github Actions* ist noch ein [Feature Request](https:
 1. Klicke auf *Actions* im oberen Reiter.
 2. Wähle einen Build aus.
 3. Klicke auf der linken Seitenleiste auf den Job *build*.
-4. Klicke auf den Button **Re-run jobs**
+4. Klicke auf den Button **Re-run jobs**.
 
 
 ## Konfiguration
