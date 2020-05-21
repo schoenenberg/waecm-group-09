@@ -230,7 +230,6 @@ const App = () => {
                       </h1>
                       <Divider variant="middle" />
                     </div>
-                    )}
                   </header>
                   <Login
                     accessDenied={accessDenied}
