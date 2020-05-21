@@ -3,8 +3,8 @@ import React, {
   MouseEventHandler,
   ReactNode,
   useEffect,
-  useState
-} from "react";
+  useState,
+} from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -77,9 +77,11 @@ const tabProps = (tabIndex: number) => {
 
 type MenuAppBarProps = {
   onLogout: MouseEventHandler;
+  guidelineAccepted: boolean;
+  setGuidelineAccepted: (newValue: boolean) => void;
 };
 
-export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
+export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout, guidelineAccepted, setGuidelineAccepted }) => {
   // query to get all subrredit data
   const { loading, error, data } = useQuery<AllSubredditsData>(
     GET_ALL_SUBREDDITS,
@@ -221,7 +223,7 @@ export const MenuAppBar: FC<MenuAppBarProps> = ({ onLogout }) => {
       </TabPanel>
       <TabPanel value={value} tabIndex={2}>
         { showGuidelinesComponent && (
-        <Guidelines guidelineAccepted={true}/>
+        <Guidelines guidelineAccepted={guidelineAccepted} setGuidelineAccepted={setGuidelineAccepted} />
         )}
       </TabPanel>
     </div>

@@ -16,17 +16,21 @@ const useStyles = makeStyles(theme => ({
 
 type GuidelineProps = {
   guidelineAccepted: boolean;
+  setGuidelineAccepted: (newValue: boolean) => void;
 };
+
 
 export const Guidelines: FC<GuidelineProps> = (
   {
-    guidelineAccepted
+    guidelineAccepted,
+    setGuidelineAccepted
   }
 ) => {
   const classes = useStyles();
 
-  function handleChange() {
-
+  function handleCheckboxChange(this: any, event: React.ChangeEvent<HTMLInputElement>) {
+    console.log("Handle Checkbox change", event.target.checked);
+    setGuidelineAccepted(event.target.checked);
   }
 
   return (
@@ -36,7 +40,7 @@ export const Guidelines: FC<GuidelineProps> = (
           control={
             <Checkbox
               checked={guidelineAccepted}
-              onChange={handleChange}
+              onChange={handleCheckboxChange}
               name="guidelineCheckbox"
               color="primary"
             />

@@ -148,7 +148,7 @@ const App = () => {
       <Container component="main" className={classes.container}>
       <div className = {interactionAllowed} >
         <header>
-          {isLoggedIn && <MenuAppBar onLogout={logout} />}
+          {isLoggedIn && <MenuAppBar onLogout={logout} guidelineAccepted={!bannerVisible} setGuidelineAccepted={setBannerVisible}/>}
           {!isLoggedIn && (
             <div>
               <h1 className={classes.fonts}>WAECM Project</h1>
