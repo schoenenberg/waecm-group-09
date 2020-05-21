@@ -1,17 +1,17 @@
-import React, { FC } from "react";
-import { Checkbox, FormControlLabel, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { FC, ChangeEvent } from 'react';
+import { Checkbox, FormControlLabel, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginTop: theme.spacing(19),
-    display: "block",
-    height: "100%"
+    display: 'block',
+    height: '100%',
   },
   link: {
-    color: "#FFFFFF"
-  }
+    color: '#FFFFFF',
+  },
 }));
 
 type GuidelineProps = {
@@ -19,18 +19,15 @@ type GuidelineProps = {
   setGuidelineAccepted: (newValue: boolean) => void;
 };
 
-export const Guidelines: FC<GuidelineProps> = (
-  {
-    guidelineAccepted,
-    setGuidelineAccepted
-  }
-) => {
+export const Guidelines: FC<GuidelineProps> = ({
+  guidelineAccepted,
+  setGuidelineAccepted,
+}) => {
   const classes = useStyles();
 
-  function handleCheckboxChange(this: any, event: React.ChangeEvent<HTMLInputElement>) {
-    console.log("Handle Checkbox change", event.target.checked);
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     setGuidelineAccepted(event.target.checked);
-  }
+  };
 
   return (
     <div className={classes.root}>
