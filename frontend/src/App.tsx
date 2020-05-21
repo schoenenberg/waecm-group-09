@@ -38,12 +38,30 @@ const App = () => {
   // check if user is already logged in
   const getIsLoggedIn = () => {
     return window.sessionStorage.getItem('currentToken') != null;
-
   };
-  const [bannerVisible, setBannerVisible] = useState(true);
+
+  const getVisibility = () => {
+    return window.sessionStorage.getItem('bannerHidden') == null;
+  };
+
+  const getInteraction = () => {
+    if(window.sessionStorage.getItem('bannerHidden') == null){
+      return classes.noInteraction;
+
+    }
+    else{
+      return classes.withInteraction;
+    }
+  };
+
+  const initialBannerVisibility = getVisibility();
+  const [bannerVisible, setBannerVisible] = useState(initialBannerVisibility);
   const [policyAcceptedMessage, setPolicyAcceptedMessage] = useState(false);
   const initialValue = getIsLoggedIn();
-  const [interactionAllowed, setInteractionAllowed] = useState(classes.noInteraction);
+
+  const initialInteractionValue = getInteraction();
+  const [interactionAllowed, setInteractionAllowed] = useState(initialInteractionValue);
+
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
   const [token_id, setTokenId] = useState('');
   const [oldToken, setOldToken] = useState('');
@@ -66,14 +84,17 @@ const App = () => {
 
   useEffect(() => {
 
-    //add functionality to 
-    const el: any = ref.current;
-    el.addEventListener('on-accept', () => {
-      // callback function for whatever you want to do after accept is clicked
-      setPolicyAcceptedMessage(true);
-      setInteractionAllowed(classes.withInteraction)
-      setBannerVisible(false); 
-     });
+    //add functionality to
+    if(bannerVisible) {
+      const el: any = ref.current;
+      el.addEventListener('on-accept', () => {
+        // callback function for whatever you want to do after accept is clicked
+        setPolicyAcceptedMessage(true);
+        setInteractionAllowed(classes.withInteraction)
+        setBannerVisible(false);
+        window.sessionStorage.setItem("bannerHidden", "false");
+      });
+    }
 
     if (window.sessionStorage.getItem('currentToken') != null) {
       setIsLoggedIn(true);
