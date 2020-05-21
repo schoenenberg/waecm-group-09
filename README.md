@@ -177,5 +177,56 @@ Da es mit TypeScript an dieser Stelle ein paar Schwierigkeiten gab, entschieden 
 
 Beim Durchsuchen von GitHub Repos sind wir auf [LitElement](https://github.com/Polymer/lit-element) gestoßen, was das Erstellen von Web Components vereinfachen soll. Wir haben kurz überlegt auf diese Technologie zu wechseln, da wir aber schon fast fertig waren, blieben wir bei der Standard JavaScript API Implementierung von Custom Elements.
 
-Da später noch ein Update zu dieser Aufgabe ins Forum geschrieben wurde, haben wir das Element in ein externes Repo ausgelagert, auf npm gepublished und so eingebunden.
+Da später noch ein Update zu dieser Aufgabe ins Forum geschrieben wurde, haben wir das Element in ein externes Repo ausgelagert, auf npm gepublished und so eingebunden. Das Repo kann in [GitHub] (https://github.com/aliciaschwabenbauer/custom-banner-web-element) gefunden werden.
+
+Das Element kann einfach über npm install als Dependecy hinzugefügt werden:
+`npm install custom-banner-web-element`
+
+Um es in einer React App zu nutzen 
+1. ein declarations.d.ts file erstellen: 
+
+```
+declare namespace JSX {
+    interface IntrinsicElements {
+        "custom-banner": any;
+    }
+}
+```
+
+2. in dem Komponenten: 
+```
+import 'custom-banner-web-element'
+
+...
+
+//initialize an object reference 
+const ref = createRef(); 
+
+...
+
+// add an event listener for whatever you want to do after accept is clicked 
+const el: any = ref.current;
+el.addEventListener('on-accept', () => {
+    // callback function 
+});
+
+...
+
+// render function in return staement(hooks)/render function with reference set from above 
+<custom-banner 
+          ref={ref} 
+          application-name="Name"
+          policy-link="Link">
+</custom-banner>
+``` 
+
+Um es in PlainJS zu nutzen, kann einfach das Banner.js file aus dem Repository in das HTML zu übernehmen und mit 
+```
+<custom-banner 
+          ref={ref} 
+          application-name="Name"
+          policy-link="Link">
+</custom-banner>
+```
+einzubinden.
 

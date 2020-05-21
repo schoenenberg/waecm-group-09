@@ -9,6 +9,10 @@ export const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
     headerMode: 'screen',
   },
+  banner: {
+    position: 'absolute',
+    bottom: theme.spacing(1),
+  },
 
   noInteraction:{
     pointerEnabled: false,
