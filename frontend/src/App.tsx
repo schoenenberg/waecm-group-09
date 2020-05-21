@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, createRef } from 'react';
 import './App.css';
 import Container from '@material-ui/core/Container';
 import { uuid } from 'uuidv4';
@@ -11,6 +11,8 @@ import { useStyles } from './materialStyles';
 import { Login } from './components/Login';
 import Divider from '@material-ui/core/Divider';
 import { MenuAppBar } from './components/Navigation';
+
+import 'custom-banner-web-element'
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -30,12 +32,16 @@ const useReactPath = () => {
 const App = () => {
   const classes = useStyles();
 
+  const ref = createRef(); 
+
   // check if user is already logged in
   const getIsLoggedIn = () => {
     return window.sessionStorage.getItem('currentToken') != null;
 
   };
+  const [bannerVisible, setBannerVisible] = useState(true);
   const initialValue = getIsLoggedIn();
+  const [interactionAllowed, setInteractionAllowed] = useState(classes.noInteraction);
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue);
   const [token_id, setTokenId] = useState('');
   const [oldToken, setOldToken] = useState('');
@@ -57,6 +63,15 @@ const App = () => {
   const href = useReactPath();
 
   useEffect(() => {
+
+    //add functionality to 
+    const el: any = ref.current;
+    el.addEventListener('on-accept', () => {
+      // callback function for whatever you want to do after accept is clicked
+      setInteractionAllowed(classes.withInteraction)
+      setBannerVisible(false); 
+     });
+
     if (window.sessionStorage.getItem('currentToken') != null) {
       setIsLoggedIn(true);
     }
@@ -126,6 +141,7 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
+      <div className = {interactionAllowed} >
       <Container component="main" className={classes.container}>
         <header>
           {isLoggedIn && <MenuAppBar onLogout={logout} />}
@@ -147,11 +163,13 @@ const App = () => {
           />
         )}
       </Container>
+      </div>
+      { bannerVisible &&
       <custom-banner
-        application-name={"waecm-project"}
-        policy-link={"TODO: link"}
-        on-accept={() => {}}
-      />
+        ref={ref} 
+        application-name="WAECM"
+        policy-link="Link">
+      </custom-banner>}
     </ApolloProvider>
   );
 };
