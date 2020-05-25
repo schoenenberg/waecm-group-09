@@ -21,7 +21,7 @@ it('renders without crashing', () => {
 
 it('renders title prop correctly', () => {
   const { queryByTestId } = render(
-    <AlertWithTitle title={'Title0'} severity={'warning'}>
+    <AlertWithTitle title={'Title1'} severity={'warning'}>
       {'Some Text'}
     </AlertWithTitle>,
   );
