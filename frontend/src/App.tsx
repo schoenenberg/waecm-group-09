@@ -10,12 +10,17 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { useStyles } from './materialStyles';
 import { Login } from './components/Login';
 import Divider from '@material-ui/core/Divider';
-import { MenuAppBar } from './components/Navigation';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 
 import 'custom-banner-web-element';
 import { Alert } from '@material-ui/lab';
 import { Policy } from './pages/Policy';
+import { Dashboard } from './pages/Dashboard';
 
 const useReactPath = () => {
   const [windowHref, setWindowHref] = useState(window.location.href);
@@ -199,18 +204,25 @@ const App = () => {
               setGuidelineAccepted={handleGuidelineAccepted}
             />
           </Route>
+          <Route path={'/dashboard'}>
+            {isLoggedIn ? (
+              <Dashboard
+                interactionAllowed={interactionAllowed}
+                setGuidelineAccepted={handleGuidelineAccepted}
+                guidelineAccepted={guidelineAccepted}
+                logoutHandler={logout}
+              />
+            ) : (
+              <Redirect to={'/'} />
+            )}
+          </Route>
           <Route path={'/'}>
-            <Container component="main" className={classes.container}>
-              <div className={interactionAllowed}>
-                <header>
-                  {isLoggedIn && (
-                    <MenuAppBar
-                      onLogout={logout}
-                      guidelineAccepted={guidelineAccepted}
-                      setGuidelineAccepted={handleGuidelineAccepted}
-                    />
-                  )}
-                  {!isLoggedIn && (
+            {isLoggedIn ? (
+              <Redirect to={'/dashboard'} />
+            ) : (
+              <Container component="main" className={classes.container}>
+                <div className={interactionAllowed}>
+                  <header>
                     <div>
                       <h1 className={classes.fonts}>WAECM Project</h1>
                       <h1 className={classes.names}>
@@ -218,9 +230,7 @@ const App = () => {
                       </h1>
                       <Divider variant="middle" />
                     </div>
-                  )}
-                </header>
-                {!isLoggedIn && (
+                  </header>
                   <Login
                     accessDenied={accessDenied}
                     onLogin={login}
@@ -228,9 +238,9 @@ const App = () => {
                     onRedirectStartpage={redirectStartPage}
                     isProfileDetailPage={isProfileDetailPage}
                   />
-                )}
-              </div>
-            </Container>
+                </div>
+              </Container>
+            )}
           </Route>
         </Switch>
       </Router>
